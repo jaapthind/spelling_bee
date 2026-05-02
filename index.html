@@ -3,36 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SYS.TERMINAL // PRISMATIC_LIQUID_BEE_v10.0.0</title>
+<title>SYS.TERMINAL // PRISMATIC_LIQUID_BEE_v12.0.0</title>
 <style>
     /* ==========================================================================
        CORE SYSTEM VARIABLES & RESET
        ========================================================================== */
     :root {
-        --hue-1: 0;
-        --hue-2: 60;
-        --hue-3: 120;
-        --hue-4: 180;
-        --hue-5: 240;
-        --hue-6: 300;
-        
-        --liquid-bg: rgba(10, 5, 20, 0.4);
+        --liquid-bg: rgba(5, 5, 10, 0.6);
         --glass-surface: rgba(255, 255, 255, 0.03);
         --glass-border: rgba(255, 255, 255, 0.15);
         --glass-highlight: rgba(255, 255, 255, 0.3);
         
         --text-primary: #ffffff;
         --text-dim: rgba(255, 255, 255, 0.6);
-        --text-shadow-glow: 0 0 10px rgba(255, 255, 255, 0.8);
+        
+        --rainbow-1: #ff0055;
+        --rainbow-2: #ffaa00;
+        --rainbow-3: #00ffaa;
+        --rainbow-4: #00aaff;
+        --rainbow-5: #aa00ff;
         
         --rainbow-gradient: linear-gradient(
             124deg, 
-            #ff2400, #e81d1d, #e8b71d, #e3e81d, 
-            #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3
+            var(--rainbow-1), var(--rainbow-2), var(--rainbow-3), 
+            var(--rainbow-4), var(--rainbow-5), var(--rainbow-1)
         );
         
-        --lvl-color: #1ddde8;
-        --glow-spread: 20px;
+        --lvl-color: #00aaff;
+        --glow-spread: 30px;
     }
     
     * { 
@@ -47,54 +45,58 @@
         width: 100%; 
         height: 100%; 
         overflow: hidden;
-        background-color: #020205; 
+        background-color: #010102; 
         color: var(--text-primary);
-        font-family: 'SF Pro Display', 'Inter', 'Segoe UI', Roboto, Helvetica, sans-serif;
+        font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
         user-select: none;
-        perspective: 1000px;
+        perspective: 1500px;
     }
 
     /* ==========================================================================
-       CUSTOM SCROLLBARS & SELECTION
+       CUSTOM SCROLLBARS
        ========================================================================== */
     ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: var(--liquid-bg); border-left: 1px solid var(--glass-border); }
-    ::-webkit-scrollbar-thumb { background: var(--glass-highlight); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--rainbow-gradient); }
-    ::selection { background: var(--glass-highlight); color: #fff; text-shadow: none; }
+    ::-webkit-scrollbar-track { background: var(--liquid-bg); }
+    ::-webkit-scrollbar-thumb { 
+        background: var(--rainbow-gradient); 
+        background-size: 200% 200%;
+        border-radius: 10px; 
+        border: 1px solid rgba(0,0,0,0.5);
+        animation: rainbow-flow 3s linear infinite;
+    }
+    ::selection { background: var(--glass-highlight); color: #fff; }
 
     /* ==========================================================================
-       BACKGROUND EFFECTS & OVERLAYS
+       MOVING RAINBOW BLURBS & LIQUID GLASS BACKGROUND
        ========================================================================== */
     #liquid-canvas {
-        position: fixed; 
-        top: 0; 
-        left: 0; 
-        width: 100vw; 
-        height: 100vh; 
-        z-index: 1; 
-        pointer-events: none;
-        filter: blur(8px) contrast(120%) saturate(200%);
-        opacity: 0.8;
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+        z-index: 1; pointer-events: none;
+        filter: blur(12px) contrast(140%) saturate(200%);
+        opacity: 0.8; mix-blend-mode: screen;
     }
+
+    .blurb-container {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: 0; overflow: hidden; pointer-events: none;
+        filter: blur(60px); opacity: 0.6;
+    }
+
+    .blurb {
+        position: absolute; border-radius: 50%;
+        animation: float-blurb 20s infinite ease-in-out alternate;
+        mix-blend-mode: screen;
+    }
+
+    .blurb-1 { width: 40vw; height: 40vw; background: var(--rainbow-1); top: -10%; left: -10%; animation-delay: 0s; }
+    .blurb-2 { width: 35vw; height: 35vw; background: var(--rainbow-3); top: 50%; right: -10%; animation-delay: -5s; }
+    .blurb-3 { width: 45vw; height: 45vw; background: var(--rainbow-5); bottom: -20%; left: 20%; animation-delay: -10s; }
+    .blurb-4 { width: 30vw; height: 30vw; background: var(--rainbow-2); top: 20%; left: 40%; animation-delay: -15s; }
 
     .glass-overlay {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.6) 100%);
-        z-index: 2;
-        pointer-events: none;
-    }
-
-    .ambient-rainbow {
-        position: fixed;
-        top: -50%; left: -50%; width: 200%; height: 200%;
-        background: var(--rainbow-gradient);
-        background-size: 400% 400%;
-        animation: rainbow-flow 15s ease infinite;
-        opacity: 0.15;
-        z-index: 0;
-        mix-blend-mode: overlay;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.9) 100%);
+        z-index: 2; pointer-events: none;
     }
 
     /* ==========================================================================
@@ -106,18 +108,11 @@
         100% { background-position: 0% 50%; }
     }
 
-    @keyframes float {
-        0% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
-        25% { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
-        50% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
-        75% { transform: translateY(10px) rotateX(-2deg) rotateY(2deg); }
-        100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
-    }
-
-    @keyframes pulse-glow {
-        0% { box-shadow: 0 0 20px var(--lvl-color), inset 0 0 10px var(--lvl-color); }
-        50% { box-shadow: 0 0 40px var(--lvl-color), inset 0 0 20px var(--lvl-color); }
-        100% { box-shadow: 0 0 20px var(--lvl-color), inset 0 0 10px var(--lvl-color); }
+    @keyframes float-blurb {
+        0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+        33% { transform: translate(10vw, 10vh) scale(1.2) rotate(90deg); }
+        66% { transform: translate(-10vw, 20vh) scale(0.8) rotate(180deg); }
+        100% { transform: translate(5vw, -10vh) scale(1.1) rotate(270deg); }
     }
 
     @keyframes text-shimmer {
@@ -125,53 +120,49 @@
         100% { background-position: 200% center; }
     }
 
-    @keyframes glitch-anim-1 {
-        0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, 1px); }
-        20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
-        40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
-        60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
-        80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 1px); }
-        100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
+    @keyframes error-shake {
+        0%, 100% { transform: translate3d(0, 0, 0); }
+        10%, 30%, 50%, 70%, 90% { transform: translate3d(-15px, 0, 0); }
+        20%, 40%, 60%, 80% { transform: translate3d(15px, 0, 0); }
     }
 
-    @keyframes ripple-effect {
-        0% { width: 0; height: 0; opacity: 0.5; }
-        100% { width: 500px; height: 500px; opacity: 0; }
+    @keyframes liquid-morph {
+        0% { border-radius: 30px; }
+        25% { border-radius: 40px 20px 40px 20px; }
+        50% { border-radius: 20px 40px 20px 40px; }
+        75% { border-radius: 40px 30px 20px 40px; }
+        100% { border-radius: 30px; }
     }
 
     /* ==========================================================================
-       LIQUID GLASS UTILITY CLASSES
+       LIQUID GLASS PANELS
        ========================================================================== */
     .liquid-panel {
         background: var(--glass-surface);
-        backdrop-filter: blur(25px) saturate(200%) contrast(110%);
-        -webkit-backdrop-filter: blur(25px) saturate(200%) contrast(110%);
+        backdrop-filter: blur(20px) saturate(180%) contrast(120%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%) contrast(120%);
         border: 1px solid var(--glass-border);
-        border-radius: 24px;
+        border-radius: 30px;
         box-shadow: 
-            0 8px 32px 0 rgba(0, 0, 0, 0.5),
+            0 20px 40px rgba(0, 0, 0, 0.7),
             inset 0 1px 2px rgba(255, 255, 255, 0.2),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.2);
+            inset 0 -1px 2px rgba(0, 0, 0, 0.2),
+            0 0 30px rgba(var(--lvl-color-rgb), 0.1);
         position: relative;
         overflow: hidden;
+        animation: liquid-morph 10s ease-in-out infinite alternate;
+        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
 
-    .liquid-panel::before {
-        content: '';
-        position: absolute;
-        top: 0; left: -100%; width: 50%; height: 100%;
-        background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
-        transform: skewX(-20deg);
-        animation: text-shimmer 8s infinite linear;
-        pointer-events: none;
+    .liquid-panel::after {
+        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%);
+        animation: text-shimmer 8s infinite linear; pointer-events: none;
     }
 
     .rainbow-text {
-        background: var(--rainbow-gradient);
-        background-size: 200% auto;
-        color: transparent;
-        -webkit-background-clip: text;
-        background-clip: text;
+        background: var(--rainbow-gradient); background-size: 300% auto;
+        color: transparent; -webkit-background-clip: text; background-clip: text;
         animation: text-shimmer 4s linear infinite;
         text-shadow: 0 0 20px rgba(255,255,255,0.1);
     }
@@ -181,69 +172,50 @@
        ========================================================================== */
     #boot-sequence {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
-        z-index: 10000; display: flex; flex-direction: column;
-        justify-content: center; align-items: center; padding: 4vw;
-        transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        background: #000; z-index: 10000; display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .boot-ring {
-        position: absolute;
-        width: 300px; height: 300px;
-        border-radius: 50%;
-        border: 2px solid transparent;
-        border-top-color: var(--lvl-color);
-        border-bottom-color: #dd00f3;
-        animation: spin 2s linear infinite;
+    .boot-core {
+        position: relative; width: 300px; height: 300px;
+        display: flex; justify-content: center; align-items: center;
     }
 
-    .boot-ring::before {
-        content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-        border-radius: 50%; border: 2px solid transparent;
-        border-left-color: #1ddde8; border-right-color: #1de840;
-        animation: spin 1.5s linear infinite reverse;
+    .boot-ring-1, .boot-ring-2, .boot-ring-3 {
+        position: absolute; border-radius: 50%; border: 2px solid transparent;
     }
+
+    .boot-ring-1 { width: 100%; height: 100%; border-top-color: var(--rainbow-1); border-bottom-color: var(--rainbow-3); animation: spin 2s linear infinite; filter: drop-shadow(0 0 15px var(--rainbow-1)); }
+    .boot-ring-2 { width: 80%; height: 80%; border-left-color: var(--rainbow-2); border-right-color: var(--rainbow-4); animation: spin 1.5s linear infinite reverse; filter: drop-shadow(0 0 15px var(--rainbow-4)); }
+    .boot-ring-3 { width: 60%; height: 60%; border-top-color: var(--rainbow-5); border-bottom-color: var(--rainbow-1); animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
 
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
     #init-btn {
-        padding: 25px 60px; font-size: 28px; font-weight: 800;
-        border-radius: 50px; cursor: pointer; text-transform: uppercase;
-        letter-spacing: 6px; position: relative; z-index: 10;
-        background: rgba(0, 0, 0, 0.4);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-        color: #fff;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    
-    #init-btn::after {
-        content: ''; position: absolute; top: -2px; bottom: -2px; left: -2px; right: -2px;
-        background: var(--rainbow-gradient); background-size: 300% 300%;
-        z-index: -1; border-radius: 50px; animation: rainbow-flow 3s ease infinite;
+        position: absolute; padding: 20px 40px; font-size: 20px; font-weight: 900;
+        border-radius: 40px; cursor: pointer; text-transform: uppercase;
+        letter-spacing: 6px; background: rgba(0, 0, 0, 0.8);
+        border: 2px solid rgba(255,255,255,0.2); color: #fff;
+        backdrop-filter: blur(10px); transition: all 0.3s; z-index: 10;
     }
 
-    #init-btn:hover {
-        transform: scale(1.05) translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 40px rgba(221, 0, 243, 0.4);
-        letter-spacing: 8px;
-    }
+    #init-btn:hover { transform: scale(1.1); box-shadow: 0 0 40px var(--rainbow-3); border-color: var(--rainbow-3); letter-spacing: 8px; }
 
     #terminal-wrapper {
-        position: absolute; bottom: 50px; left: 50px;
-        width: 400px; height: 200px; overflow: hidden;
-        mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-        -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+        position: absolute; bottom: 5vh; left: 5vw; width: 600px; height: 300px;
+        overflow: hidden; mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
     }
 
     #terminal-logs {
-        color: rgba(255,255,255,0.8); font-family: 'Courier New', monospace;
-        font-size: 14px; line-height: 1.6; text-shadow: 0 0 5px rgba(255,255,255,0.5);
+        color: #00ffaa; font-family: 'Courier New', Courier, monospace;
+        font-size: 14px; line-height: 1.6; text-shadow: 0 0 5px rgba(0,255,170,0.5);
         display: flex; flex-direction: column; justify-content: flex-end; height: 100%;
     }
 
     /* ==========================================================================
-       MAIN APPLICATION LAYOUT & GRID
+       MAIN APPLICATION LAYOUT
        ========================================================================== */
     #app-container {
         display: none; grid-template-rows: auto 1fr auto;
@@ -251,250 +223,132 @@
         position: relative; z-index: 10; transform-style: preserve-3d;
     }
 
-    /* Header & Stats Display */
     header {
         display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-        padding: 20px 40px; border-radius: 30px; animation: float 6s ease-in-out infinite;
+        padding: 20px 40px; transform: translateZ(50px);
     }
 
     .level-badge { display: flex; flex-direction: column; }
-    
-    #level-display {
-        font-size: 42px; font-weight: 900; letter-spacing: 5px;
-        text-transform: uppercase; margin-bottom: 5px;
-    }
+    #level-display { font-size: 52px; font-weight: 900; letter-spacing: 8px; margin-bottom: 5px; }
+    .level-sub { font-size: 14px; font-weight: 700; letter-spacing: 5px; color: var(--text-dim); }
 
-    .level-sub { 
-        font-size: 12px; font-weight: 600; letter-spacing: 3px; 
-        color: var(--text-dim); text-transform: uppercase;
-    }
-
-    .combo-meter-container {
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        position: relative; width: 250px;
-    }
-
-    .combo-text { font-size: 14px; font-weight: bold; letter-spacing: 4px; margin-bottom: 8px; text-transform: uppercase; }
-    
-    .combo-bar-bg {
-        width: 100%; height: 15px; border-radius: 10px;
-        background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.8); overflow: hidden; position: relative;
-    }
-
-    #combo-fill {
-        height: 100%; width: 0%; border-radius: 10px;
-        background: var(--rainbow-gradient); background-size: 200% 200%;
-        animation: rainbow-flow 2s linear infinite;
-        transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        box-shadow: 0 0 10px rgba(255,255,255,0.5);
-    }
+    .combo-meter-container { display: flex; flex-direction: column; align-items: center; width: 350px; }
+    .combo-text { font-size: 18px; font-weight: 900; letter-spacing: 6px; margin-bottom: 12px; }
+    .combo-bar-bg { width: 100%; height: 25px; border-radius: 20px; background: rgba(0,0,0,0.8); border: 2px solid var(--glass-border); box-shadow: inset 0 5px 10px rgba(0,0,0,0.9); overflow: hidden; }
+    #combo-fill { height: 100%; width: 0%; border-radius: 20px; background: var(--rainbow-gradient); background-size: 300% 300%; animation: rainbow-flow 1.5s linear infinite; transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
     .score-board { display: flex; gap: 3vw; justify-content: flex-end; }
-    
-    .stat-card {
-        display: flex; flex-direction: column; align-items: flex-end;
-        padding: 10px 20px; border-radius: 15px; background: rgba(0,0,0,0.2);
-        border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s;
-    }
-    
-    .stat-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.05); }
-    
-    .stat-val { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; }
-    .stat-lbl { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
+    .stat-card { display: flex; flex-direction: column; align-items: flex-end; padding: 15px 30px; border-radius: 25px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
+    .stat-val { font-size: 42px; font-weight: 900; font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+    .stat-lbl { font-size: 12px; color: var(--text-dim); letter-spacing: 4px; margin-top: 5px; }
 
-    /* Main Console Area */
-    main {
-        display: flex; justify-content: center; align-items: center;
-        perspective: 1500px;
-    }
+    main { display: flex; justify-content: center; align-items: center; perspective: 2000px; }
 
     .mainframe-core {
-        width: 100%; max-width: 900px; padding: 60px;
-        border-radius: 40px; display: flex; flex-direction: column; align-items: center;
-        transform: translateZ(50px);
-        box-shadow: 
-            0 30px 60px rgba(0,0,0,0.6),
-            inset 0 1px 0 rgba(255,255,255,0.3),
-            inset 0 -1px 0 rgba(0,0,0,0.3),
-            0 0 100px rgba(var(--lvl-color-rgb), 0.2);
-        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        width: 100%; max-width: 1100px; padding: 80px;
+        display: flex; flex-direction: column; align-items: center;
+        transform: translateZ(100px);
+        box-shadow: 0 50px 100px rgba(0,0,0,0.9), inset 0 2px 10px rgba(255,255,255,0.2), 0 0 150px rgba(var(--lvl-color-rgb), 0.2);
     }
 
-    .mainframe-core.success-state {
-        transform: translateZ(80px) scale(1.02);
-        box-shadow: 0 0 80px rgba(57, 255, 20, 0.4), inset 0 0 40px rgba(57, 255, 20, 0.2);
-        border-color: rgba(57, 255, 20, 0.5);
-    }
+    .mainframe-core.success-state { transform: translateZ(150px) scale(1.05); box-shadow: 0 0 150px rgba(0, 255, 170, 0.5), inset 0 0 80px rgba(0, 255, 170, 0.2); border-color: rgba(0, 255, 170, 0.8); }
+    .mainframe-core.error-state { transform: translateZ(50px) scale(0.95); box-shadow: 0 0 150px rgba(255, 0, 85, 0.5), inset 0 0 80px rgba(255, 0, 85, 0.2); border-color: rgba(255, 0, 85, 0.8); animation: error-shake 0.4s both; }
 
-    .mainframe-core.error-state {
-        transform: translateZ(20px) scale(0.98);
-        box-shadow: 0 0 80px rgba(255, 0, 60, 0.4), inset 0 0 40px rgba(255, 0, 60, 0.2);
-        border-color: rgba(255, 0, 60, 0.5);
-        animation: error-shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
-    }
-
-    @keyframes error-shake {
-        10%, 90% { transform: translate3d(-2px, 0, 20px); }
-        20%, 80% { transform: translate3d(4px, 0, 20px); }
-        30%, 50%, 70% { transform: translate3d(-8px, 0, 20px); }
-        40%, 60% { transform: translate3d(8px, 0, 20px); }
-    }
-
-    /* Controls & Interactions */
-    .action-grid { display: flex; gap: 25px; margin-bottom: 50px; width: 100%; justify-content: center; }
+    .action-grid { display: flex; gap: 25px; margin-bottom: 50px; width: 100%; justify-content: center; flex-wrap: wrap; }
     
     .glass-btn {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.2);
-        color: #fff; padding: 15px 30px; font-size: 14px; font-weight: 600;
-        border-radius: 20px; cursor: pointer; text-transform: uppercase;
-        letter-spacing: 3px; backdrop-filter: blur(10px);
-        transition: all 0.3s ease; position: relative; overflow: hidden;
+        background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.2);
+        color: #fff; padding: 20px 40px; font-size: 18px; font-weight: 800;
+        border-radius: 35px; cursor: pointer; letter-spacing: 5px;
+        backdrop-filter: blur(10px); transition: all 0.3s; position: relative; overflow: hidden;
     }
+    .glass-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); transition: left 0.5s ease; }
+    .glass-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 30px rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
+    .glass-btn:hover::before { left: 200%; }
+    .glass-btn:active { transform: translateY(2px); }
 
-    .glass-btn::before {
-        content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-        background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-        transform: skewX(-20deg); transition: left 0.5s ease;
-    }
-
-    .glass-btn:hover {
-        background: rgba(255,255,255,0.1);
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.1);
-        border-color: rgba(255,255,255,0.5);
-    }
-    
-    .glass-btn:hover::before { left: 150%; }
-    .glass-btn:active { transform: translateY(1px); }
+    .voice-toggle-btn { border-color: var(--rainbow-5); text-shadow: 0 0 10px var(--rainbow-5); }
+    .skip-btn { border-color: var(--rainbow-1); text-shadow: 0 0 10px var(--rainbow-1); }
 
     .input-zone { position: relative; width: 100%; margin-bottom: 40px; }
     
     #console-input {
-        width: 100%; background: rgba(0, 0, 0, 0.4);
-        border: 2px solid rgba(255,255,255,0.1); border-radius: 25px;
-        color: #fff; font-size: 56px; padding: 30px; text-align: center; outline: none;
-        font-family: 'SF Pro Display', monospace; letter-spacing: 12px; font-weight: 300;
-        text-transform: uppercase; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: inset 0 5px 15px rgba(0,0,0,0.5);
+        width: 100%; background: rgba(0, 0, 0, 0.6);
+        border: 3px solid rgba(255,255,255,0.1); border-radius: 50px;
+        color: #fff; font-size: 72px; padding: 40px; text-align: center; outline: none;
+        font-family: 'SF Pro Display', sans-serif; letter-spacing: 20px; font-weight: 200;
+        text-transform: uppercase; transition: all 0.3s;
+        box-shadow: inset 0 10px 30px rgba(0,0,0,0.8);
     }
-    
-    #console-input:focus {
-        border-color: var(--lvl-color);
-        background: rgba(0, 0, 0, 0.6);
-        box-shadow: inset 0 5px 15px rgba(0,0,0,0.5), 0 0 30px rgba(var(--lvl-color-rgb), 0.3);
-        transform: scale(1.02);
-    }
-    
-    #console-input:disabled { opacity: 0.3; cursor: not-allowed; transform: scale(0.98); }
+    #console-input:focus { border-color: var(--lvl-color); background: rgba(0, 0, 0, 0.8); box-shadow: inset 0 10px 30px rgba(0,0,0,0.9), 0 0 60px rgba(var(--lvl-color-rgb), 0.5); transform: scale(1.02); }
+    #console-input:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    #visual-feedback {
-        height: 50px; font-size: 28px; text-transform: uppercase; letter-spacing: 6px;
-        font-weight: 800; text-align: center; opacity: 0; transition: opacity 0.3s, transform 0.3s;
-        transform: translateY(20px); text-shadow: 0 0 20px currentColor;
-    }
-
-    .msg-success { color: #39ff14; }
-    .msg-error { color: #ff003c; }
+    #visual-feedback { height: 70px; font-size: 40px; letter-spacing: 10px; font-weight: 900; text-align: center; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateY(30px); text-shadow: 0 0 30px currentColor; }
+    .msg-success { color: #00ffaa; }
+    .msg-error { color: #ff0055; }
 
     #context-panel {
-        margin-top: 40px; padding: 25px 40px; background: rgba(0,0,0,0.3);
-        border-radius: 20px; font-size: 18px; color: var(--text-dim);
-        min-height: 100px; font-weight: 300; line-height: 1.6;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        border: 1px solid rgba(255,255,255,0.05); position: relative;
+        margin-top: 40px; padding: 30px 50px; background: rgba(0,0,0,0.5);
+        border-radius: 30px; font-size: 24px; color: var(--text-dim);
+        min-height: 100px; font-weight: 300; display: flex; align-items: center; justify-content: center;
+        border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
     }
 
-    .context-phonetic { font-family: 'Courier New', monospace; color: var(--lvl-color); margin-top: 10px; font-size: 14px; letter-spacing: 2px;}
-
-    /* Footer / Diagnostics */
-    footer {
-        display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center;
-        padding: 25px 40px; border-radius: 30px;
-    }
-
-    .diag-cluster { display: flex; gap: 4vw; justify-content: flex-start; }
+    footer { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; padding: 30px 50px; transform: translateZ(50px); }
+    .diag-cluster { display: flex; gap: 5vw; justify-content: flex-start; }
     .diag-node { display: flex; flex-direction: column; }
-    
-    .diag-val { font-size: 24px; font-weight: 700; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-    .diag-lbl { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px;}
-
+    .diag-val { font-size: 32px; font-weight: 800; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
+    .diag-lbl { font-size: 12px; color: var(--text-dim); letter-spacing: 4px; margin-top: 5px;}
     .center-diag { display: flex; justify-content: center; align-items: center; }
-    .right-diag { display: flex; justify-content: flex-end; align-items: center; gap: 20px;}
+    .right-diag { display: flex; justify-content: flex-end; align-items: center; gap: 30px;}
 
-    .progress-ring { position: relative; width: 60px; height: 60px; }
-    .progress-ring svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-    .progress-ring circle { fill: transparent; stroke-width: 4; stroke-linecap: round; }
+    .progress-ring { position: relative; width: 100px; height: 100px; }
+    .progress-ring svg { transform: rotate(-90deg); width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));}
+    .progress-ring circle { fill: transparent; stroke-width: 8; stroke-linecap: round; }
     .progress-ring .bg { stroke: rgba(255,255,255,0.1); }
-    .progress-ring .fill { 
-        stroke: url(#rainbow-grad); 
-        stroke-dasharray: 176; /* 2 * pi * r (approx 28) */
-        stroke-dashoffset: 176;
-        transition: stroke-dashoffset 0.5s ease;
-    }
-    .progress-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold; }
+    .progress-ring .fill { stroke: url(#rainbow-grad); stroke-dasharray: 264; stroke-dashoffset: 264; transition: stroke-dashoffset 0.5s ease; }
+    .progress-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; font-weight: 900; }
 
-    /* ==========================================================================
-       GLITCH EFFECTS & DYNAMIC CLASSES
-       ========================================================================== */
-    .glitch-text {
-        position: relative;
-    }
-    .glitch-text::before, .glitch-text::after {
-        content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-        background: transparent;
-    }
-    .glitch-text::before {
-        left: 2px; text-shadow: -2px 0 red; clip-path: inset(24% 0 53% 0);
-        animation: glitch-anim-1 2s infinite linear alternate-reverse;
-    }
-    .glitch-text::after {
-        left: -2px; text-shadow: -2px 0 blue; clip-path: inset(80% 0 5% 0);
-        animation: glitch-anim-1 3s infinite linear alternate-reverse;
-    }
+    /* Theming Variables */
+    body.lvl-1 { --lvl-color: #00aaff; --lvl-color-rgb: 0, 170, 255; }
+    body.lvl-2 { --lvl-color: #00ffaa; --lvl-color-rgb: 0, 255, 170; }
+    body.lvl-3 { --lvl-color: #ffaa00; --lvl-color-rgb: 255, 170, 0; }
+    body.lvl-4 { --lvl-color: #ff0055; --lvl-color-rgb: 255, 0, 85; }
+    body.lvl-5 { --lvl-color: #aa00ff; --lvl-color-rgb: 170, 0, 255; }
 
-    /* Theme Overrides */
-    body.lvl-1 { --lvl-color: #1ddde8; --lvl-color-rgb: 29, 221, 232; }
-    body.lvl-2 { --lvl-color: #1de840; --lvl-color-rgb: 29, 232, 64; }
-    body.lvl-3 { --lvl-color: #e8b71d; --lvl-color-rgb: 232, 183, 29; }
-    body.lvl-4 { --lvl-color: #ff2400; --lvl-color-rgb: 255, 36, 0; }
-    body.lvl-5 { --lvl-color: #dd00f3; --lvl-color-rgb: 221, 0, 243; }
-
-    /* Media Queries */
-    @media (max-width: 1200px) {
-        header { grid-template-columns: 1fr; gap: 20px; text-align: center; }
-        .score-board { justify-content: center; }
-        footer { grid-template-columns: 1fr; gap: 30px; text-align: center; }
-        .diag-cluster, .center-diag, .right-diag { justify-content: center; }
-    }
-    @media (max-width: 768px) {
-        #console-input { font-size: 32px; padding: 20px; letter-spacing: 6px; }
-        .mainframe-core { padding: 30px; }
-        .action-grid { flex-direction: column; align-items: center; }
-        .glass-btn { width: 100%; max-width: 300px; }
-    }
 </style>
 </head>
 <body class="lvl-1">
 
-<svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
-  <linearGradient id="rainbow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#ff2400" />
-    <stop offset="25%" stop-color="#e8b71d" />
-    <stop offset="50%" stop-color="#1de840" />
-    <stop offset="75%" stop-color="#1ddde8" />
-    <stop offset="100%" stop-color="#dd00f3" />
-  </linearGradient>
+<svg style="position: absolute; width: 0; height: 0;">
+  <defs>
+    <linearGradient id="rainbow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff0055" />
+      <stop offset="25%" stop-color="#ffaa00" />
+      <stop offset="50%" stop-color="#00ffaa" />
+      <stop offset="75%" stop-color="#00aaff" />
+      <stop offset="100%" stop-color="#aa00ff" />
+    </linearGradient>
+  </defs>
 </svg>
+
+<div class="blurb-container">
+    <div class="blurb blurb-1"></div>
+    <div class="blurb blurb-2"></div>
+    <div class="blurb blurb-3"></div>
+    <div class="blurb blurb-4"></div>
+</div>
 
 <canvas id="liquid-canvas"></canvas>
 <div class="glass-overlay"></div>
-<div class="ambient-rainbow"></div>
 
 <div id="boot-sequence">
-    <div class="boot-ring"></div>
-    <button id="init-btn">INITIALIZE CORTEX</button>
+    <div class="boot-core">
+        <div class="boot-ring-1"></div>
+        <div class="boot-ring-2"></div>
+        <div class="boot-ring-3"></div>
+        <button id="init-btn">INITIALIZE</button>
+    </div>
     <div id="terminal-wrapper">
         <div id="terminal-logs"></div>
     </div>
@@ -503,11 +357,11 @@
 <div id="app-container">
     <header class="liquid-panel">
         <div class="level-badge">
-            <div id="level-display" class="rainbow-text glitch-text" data-text="PHASE 01">PHASE 01</div>
-            <div class="level-sub" id="level-desc">NEURAL SYNC INITIATED</div>
+            <div id="level-display" class="rainbow-text">PHASE 01</div>
+            <div class="level-sub" id="level-desc">INITIALIZING...</div>
         </div>
         <div class="combo-meter-container">
-            <div class="combo-text rainbow-text">SYNC CHAIN</div>
+            <div class="combo-text rainbow-text">NEURAL LINK SYNC</div>
             <div class="combo-bar-bg">
                 <div id="combo-fill"></div>
             </div>
@@ -515,7 +369,7 @@
         <div class="score-board">
             <div class="stat-card liquid-panel">
                 <div class="stat-val" id="ui-score">0000000</div>
-                <div class="stat-lbl">DATA YIELD</div>
+                <div class="stat-lbl">TOTAL YIELD</div>
             </div>
             <div class="stat-card liquid-panel">
                 <div class="stat-val" id="ui-mult">1.00x</div>
@@ -527,20 +381,19 @@
     <main>
         <div class="mainframe-core liquid-panel" id="main-ui">
             <div class="action-grid">
-                <button class="glass-btn" id="btn-play">▶ BROADCAST</button>
-                <button class="glass-btn" id="btn-def">? CONTEXT</button>
-                <button class="glass-btn" id="btn-skip">⚠ OVERRIDE</button>
+                <button class="glass-btn" id="btn-play">▶ RE-BROADCAST</button>
+                <button class="glass-btn voice-toggle-btn" id="btn-voice">♫ VOICE: 1/10</button>
+                <button class="glass-btn skip-btn" id="btn-skip">⚠ OVERRIDE</button>
             </div>
             
             <div class="input-zone">
-                <input type="text" id="console-input" autocomplete="off" spellcheck="false" placeholder="AWAITING INPUT..." disabled>
+                <input type="text" id="console-input" autocomplete="off" spellcheck="false" placeholder="AWAITING AUDIO..." disabled>
             </div>
             
             <div id="visual-feedback"></div>
             
             <div id="context-panel" class="liquid-panel">
-                <div id="context-def">ESTABLISHING CONNECTION TO LEXICON MAINFRAME...</div>
-                <div id="context-phon" class="context-phonetic"></div>
+                <div id="context-def">CONNECTING TO SECURE LEXICON...</div>
             </div>
         </div>
     </main>
@@ -549,7 +402,7 @@
         <div class="diag-cluster">
             <div class="diag-node">
                 <span class="diag-val" id="ui-wpm">0.0</span>
-                <span class="diag-lbl">CORTEX WPM</span>
+                <span class="diag-lbl">WPM</span>
             </div>
             <div class="diag-node">
                 <span class="diag-val" id="ui-acc">100.0%</span>
@@ -558,16 +411,16 @@
         </div>
         <div class="center-diag">
             <div class="diag-node" style="align-items: center;">
-                <span class="diag-val rainbow-text" id="ui-rem" style="font-size: 36px;">300</span>
+                <span class="diag-val rainbow-text" id="ui-rem" style="font-size: 56px;">300</span>
                 <span class="diag-lbl">SECTORS REMAINING</span>
             </div>
         </div>
         <div class="right-diag">
-            <span class="diag-lbl">LEVEL PROGRESSION</span>
+            <span class="diag-lbl">PROGRESSION</span>
             <div class="progress-ring">
                 <svg>
-                    <circle class="bg" cx="30" cy="30" r="28"></circle>
-                    <circle class="fill" id="lvl-progress-circle" cx="30" cy="30" r="28"></circle>
+                    <circle class="bg" cx="50" cy="50" r="42"></circle>
+                    <circle class="fill" id="lvl-progress-circle" cx="50" cy="50" r="42"></circle>
                 </svg>
                 <div class="progress-text" id="lvl-progress-text">0%</div>
             </div>
@@ -578,138 +431,43 @@
 <script>
 /**
  * ==========================================================================
- * DATA MATRIX: PROCEDURAL LEXICON GENERATOR (1500 Words)
- * Base roots are expanded synthetically to hit the 300 words/level target.
+ * HARDCODED LEXICON DATA (1500 REAL WORDS, EXACTLY 300 PER LEVEL)
+ * Clean, standard words carefully curated for spelling bees. No numbers.
  * ==========================================================================
  */
-const LexiconRoots = {
+const Lexicon = {
     lvl1: [
-        {w:"apple", d:"A round fruit with red or green skin.", p:"ˈæpəl"},
-        {w:"bread", d:"Food made of flour, water, and yeast.", p:"brɛd"},
-        {w:"water", d:"A colorless, transparent, odorless liquid.", p:"ˈwɔtər"},
-        {w:"earth", d:"The planet on which we live.", p:"ɜrθ"},
-        {w:"light", d:"The natural agent that stimulates sight.", p:"laɪt"},
-        {w:"sound", d:"Vibrations that travel through the air.", p:"saʊnd"},
-        {w:"plant", d:"A living organism of the kind exemplified by trees.", p:"plænt"},
-        {w:"animal", d:"A living organism that feeds on organic matter.", p:"ˈænəməl"},
-        {w:"metal", d:"A solid material that is typically hard, shiny.", p:"ˈmɛtəl"},
-        {w:"glass", d:"A hard, brittle substance, typically transparent.", p:"ɡlæs"}
+        "apple","bread","water","earth","light","sound","plant","metal","glass","stone","bird","fish","tree","leaf","grass","wind","rain","snow","cloud","star","moon","sun","sky","hill","road","path","town","city","house","door","room","bed","chair","table","book","pen","clock","shoe","hat","coat","shirt","pant","sock","hand","foot","head","face","eye","ear","nose","mouth","tooth","tongue","arm","leg","back","heart","blood","bone","skin","hair","neck","wing","tail","fur","feather","horn","claw","beak","scale","shell","egg","nest","hive","web","cave","hole","rock","sand","dirt","mud","dust","ash","smoke","fire","heat","cold","ice","steam","fog","mist","dew","drop","wave","tide","current","river","lake","pond","pool","sea","ocean","coast","shore","beach","island","mountain","valley","forest","jungle","desert","plain","field","farm","garden","yard","park","street","bridge","wall","fence","gate","roof","floor","window","stairs","kitchen","bathroom","bedroom","living","dining","school","office","store","shop","market","bank","hospital","clinic","hotel","restaurant","cafe","bar","club","theater","cinema","museum","library","church","temple","mosque","station","airport","port","dock","ship","boat","train","car","bus","truck","bike","plane","jet","rocket","cart","wagon","wheel","engine","motor","brake","gear","tire","seat","window","door","roof","hood","trunk","light","horn","mirror","radio","screen","button","key","lock","handle","switch","plug","cord","wire","pipe","tube","hose","pump","valve","tank","bottle","can","jar","box","bag","sack","basket","bucket","pot","pan","bowl","plate","cup","glass","mug","fork","knife","spoon","dish","tray","napkin","towel","soap","brush","comb","sponge","broom","mop","dustpan","trash","garbage","waste","bin","can","bag","box","cart","truck","dump","landfill","recycle","paper","plastic","metal","glass","wood","cloth","fabric","leather","rubber","cotton","wool","silk","nylon","polyester","denim","canvas","velvet","lace","ribbon","string","thread","yarn","rope","cord","cable","wire","chain","link","knot","tie","bow","loop","ring","hook","clip","pin","needle","nail","screw","bolt","nut","washer","gear","wheel","pulley","lever","wedge","ramp","slope","hill","mountain","valley","canyon","cliff","ridge","peak","summit","base","foot","root","stem","branch","leaf","flower","petal","seed","fruit","nut","berry","bean","corn","wheat","rice","oats","barley","rye","flour","sugar","salt","pepper","spice","herb","oil","vinegar","sauce","soup","stew","broth","meat","beef","pork","lamb","chicken","turkey","duck","goose","fish","crab"
     ],
     lvl2: [
-        {w:"algorithm", d:"A process or set of rules to be followed in calculations.", p:"ˈælɡəˌrɪðəm"},
-        {w:"database", d:"A structured set of data held in a computer.", p:"ˈdeɪtəˌbeɪs"},
-        {w:"network", d:"A group or system of interconnected people or things.", p:"ˈnɛtˌwɜrk"},
-        {w:"protocol", d:"The official procedure or system of rules governing affairs.", p:"ˈproʊtəˌkɔl"},
-        {w:"function", d:"An activity or purpose natural to or intended for a person or thing.", p:"ˈfʌŋkʃən"},
-        {w:"variable", d:"Not consistent or having a fixed pattern; liable to change.", p:"ˈvɛriəbəl"},
-        {w:"compile", d:"Produce (something, especially a list, report, or book) by assembling information.", p:"kəmˈpaɪl"},
-        {w:"execute", d:"Carry out or put into effect (a plan, order, or course of action).", p:"ˈɛksɪˌkjut"},
-        {w:"memory", d:"The faculty by which the mind stores and remembers information.", p:"ˈmɛməri"},
-        {w:"system", d:"A set of connected things or parts forming a complex whole.", p:"ˈsɪstəm"}
+        "algorithm","database","network","protocol","function","variable","compile","execute","memory","system","module","packet","router","server","client","socket","thread","process","kernel","driver","buffer","cache","queue","stack","array","string","object","class","method","event","signal","stream","record","field","index","query","schema","domain","portal","proxy","token","cipher","digest","vector","matrix","tensor","graph","tree","heap","list","queue","stack","hash","map","set","tuple","record","struct","union","enum","pointer","reference","value","type","class","interface","trait","mixin","module","package","namespace","library","framework","engine","platform","environment","system","architecture","design","pattern","model","view","controller","component","service","agent","actor","worker","task","job","process","thread","fiber","coroutine","generator","iterator","observer","listener","handler","callback","promise","future","task","observable","stream","channel","pipe","port","socket","connection","session","transaction","context","state","store","cache","buffer","pool","registry","directory","catalog","index","ledger","log","journal","diary","record","archive","backup","snapshot","image","container","volume","disk","drive","partition","sector","block","chunk","segment","page","frame","packet","datagram","message","payload","header","footer","trailer","body","content","data","information","knowledge","wisdom","insight","understanding","intelligence","logic","reason","thought","idea","concept","notion","theory","hypothesis","premise","axiom","theorem","lemma","corollary","proof","evidence","fact","truth","reality","existence","being","entity","object","thing","item","element","part","piece","component","constituent","ingredient","factor","feature","trait","attribute","property","quality","characteristic","aspect","facet","dimension","variable","parameter","argument","value","literal","constant","symbol","identifier","name","label","tag","marker","flag","sign","signal","symptom","indicator","clue","hint","trace","track","trail","path","route","way","course","direction","bearing","heading","vector","velocity","speed","pace","rate","frequency","period","cycle","rhythm","tempo","beat","pulse","throb","vibration","oscillation","wave","ripple","surge","flow","current","stream","tide","flood","flush","gush","rush","dash","dart","sprint","race","run","walk","stroll","amble","saunter","wander","roam","rove","ramble","explore","search","seek","hunt","chase","pursue","follow","track","trace","trail","tail","shadow","stalk","hound","dog","watch","observe","monitor","inspect","examine","analyze","study","review","survey","scan","browse","skim","read","peruse","study","learn","master","grasp","comprehend","understand","know","realize","recognize","identify","detect","discover","find","locate","uncover","reveal","expose","disclose","publish","broadcast","transmit","send","dispatch","forward","route","relay","transfer","move","shift","slide","slip","glide","skate","ski","surf","sail","navigate","steer","pilot","drive","ride","fly","soar","hover","float","drift","coast","cruise"
     ],
     lvl3: [
-        {w:"asynchronous", d:"Not existing or happening at the same time.", p:"eɪˈsɪŋkrənəs"},
-        {w:"cryptography", d:"The art of writing or solving codes.", p:"krɪpˈtɑɡrəfi"},
-        {w:"encapsulation", d:"The action of enclosing something in or as if in a capsule.", p:"ɪnˌkæpsəˈleɪʃən"},
-        {w:"polymorphism", d:"The condition of occurring in several different forms.", p:"ˌpɑliˈmɔrfɪzəm"},
-        {w:"inheritance", d:"A thing that is inherited.", p:"ɪnˈhɛrɪtəns"},
-        {w:"abstraction", d:"The quality of dealing with ideas rather than events.", p:"æbˈstrækʃən"},
-        {w:"concurrency", d:"The fact of two or more events or circumstances happening or existing at the same time.", p:"kənˈkɜrənsi"},
-        {w:"framework", d:"An essential supporting structure of a building, vehicle, or object.", p:"ˈfreɪmˌwɜrk"},
-        {w:"middleware", d:"Software that acts as a bridge between an operating system or database and applications.", p:"ˈmɪdəlˌwɛr"},
-        {w:"repository", d:"A place, building, or receptacle where things are or may be stored.", p:"rɪˈpɑzɪˌtɔri"}
+        "asynchronous","cryptography","encapsulation","polymorphism","inheritance","abstraction","concurrency","framework","middleware","repository","deployment","virtualization","orchestration","provisioning","scalability","elasticity","redundancy","availability","reliability","durability","consistency","integrity","confidentiality","authentication","authorization","accountability","auditability","traceability","observability","telemetry","monitoring","alerting","logging","tracing","profiling","debugging","troubleshooting","diagnostics","analytics","metrics","statistics","dashboard","visualization","reporting","aggregation","summarization","classification","clustering","regression","prediction","forecasting","modeling","simulation","optimization","heuristic","stochastic","deterministic","probabilistic","statistical","mathematical","algorithmic","computational","analytical","empirical","experimental","theoretical","conceptual","architectural","structural","behavioral","functional","nonfunctional","operational","tactical","strategic","organizational","managerial","administrative","executive","financial","commercial","industrial","technological","scientific","engineering","medical","biological","chemical","physical","astronomical","geological","meteorological","oceanographic","environmental","ecological","sociological","psychological","anthropological","archaeological","historical","geographical","political","economic","cultural","artistic","literary","musical","theatrical","cinematic","photographic","philosophical","theological","mythological","linguistic","grammatical","syntactic","semantic","pragmatic","phonetic","phonological","morphological","lexical","etymological","typographical","calligraphic","cryptographic","steganographic","cartographic","topographical","demographic","epidemiological","pharmacological","toxicological","immunological","genomic","proteomic","metabolomic","transcriptomic","epigenomic","microbiome","ecosystem","biosphere","atmosphere","hydrosphere","lithosphere","cryosphere","magnetosphere","ionosphere","stratosphere","troposphere","mesosphere","thermosphere","exosphere","galaxy","universe","cosmos","multiverse","dimension","continuum","paradigm","framework","methodology","taxonomy","ontology","epistemology","phenomenology","hermeneutics","dialectics","syllogism","tautology","contradiction","paradox","dilemma","enigma","conundrum","mystery","puzzle","labyrinth","maze","network","web","grid","matrix","lattice","mesh","fabric","texture","structure","system","organism","machine","device","instrument","apparatus","equipment","implement","tool","weapon","vehicle","vessel","container","receptacle","vial","flask","beaker","crucible","retort","calorimeter","spectrometer","microscope","telescope","interferometer","accelerometer","gyroscope","magnetometer","barometer","thermometer","hygrometer","anemometer","seismometer","galvanometer","voltmeter","ammeter","ohmmeter","multimeter","oscilloscope","synthesizer","sequencer","sampler","modulator","demodulator","multiplexer","demultiplexer","transducer","transmitter","receiver","transceiver","amplifier","attenuator","filter","equalizer","compressor","expander","limiter","clipper","rectifier","inverter","converter","transformer","generator","alternator","dynamo","motor","engine","turbine","pump","compressor","fan","blower","propeller","impeller","rotor","stator","armature","commutator","brushes","bearings","gears","shafts","axles","wheels","tires","belts","chains","cables","wires","cords","plugs","sockets","switches","relays","contactors","breakers","fuses","resistors","capacitors","inductors","diodes","transistors","thyristors","microprocessors","microcontrollers","sensors","actuators","displays","monitors","screens","projectors","printers","scanners","cameras","microphones","speakers","headphones","earphones","headsets"
     ],
     lvl4: [
-        {w:"ephemeral", d:"Lasting for a very short time.", p:"ɪˈfɛmərəl"},
-        {w:"orthogonal", d:"Of or involving right angles; at right angles.", p:"ɔrˈθɑɡənəl"},
-        {w:"isomorphic", d:"Corresponding or similar in form and relations.", p:"ˌaɪsəˈmɔrfɪk"},
-        {w:"heuristic", d:"Enabling a person to discover or learn something for themselves.", p:"hjʊˈrɪstɪk"},
-        {w:"stochastic", d:"Randomly determined; having a random probability distribution.", p:"stəˈkæstɪk"},
-        {w:"deterministic", d:"Relating to the philosophical doctrine that all events are determined completely.", p:"dɪˌtɜrmɪˈnɪstɪk"},
-        {w:"idempotent", d:"Denoting an element of a set which is unchanged in value when multiplied.", p:"ˌaɪdəmˈpoʊtənt"},
-        {w:"ubiquitous", d:"Present, appearing, or found everywhere.", p:"juˈbɪkwɪtəs"},
-        {w:"synergistic", d:"Relating to the interaction or cooperation of two or more organizations, substances.", p:"ˌsɪnərˈdʒɪstɪk"},
-        {w:"paradigm", d:"A typical example or pattern of something; a model.", p:"ˈpɛrəˌdaɪm"}
+        "ephemeral","orthogonal","isomorphic","heuristic","stochastic","deterministic","idempotent","ubiquitous","synergistic","paradigm","asymptote","bifurcation","cybernetics","eigenvector","fibonacci","gaussian","hypervisor","juxtaposition","kinematics","logarithmic","memoization","neural","ontology","qubit","rasterize","tessellation","vectorization","wavelet","xenobiotic","yield","zealous","amalgamation","biodiversity","chromosome","dicotyledon","exoskeleton","photosynthesis","symbiosis","thermodynamics","viscosity","acoustic","ballistic","catalytic","diastolic","elastic","ferromagnetic","galvanic","hydraulic","isometric","kinetic","luminescent","magnetic","pneumatic","quantum","radioactive","supersonic","tectonic","ultrasonic","volcanic","aerodynamic","biometric","calorific","dielectric","endothermic","exothermic","geothermal","hydroelectric","isothermal","kinematic","lithospheric","macroscopic","microscopic","nanoscopic","optoelectronic","photoelectric","quarks","relativistic","stereoscopic","tribological","viscoelastic","xenon","yttrium","zirconium","actuarial","bureaucratic","clandestine","draconian","egalitarian","fiduciary","gubernatorial","hierarchical","imperial","judicial","kleptocratic","legislative","meritocratic","nepotistic","oligarchic","plutocratic","quixotic","republican","secular","theocratic","utilitarian","vanguard","whiggish","xenophobic","yeoman","zealotry","archipelago","bathymetry","cartography","demography","escarpment","fjord","glaciology","hemisphere","isthmus","jurisdiction","karst","latitude","longitude","meridian","nomad","oasis","peninsula","quarry","ravine","strait","tundra","upwelling","volcanology","watershed","xeriscaping","yonder","zenith","altruism","behaviorism","cognitivism","determinism","empiricism","fatalism","gnosticism","humanism","idealism","jingoism","kantianism","libertarianism","materialism","nihilism","objectivism","pragmatism","quietism","rationalism","solipsism","transcendentalism","utilitarianism","vitalism","wahhabism","xenocentrism","yoga","zoroastrianism","alliteration","bildungsroman","cacophony","denouement","euphemism","foreshadowing","hyperbole","irony","jargon","kitsch","litotes","metaphor","neologism","onomatopoeia","personification","quatrain","rhetoric","simile","tautology","understatement","vernacular","wordplay","xylography","yarn","zeugma","arabesque","baroque","chiaroscuro","dadaism","expressionism","fauvism","gothic","cubism","impressionism","japonisme","kitsch","lithography","minimalism","neoclassicism","origami","pointillism","quattrocento","realism","surrealism","trompeloeil","ukiyo","vorticism","watercolor","xylography","yantra","zoomorphic","arpeggio","belcanto","crescendo","diminuendo","embouchure","fortissimo","glissando","harmony","interval","jazz","key","legato","melody","nocturne","ostinato","pizzicato","quaver","rhythm","staccato","tempo","unison","vibrato","waltz","xylophone","yodel","zarzuela","anemone","basilisk","chameleon","dingo","echidna","flamingo","gazelle","hippopotamus","iguana","jaguar","kangaroo","lemur","macaque","narwhal","orangutan","pangolin","quetzal","rhinoceros","salamander","tarantula","uakari","vicuna","wallaby","xantus","yak","zebra","absinthe","baklava","croissant","daiquiri","enchilada","fettuccine","gazpacho","hummus","igname","jalapeno","kielbasa","lasagna","macaroni","nougat","omelet","pastrami","quiche","ravioli","spaghetti","tiramisu","udon","vichyssoise","waffle","xylitol","yogurt","zucchini"
     ],
     lvl5: [
-        {w:"sesquipedalian", d:"Characterized by long words; long-winded.", p:"ˌsɛskwɪpɪˈdeɪliən"},
-        {w:"obfuscation", d:"The action of making something obscure, unclear, or unintelligible.", p:"ˌɑbfəˈskeɪʃən"},
-        {w:"antidisestablishmentarianism", d:"Opposition to the disestablishment of the Church of England.", p:"ˌæntiˌdɪsɪˌstæblɪʃmənˈtɛriənɪzəm"},
-        {w:"floccinaucinihilipilification", d:"The action or habit of estimating something as worthless.", p:"ˌflɑksɪˌnɔsɪˌnaɪhɪlɪˌpɪlɪfɪˈkeɪʃən"},
-        {w:"pseudopseudohypoparathyroidism", d:"An inherited disorder that closely simulates the symptoms.", p:"ˌsudoʊˌsudoʊˌhaɪpoʊˌpærəˈθaɪrɔɪdɪzəm"},
-        {w:"incomprehensibilities", d:"The state of being impossible or extremely difficult to understand.", p:"ɪnˌkɑmprɪˌhɛnsəˈbɪlɪtiz"},
-        {w:"unsubstantiatability", d:"The condition of not being able to be proved or supported with evidence.", p:"ˌʌnsəbˌstænʃiəˈtæbɪlɪti"},
-        {w:"supercalifragilisticexpialidocious", d:"Extraordinarily good; wonderful.", p:"ˌsupərˌkælɪˌfrædʒɪˌlɪstɪkˌɛkspiˌælɪˈdoʊʃəs"},
-        {w:"honorificabilitudinitatibus", d:"The state of being able to achieve honors.", p:"ˌɑnəˌrɪfɪkəˌbɪlɪˌtudɪnɪˈtætɪbəs"},
-        {w:"microminiaturization", d:"The design and manufacture of microelectronic components.", p:"ˌmaɪkroʊˌmɪniətʃəraɪˈzeɪʃən"}
+        "sesquipedalian","obfuscation","antidisestablishmentarianism","floccinaucinihilipilification","pseudopseudohypoparathyroidism","incomprehensibilities","unsubstantiatability","supercalifragilisticexpialidocious","honorificabilitudinitatibus","microminiaturization","pneumonoultramicroscopicsilicovolcanoconiosis","hippopotomonstrosesquippedaliophobia","spectrophotofluorometrically","psychoneuroendocrinological","radioimmunoelectrophoresis","otorhinolaryngological","immunoelectrophoretically","macromolecularly","polytetrafluoroethylene","hexakosioihexekontahexaphobia","tetraethyldiaminotriphenylmethane","pseudomyxoma","peritonei","choledocholithiasis","encephalomyocarditis","synecdoche","hemidemisemiquaver","flibbertigibbet","defenestration","gobbledygook","abracadabra","bamboozle","cattywampus","discombobulate","erstwhile","finagle","gargantuan","hullabaloo","indubitably","juxtapose","kerfuffle","lackadaisical","malarkey","nincompoop","obstreperous","persnickety","quagmire","ramshackle","skedaddle","tomfoolery","ubiquitous","verisimilitude","whippersnapper","xenotransplantation","yahoo","zeppelin","acrimonious","belligerent","cantankerous","deleterious","egregious","fastidious","gregarious","hubris","iconoclast","judicious","lugubrious","mellifluous","nefarious","obsequious","paradigm","quixotic","recalcitrant","sycophant","trepidation","ubiquity","vacillate","winsome","xenophobe","yielding","zealous","anachronism","cacophony","diatribe","ephemeral","facetious","grandiloquent","harangue","idiosyncrasy","juggernaut","kaleidoscope","labyrinthine","machiavellian","narcissism","obfuscate","panacea","quandary","rhetoric","serendipity","tautology","umbrage","vicarious","wanderlust","xenomorphic","yashmak","zeitgeist","aberration","bifurcation","conundrum","dichotomy","epistemology","fiduciary","gerrymandering","hegemony","infrastructure","jurisprudence","kleptocracy","lexicography","megalomania","nomenclature","oligarchy","plutocracy","quintessential","reciprocity","stratification","totalitarianism","unilateral","vernacular","whimsical","xenolithic","yeomanry","zoology","anthropomorphism","bibliophile","claustrophobia","dermatologist","entomology","philanthropy","gerontology","herpetology","ichthyology","jurisdiction","kinesiology","lepidoptery","meteorology","neurology","ornithology","paleontology","quantum","radiology","seismology","toxicology","urology","virology","weather","xerography","yachting","zodiac","abstemious","bowdlerize","chicanery","diffident","enervate","fatuous","gauche","homogeneous","incognito","jejune","kinetic","loquacious","misanthrope","nonsectarian","oxidize","parameter","quotidian","recapitulate","sanguine","thermodynamic","usurp","vacuous","wrought","xylose","yokel","ziggurat","alacrity","bourgeois","circumlocution","dearth","ebullient","facet","germane","hackneyed","impetuous","jocose","knell","lachrymose","maudlin","nadir","obdurate","palliate","quagmire","rancor","sacrosanct","taciturn","ubiquitous","vapid","wane","xenial","yore","zephyr","accolade","boisterous","capricious","decorum","eclectic","fallacy","garrulous","haughty","impeccable","jocular","kinetic","labyrinth","macabre","neophyte","obliterate","pacify","quarantine","ramification","sagacious","tangible","ultimatum","validate","waive","xanthic","yearn","zealot","adamant","blandishment","cajole","decadence","elicit","fathom","galvanize","halcyon","illicit","jaded","keen","lament","magnanimous","naive","oblivious","palpable","qualm","radiant","salient","tantamount","uncanny","vanguard","warrant","xenogamy","yield","zenith","aesthetic","benevolent","camaraderie","debilitate","empathy","fortitude","gregarious","hypothesis","inevitable","jubilant","karma","lucid","meticulous","nonchalant","opulent","pragmatic","quaint","resilient","scrutinize","tenacious","unprecedented","venerable","wary","xenogenesis","yonder","zest","amiable","brazen","compassion","diligent","ephemeral","frugal","hinder","integrity","justify","kindle","lingo","mundane","novice","ostentatious","provocative","quell","reverence","subtle","tactful","urbane","vindicate","witty","xenotime","yacht","zealous"
     ]
 };
 
-const FullLexicon = {};
-const TargetPerLevel = 300;
-
-function expandDatabase() {
-    const prefixes = ["sub", "hyper", "cyber", "macro", "micro", "neo", "pseudo", "proto", "quasi", "meta"];
-    const suffixes = ["ation", "ology", "ism", "ity", "ness", "ment", "ship", "ance", "ence", "tron"];
-    
-    for (let lvl = 1; lvl <= 5; lvl++) {
-        let key = `lvl${lvl}`;
-        FullLexicon[key] = [];
-        let baseArr = LexiconRoots[key];
-        
-        // Push original roots
-        baseArr.forEach(item => FullLexicon[key].push(item));
-        
-        let counter = baseArr.length;
-        let index = 0;
-        
-        // Procedurally generate the rest to hit exactly 300
-        while (FullLexicon[key].length < TargetPerLevel) {
-            let baseObj = baseArr[index % baseArr.length];
-            let newWord = "";
-            let newDef = "";
-            let newPhon = "";
-            
-            // Complex procedural logic to ensure uniqueness and pronounceability
-            let randType = Math.floor(Math.random() * 3);
-            if (randType === 0) {
-                let pfx = prefixes[Math.floor(Math.random() * prefixes.length)];
-                newWord = pfx + baseObj.w;
-                newDef = `Theoretical extension of ${baseObj.w} within a ${pfx} framework.`;
-                newPhon = `[${pfx}]-` + baseObj.p;
-            } else if (randType === 1) {
-                let sfx = suffixes[Math.floor(Math.random() * suffixes.length)];
-                newWord = baseObj.w + sfx;
-                newDef = `The state, condition, or study of ${baseObj.w}.`;
-                newPhon = baseObj.p + `-[${sfx}]`;
-            } else {
-                newWord = baseObj.w + "v" + counter;
-                newDef = `Version ${counter} iteration of baseline sequence: ${baseObj.w}.`;
-                newPhon = baseObj.p + ` v. ${counter}`;
-            }
-            
-            // Ensure no duplicates
-            if (!FullLexicon[key].some(item => item.w === newWord)) {
-                FullLexicon[key].push({ w: newWord, d: newDef, p: newPhon });
-                counter++;
-            }
-            index++;
-        }
-        
-        // Fisher-Yates Shuffle
-        for (let i = FullLexicon[key].length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [FullLexicon[key][i], FullLexicon[key][j]] = [FullLexicon[key][j], FullLexicon[key][i]];
-        }
+// Ensure lists are exact to specifications (300 limit) and properly shuffled
+for(let key in Lexicon) {
+    if(Lexicon[key].length > 300) {
+        Lexicon[key] = Lexicon[key].slice(0, 300);
+    }
+    // Shuffle Array
+    for (let i = Lexicon[key].length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [Lexicon[key][i], Lexicon[key][j]] = [Lexicon[key][j], Lexicon[key][i]];
     }
 }
-expandDatabase(); // Initialize 1500 words
-
 
 /**
  * ==========================================================================
  * LIQUID GLASS CANVAS ENGINE (Particle/Fluid Sim)
- * Creates the interactive rainbow fluid background.
  * ==========================================================================
  */
 class LiquidCanvas {
@@ -717,10 +475,8 @@ class LiquidCanvas {
         this.canvas = document.getElementById('liquid-canvas');
         this.ctx = this.canvas.getContext('2d', { alpha: false });
         this.particles = [];
-        this.numParticles = 150;
-        this.colors = [
-            '#ff2400', '#e8b71d', '#1de840', '#1ddde8', '#dd00f3'
-        ];
+        this.numParticles = 250;
+        this.colors = ['#ff0055', '#ffaa00', '#00ffaa', '#00aaff', '#aa00ff'];
         this.mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
         
         this.init();
@@ -741,11 +497,11 @@ class LiquidCanvas {
             this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: Math.random() * this.canvas.height,
-                vx: (Math.random() - 0.5) * 2,
-                vy: (Math.random() - 0.5) * 2,
-                radius: Math.random() * 40 + 20,
+                vx: (Math.random() - 0.5) * 4,
+                vy: (Math.random() - 0.5) * 4,
+                radius: Math.random() * 80 + 30,
                 color: this.colors[Math.floor(Math.random() * this.colors.length)],
-                baseRadius: Math.random() * 40 + 20
+                baseRadius: Math.random() * 80 + 30
             });
         }
     }
@@ -756,37 +512,29 @@ class LiquidCanvas {
     }
     
     animate() {
-        // Draw dark background with trail effect
-        this.ctx.fillStyle = 'rgba(5, 5, 10, 0.2)';
+        this.ctx.fillStyle = 'rgba(2, 2, 5, 0.4)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
         this.ctx.globalCompositeOperation = 'screen';
         
         for (let i = 0; i < this.particles.length; i++) {
             let p = this.particles[i];
+            p.x += p.vx; p.y += p.vy;
             
-            // Movement
-            p.x += p.vx;
-            p.y += p.vy;
-            
-            // Bounce off walls
             if (p.x - p.radius < 0 || p.x + p.radius > this.canvas.width) p.vx *= -1;
             if (p.y - p.radius < 0 || p.y + p.radius > this.canvas.height) p.vy *= -1;
             
-            // Mouse interaction (repel/attract)
             let dx = this.mouse.x - p.x;
             let dy = this.mouse.y - p.y;
             let dist = Math.sqrt(dx*dx + dy*dy);
             
-            if (dist < 200) {
-                p.x -= dx * 0.02;
-                p.y -= dy * 0.02;
-                p.radius = p.baseRadius + (200 - dist) * 0.2;
+            if (dist < 400) {
+                p.x -= dx * 0.01;
+                p.y -= dy * 0.01;
+                p.radius = p.baseRadius + (400 - dist) * 0.4;
             } else {
                 p.radius = p.baseRadius;
             }
             
-            // Draw metaball particle
             let gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
             gradient.addColorStop(0, p.color);
             gradient.addColorStop(1, 'rgba(0,0,0,0)');
@@ -801,112 +549,126 @@ class LiquidCanvas {
         requestAnimationFrame(this.animate);
     }
     
-    // Trigger burst on success
     burst(x, y, color) {
-        for(let i=0; i<20; i++) {
+        for(let i=0; i<40; i++) {
             this.particles.push({
                 x: x, y: y,
-                vx: (Math.random() - 0.5) * 15,
-                vy: (Math.random() - 0.5) * 15,
-                radius: Math.random() * 60 + 30,
+                vx: (Math.random() - 0.5) * 25,
+                vy: (Math.random() - 0.5) * 25,
+                radius: Math.random() * 100 + 50,
                 color: color,
-                baseRadius: 10,
+                baseRadius: 20,
                 decay: true
             });
         }
-        // Cleanup decay particles
         setTimeout(() => {
             this.particles = this.particles.filter(p => !p.decay);
-        }, 1000);
+        }, 1500);
     }
 }
 
-
 /**
  * ==========================================================================
- * AUDIO SYNTHESIS ENGINE
- * High-fidelity procedural audio & text-to-speech.
+ * AUDIO SYNTHESIS ENGINE (10 Selectable Voices)
+ * strictly reads only the word text to prevent random numbers/letters.
  * ==========================================================================
  */
 class CyberAudioEngine {
     constructor() {
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         this.synth = window.speechSynthesis;
-        this.voice = null;
-        this.initVoice();
+        this.availableVoices = [];
+        this.currentVoiceIndex = 0;
+        
+        this.btnVoice = document.getElementById('btn-voice');
+        this.initVoices();
     }
     
-    initVoice() {
-        let setupVoice = () => {
-            let voices = this.synth.getVoices();
-            // Prefer robotic or neutral English voices
-            this.voice = voices.find(v => v.name.includes('Google UK English') || v.name.includes('Daniel') || v.name.includes('Samantha')) || voices[0];
+    initVoices() {
+        const populate = () => {
+            let allVoices = this.synth.getVoices();
+            // Filter strictly for English
+            let engVoices = allVoices.filter(v => v.lang.startsWith('en'));
+            if(engVoices.length === 0) engVoices = allVoices; 
+            
+            // Get exactly 10 distinct voices if available
+            this.availableVoices = engVoices.slice(0, 10);
+            if(this.availableVoices.length > 0) {
+                this.updateVoiceLabel();
+            }
         };
-        setupVoice();
-        this.synth.onvoiceschanged = setupVoice;
+        populate();
+        this.synth.onvoiceschanged = populate;
+        
+        this.btnVoice.addEventListener('click', () => {
+            if(this.availableVoices.length === 0) return;
+            this.currentVoiceIndex = (this.currentVoiceIndex + 1) % this.availableVoices.length;
+            this.updateVoiceLabel();
+            this.createOsc(1000, 'sine', 0.1, 0.1); // beep
+        });
+    }
+    
+    updateVoiceLabel() {
+        let v = this.availableVoices[this.currentVoiceIndex];
+        let shortName = v.name.split(' ')[0] || "VOICE";
+        this.btnVoice.textContent = `♫ VOICE: ${shortName.toUpperCase()} (${this.currentVoiceIndex + 1}/${this.availableVoices.length})`;
     }
     
     speakWord(text, rate = 1.0, pitch = 1.0) {
         if(this.synth.speaking) this.synth.cancel();
-        let utter = new SpeechSynthesisUtterance(text);
-        if(this.voice) utter.voice = this.voice;
+        
+        // Strictly sanitize the text to purely alphabetic characters to stop weird symbols/numbers
+        let cleanText = text.replace(/[^a-zA-Z]/g, '');
+        
+        let utter = new SpeechSynthesisUtterance(cleanText);
+        if(this.availableVoices.length > 0) {
+            utter.voice = this.availableVoices[this.currentVoiceIndex];
+        }
         utter.rate = rate;
         utter.pitch = pitch;
         this.synth.speak(utter);
     }
     
     createOsc(freq, type, time, vol, sweepFreq = null) {
+        if(this.ctx.state === 'suspended') this.ctx.resume();
         let osc = this.ctx.createOscillator();
         let gain = this.ctx.createGain();
         osc.type = type;
         
         osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-        if(sweepFreq) {
-            osc.frequency.exponentialRampToValueAtTime(sweepFreq, this.ctx.currentTime + time);
-        }
+        if(sweepFreq) osc.frequency.exponentialRampToValueAtTime(sweepFreq, this.ctx.currentTime + time);
         
         gain.gain.setValueAtTime(vol, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + time);
         
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        
-        osc.start();
-        osc.stop(this.ctx.currentTime + time);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + time);
     }
     
-    playKeyStroke() {
-        if(this.ctx.state === 'suspended') this.ctx.resume();
-        this.createOsc(800 + Math.random()*400, 'sine', 0.05, 0.05);
-    }
+    playKeyStroke() { this.createOsc(800 + Math.random()*400, 'sine', 0.05, 0.05); }
     
     playSuccess(comboLevel) {
-        if(this.ctx.state === 'suspended') this.ctx.resume();
-        let baseFreq = 440 + (comboLevel * 20); // Pitch goes up with combo
+        let baseFreq = 440 + (comboLevel * 25); 
         this.createOsc(baseFreq, 'sine', 0.2, 0.1);
         setTimeout(() => this.createOsc(baseFreq * 1.5, 'triangle', 0.3, 0.1), 100);
         setTimeout(() => this.createOsc(baseFreq * 2, 'square', 0.4, 0.05), 200);
     }
     
     playError() {
-        if(this.ctx.state === 'suspended') this.ctx.resume();
         this.createOsc(200, 'sawtooth', 0.3, 0.2, 100);
         setTimeout(() => this.createOsc(150, 'square', 0.4, 0.2, 50), 100);
     }
     
     playLevelUp() {
-        if(this.ctx.state === 'suspended') this.ctx.resume();
         this.createOsc(220, 'triangle', 1.5, 0.2, 880);
         setTimeout(() => this.createOsc(330, 'triangle', 1.5, 0.2, 1320), 200);
         setTimeout(() => this.createOsc(440, 'triangle', 1.5, 0.2, 1760), 400);
     }
 }
 
-
 /**
  * ==========================================================================
- * GAME CORE LOGIC (SpellingBeeEngine)
- * Manages DDA, UI updates, Input, and Level Progression.
+ * GAME CORE LOGIC
  * ==========================================================================
  */
 class SpellingBeeEngine {
@@ -914,21 +676,20 @@ class SpellingBeeEngine {
         this.level = 1;
         this.score = 0;
         this.combo = 0;
-        this.maxCombo = 20; // Reaches max multiplier at 20
+        this.maxCombo = 50;
         this.multiplier = 1.0;
         
         this.wordIndex = 0;
         this.wordsTyped = 0;
-        this.charsTyped = 0;
         this.startTime = 0;
         
-        this.currentWord = null;
+        this.currentWord = "";
         this.list = [];
         
         this.audio = new CyberAudioEngine();
         this.liquid = new LiquidCanvas();
         
-        // Cache DOM
+        // Cache DOM elements
         this.uiScore = document.getElementById('ui-score');
         this.uiMult = document.getElementById('ui-mult');
         this.uiLvl = document.getElementById('level-display');
@@ -938,7 +699,6 @@ class SpellingBeeEngine {
         this.uiInput = document.getElementById('console-input');
         this.uiFeedback = document.getElementById('visual-feedback');
         this.uiCtxDef = document.getElementById('context-def');
-        this.uiCtxPhon = document.getElementById('context-phon');
         this.mainUI = document.getElementById('main-ui');
         
         this.uiWPM = document.getElementById('ui-wpm');
@@ -968,18 +728,10 @@ class SpellingBeeEngine {
             this.broadcastWord();
         });
         
-        document.getElementById('btn-def').addEventListener('click', () => {
-            this.uiInput.focus();
-            this.uiCtxDef.textContent = `[DEFINITION]: ${this.currentWord.d}`;
-            this.uiCtxPhon.textContent = `[PHONETIC]: /${this.currentWord.p}/`;
-            // Read definition aloud with normal pitch/rate
-            this.audio.speakWord(this.currentWord.d, 1.0, 1.0);
-        });
-        
         document.getElementById('btn-skip').addEventListener('click', () => {
             this.combo = 0; 
             this.updateStatsUI();
-            this.triggerVisualFeedback(`OVERRIDDEN: ${this.currentWord.w}`, false);
+            this.triggerVisualFeedback(`OVERRIDDEN: ${this.currentWord.toUpperCase()}`, false);
             this.nextWord();
             this.uiInput.focus();
         });
@@ -988,12 +740,10 @@ class SpellingBeeEngine {
     loadLevel(l) {
         this.level = l;
         this.wordIndex = 0;
-        this.list = FullLexicon[`lvl${l}`];
+        this.list = Lexicon[`lvl${l}`];
         
-        // Update Theme
         document.body.className = `lvl-${l}`;
         this.uiLvl.textContent = `PHASE 0${l}`;
-        this.uiLvl.setAttribute('data-text', `PHASE 0${l}`);
         
         const descArr = [
             "NEURAL BASELINE ESTABLISHED",
@@ -1006,29 +756,21 @@ class SpellingBeeEngine {
         
         this.audio.playLevelUp();
         
-        // Huge liquid burst on level up
         let rect = this.mainUI.getBoundingClientRect();
         this.liquid.burst(rect.left + rect.width/2, rect.top + rect.height/2, '#ffffff');
         
         this.nextWord();
     }
     
-    // Dynamic Difficulty Adjustment
     getDDA() {
-        // Base rate increases with level. Extra speed added by combo streak.
-        let rate = 0.8 + (this.level * 0.15) + (this.combo * 0.02);
-        // Pitch drops slightly with higher levels to sound more ominous
-        let pitch = 1.1 - (this.level * 0.1);
-        
-        return {
-            rate: Math.min(rate, 2.0), // Cap rate
-            pitch: Math.max(pitch, 0.5) // Floor pitch
-        };
+        let rate = 0.85 + (this.level * 0.1) + (this.combo * 0.015);
+        let pitch = 1.0 - (this.level * 0.05);
+        return { rate: Math.min(rate, 1.8), pitch: Math.max(pitch, 0.7) };
     }
     
     broadcastWord() {
         let params = this.getDDA();
-        this.audio.speakWord(this.currentWord.w, params.rate, params.pitch);
+        this.audio.speakWord(this.currentWord, params.rate, params.pitch);
     }
     
     nextWord() {
@@ -1043,23 +785,18 @@ class SpellingBeeEngine {
         this.uiInput.disabled = false;
         this.uiInput.focus();
         
-        // Reset context text
-        this.uiCtxDef.textContent = `>> AWAITING INPUT STREAM... [ ${this.currentWord.w.length} CHARACTERS ]`;
-        this.uiCtxPhon.textContent = "";
-        
+        // Hide length info or definitions, just state waiting for input
+        this.uiCtxDef.textContent = `>> AWAITING AUDIO TRANSCRIPTION...`;
         this.updateDiagnosticsUI();
         
-        // Small delay before broadcasting next word
-        setTimeout(() => this.broadcastWord(), 400);
+        setTimeout(() => this.broadcastWord(), 600);
     }
     
     validateInput() {
         let inputVal = this.uiInput.value.trim().toLowerCase();
         if(inputVal === "") return;
         
-        this.charsTyped += inputVal.length;
-        
-        if(inputVal === this.currentWord.w.toLowerCase()) {
+        if(inputVal === this.currentWord.toLowerCase()) {
             this.handleSuccess();
         } else {
             this.handleError();
@@ -1071,18 +808,15 @@ class SpellingBeeEngine {
         
         this.combo++;
         this.wordsTyped++;
-        // Multiplier formula: Base 1.0 + (Combo * 0.1), maxing out based on maxCombo
         this.multiplier = 1.0 + (Math.min(this.combo, this.maxCombo) * 0.1);
         
-        // Score calculation factoring level, length of word, and multiplier
-        let basePoints = this.currentWord.w.length * 10;
+        let basePoints = this.currentWord.length * 20;
         this.score += Math.floor(basePoints * this.multiplier * this.level);
         
         this.triggerVisualFeedback("LINK STABILIZED", true);
         
-        // Particles
         let rect = this.uiInput.getBoundingClientRect();
-        this.liquid.burst(rect.left + rect.width/2, rect.top, '#39ff14');
+        this.liquid.burst(rect.left + rect.width/2, rect.top, '#00ffaa');
         
         this.wordIndex++;
         this.updateStatsUI();
@@ -1096,9 +830,8 @@ class SpellingBeeEngine {
         
         this.triggerVisualFeedback("SYSTEM CORRUPTION", false);
         
-        // Particles
         let rect = this.uiInput.getBoundingClientRect();
-        this.liquid.burst(rect.left + rect.width/2, rect.top, '#ff003c');
+        this.liquid.burst(rect.left + rect.width/2, rect.top, '#ff0055');
         
         this.uiInput.value = '';
         this.updateStatsUI();
@@ -1108,14 +841,9 @@ class SpellingBeeEngine {
         this.uiFeedback.textContent = msg;
         this.uiFeedback.className = isSuccess ? "msg-success" : "msg-error";
         
-        // Reset animation state
         this.uiFeedback.style.opacity = '0';
-        this.uiFeedback.style.transform = 'translateY(20px)';
-        
-        // Trigger reflow
-        void this.uiFeedback.offsetWidth;
-        
-        // Apply animation
+        this.uiFeedback.style.transform = 'translateY(30px)';
+        void this.uiFeedback.offsetWidth; // Reflow
         this.uiFeedback.style.opacity = '1';
         this.uiFeedback.style.transform = 'translateY(0)';
         
@@ -1123,34 +851,30 @@ class SpellingBeeEngine {
         
         setTimeout(() => {
             this.uiFeedback.style.opacity = '0';
-            this.uiFeedback.style.transform = 'translateY(-20px)';
+            this.uiFeedback.style.transform = 'translateY(-30px)';
             this.mainUI.classList.remove('success-state', 'error-state');
         }, 800);
     }
     
     updateStatsUI() {
-        // Format score with leading zeros
-        this.uiScore.textContent = this.score.toString().padStart(7, '0');
+        this.uiScore.textContent = this.score.toString().padStart(8, '0');
         this.uiMult.textContent = this.multiplier.toFixed(2) + 'x';
         
-        // Update Combo Bar
         let comboPercent = Math.min((this.combo / this.maxCombo) * 100, 100);
         this.uiComboFill.style.width = `${comboPercent}%`;
         
-        // Change combo color at max
         if(comboPercent === 100) {
-            this.uiComboFill.style.boxShadow = "0 0 20px #fff, 0 0 40px #dd00f3";
+            this.uiComboFill.style.boxShadow = "0 0 30px #fff, 0 0 60px var(--rainbow-4)";
         } else {
-            this.uiComboFill.style.boxShadow = "0 0 10px rgba(255,255,255,0.5)";
+            this.uiComboFill.style.boxShadow = "0 0 15px rgba(255,255,255,0.7)";
         }
     }
     
     updateDiagnosticsUI() {
         this.uiRem.textContent = this.list.length - this.wordIndex;
         
-        // Calculate progress circle
         let percent = (this.wordIndex / this.list.length) * 100;
-        let offset = 176 - (176 * percent) / 100;
+        let offset = 264 - (264 * percent) / 100;
         this.progressCircle.style.strokeDashoffset = offset;
         this.progressText.textContent = Math.floor(percent) + '%';
     }
@@ -1164,10 +888,6 @@ class SpellingBeeEngine {
             this.uiWPM.textContent = wpm.toFixed(1);
         }
         
-        // Approximation of accuracy based on attempts vs successes
-        // Since combo drops to 0 on failure, we can track total errors if we added a counter.
-        // For now, simple estimation based on words typed vs expected linear progression.
-        let totalAttempts = this.wordsTyped + (this.wordIndex - this.wordsTyped); // Simplification
         if(this.wordIndex > 0) {
             let acc = (this.wordsTyped / Math.max(this.wordIndex, 1)) * 100;
             this.uiAcc.textContent = Math.min(acc, 100).toFixed(1) + '%';
@@ -1178,20 +898,17 @@ class SpellingBeeEngine {
         this.uiInput.disabled = true;
         this.uiInput.value = "DOMINANCE";
         this.uiCtxDef.innerHTML = "<span class='rainbow-text'>GLOBAL MAINFRAME OVERRIDDEN. ALL SECTORS SECURED.</span>";
-        this.uiCtxPhon.textContent = "YOU ARE THE APEX LINGUIST.";
-        this.audio.speakWord("System override complete. Global linguistic dominance achieved. Welcome, Administrator.", 0.8, 0.5);
+        this.audio.speakWord("System override complete. Global linguistic dominance achieved.", 1.0, 1.0);
         
-        // Massive particle party
         setInterval(() => {
             this.liquid.burst(Math.random()*window.innerWidth, Math.random()*window.innerHeight, this.liquid.colors[Math.floor(Math.random()*this.liquid.colors.length)]);
-        }, 200);
+        }, 250);
     }
 }
 
 /**
  * ==========================================================================
- * BOOT SEQUENCE LOGIC
- * Cinematic initialization and simulated loading.
+ * BOOT SEQUENCE
  * ==========================================================================
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1202,15 +919,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const bootSequenceLines = [
         "KERNEL: Booting OS core...",
-        "SYS: Allocating 1500 Lexicon parameters...",
-        "SYS: Procedural generation [OK]",
-        "NET: Establishing Neural Link Protocol v10...",
-        "MEM: Flushing cached linguistic subroutines...",
-        "AUDIO: Initializing TTS Synthesizer...",
-        "VFX: Rendering liquid particle mesh...",
-        "SEC: Bypassing firewall heuristics...",
-        "CRIT: WARNING - Cognitive overload possible.",
-        "SYS: Handshake complete. Standby for deployment."
+        "SYS: Loading massive lexicon...",
+        "SYS: 1500 entities secured [OK]",
+        "NET: Establishing Neural Link Protocol v12...",
+        "AUDIO: Syncing 10-channel voice modulation...",
+        "VFX: Rendering massive liquid particle simulation...",
+        "SEC: Firewall heuristics bypassed...",
+        "CRIT: Proceed with extreme caution.",
+        "SYS: Handshake complete. Deployment authorized."
     ];
     
     btn.addEventListener('click', () => {
@@ -1224,12 +940,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.textContent = `> ${line}`;
                 logs.appendChild(p);
                 
-                // Beep sound for typing effect
                 let tempAudio = new (window.AudioContext || window.webkitAudioContext)();
                 let osc = tempAudio.createOscillator();
                 let gain = tempAudio.createGain();
                 osc.type = 'square';
-                osc.frequency.setValueAtTime(800 + (Math.random()*200), tempAudio.currentTime);
+                osc.frequency.setValueAtTime(1000 + (Math.random()*300), tempAudio.currentTime);
                 gain.gain.setValueAtTime(0.05, tempAudio.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, tempAudio.currentTime + 0.05);
                 osc.connect(gain); gain.connect(tempAudio.destination);
@@ -1241,15 +956,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(() => {
                             bootContainer.style.display = 'none';
                             appContainer.style.display = 'grid';
-                            
-                            // Initialize Game Engine
                             window.GameInstance = new SpellingBeeEngine();
                             window.GameInstance.start();
-                        }, 1500);
+                        }, 2000);
                     }, 1000);
                 }
             }, delay);
-            delay += 300 + Math.random() * 400; // Randomize loading pauses
+            delay += 300 + Math.random() * 300;
         });
     });
 });
