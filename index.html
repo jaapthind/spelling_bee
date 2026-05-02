@@ -455,8 +455,8 @@ const Lexicon = {
 
 // Ensure lists are exact to specifications (300 limit) and properly shuffled
 for(let key in Lexicon) {
-    if(Lexicon[key].length > 300) {
-        Lexicon[key] = Lexicon[key].slice(0, 300);
+    if(Lexicon[key].length > 3) {
+        Lexicon[key] = Lexicon[key].slice(0, 3);
     }
     // Shuffle Array
     for (let i = Lexicon[key].length - 1; i > 0; i--) {
