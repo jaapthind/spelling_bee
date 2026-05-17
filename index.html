@@ -16,13 +16,34 @@
         -moz-osx-font-smoothing: grayscale;
     }
     
+    @keyframes liquidBg {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
     body, html {
         width: 100%; 
         height: 100%; 
-        background-color: #ffffff; 
+        background: linear-gradient(-45deg, #f5f7fa, #ffffff, #e4e8ec, #ffffff);
+        background-size: 400% 400%;
+        animation: liquidBg 20s ease infinite;
         color: #000000;
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         user-select: none;
+    }
+
+    /* ==========================================================================
+       ADVANCED MONOCHROME LIQUID GLASS
+       ========================================================================== */
+    .liquid-glass {
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.05), inset 0 0 10px rgba(255,255,255,0.5);
+        border-radius: 24px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     /* ==========================================================================
@@ -50,17 +71,21 @@
         cursor: pointer; 
         text-transform: uppercase;
         letter-spacing: 2px; 
-        background: #ffffff;
-        border: 2px solid #000000; 
+        background: rgba(255,255,255,0.8);
+        border: 1px solid #000000; 
         color: #000000;
-        transition: all 0.2s; 
+        transition: all 0.3s ease; 
         z-index: 10;
         margin-bottom: 30px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
     }
 
     #init-btn:hover { 
         background: #000000; 
         color: #ffffff; 
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
 
     #terminal-wrapper {
@@ -70,7 +95,7 @@
     }
 
     #terminal-logs {
-        color: #000000; 
+        color: #333333; 
         font-family: 'Courier New', Courier, monospace;
         font-size: 14px; 
         line-height: 1.6;
@@ -88,6 +113,8 @@
         flex-direction: column;
         height: 100vh; 
         width: 100vw; 
+        padding: 20px;
+        gap: 20px;
     }
 
     header {
@@ -95,7 +122,6 @@
         justify-content: space-between; 
         align-items: center;
         padding: 20px 40px; 
-        border-bottom: 2px solid #000000;
     }
 
     .header-controls {
@@ -104,21 +130,26 @@
     }
 
     .std-btn {
-        background: #ffffff; 
-        border: 2px solid #000000;
-        color: #000000; 
-        padding: 10px 20px; 
-        font-size: 14px; 
+        background: rgba(255, 255, 255, 0.5); 
+        border: 1px solid rgba(0,0,0,0.2);
+        color: #000; 
+        padding: 12px 24px; 
+        font-size: 13px; 
         font-weight: bold;
         cursor: pointer; 
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
-        transition: all 0.2s; 
+        transition: all 0.3s ease; 
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
     }
 
     .std-btn:hover { 
         background: #000000; 
         color: #ffffff; 
+        border-color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
     }
 
     main { 
@@ -130,10 +161,19 @@
         padding: 40px;
     }
 
+    .main-panel {
+        width: 100%;
+        max-width: 900px;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .dashboard {
         display: flex;
-        gap: 50px;
-        margin-bottom: 40px;
+        gap: 60px;
+        margin-bottom: 50px;
         text-align: center;
     }
 
@@ -143,100 +183,107 @@
     }
 
     .stat-val {
-        font-size: 32px;
+        font-size: 36px;
         font-weight: bold;
         letter-spacing: 2px;
+        color: #111;
     }
 
     .stat-lbl {
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        color: #555555;
-        margin-top: 5px;
+        letter-spacing: 2px;
+        color: #666;
+        margin-top: 8px;
+        font-weight: 600;
     }
 
     .input-zone { 
         position: relative; 
         width: 100%; 
-        max-width: 800px;
-        margin-bottom: 20px; 
+        max-width: 700px;
+        margin-bottom: 25px; 
     }
     
     #console-input {
         width: 100%; 
-        background: transparent;
-        border: none;
-        border-bottom: 4px solid #000000;
+        background: rgba(255,255,255,0.3);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 16px;
         color: #000000; 
-        font-size: 64px; 
-        padding: 20px 10px; 
+        font-size: 56px; 
+        padding: 25px 15px; 
         text-align: center; 
         outline: none;
         font-family: 'Helvetica Neue', sans-serif; 
-        letter-spacing: 10px; 
+        letter-spacing: 12px; 
         font-weight: 300;
         text-transform: uppercase; 
-        transition: all 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 4px 10px rgba(0,0,0,0.03);
     }
 
     #console-input:focus { 
-        border-bottom-color: #555555; 
+        background: rgba(255,255,255,0.7);
+        border-color: #000000; 
+        box-shadow: inset 0 4px 10px rgba(0,0,0,0.01), 0 8px 30px rgba(0,0,0,0.05);
+        transform: scale(1.02);
     }
     
     #console-input:disabled { 
-        opacity: 0.3; 
+        opacity: 0.4; 
         cursor: not-allowed; 
     }
 
     #visual-feedback { 
         height: 30px; 
         font-size: 18px; 
-        letter-spacing: 2px; 
+        letter-spacing: 3px; 
         font-weight: bold; 
         text-align: center; 
         opacity: 0; 
-        transition: opacity 0.2s; 
+        transition: opacity 0.3s, transform 0.3s; 
         text-transform: uppercase;
+        transform: translateY(10px);
     }
 
     .msg-success { color: #000000; }
-    .msg-error { color: #000000; text-decoration: line-through; }
+    .msg-error { color: #888888; text-decoration: line-through; }
 
     #context-panel {
-        margin-top: 40px; 
-        font-size: 16px; 
+        margin-top: 30px; 
+        font-size: 14px; 
         color: #555555;
         text-align: center;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         text-transform: uppercase;
+        font-weight: bold;
     }
 
     footer { 
         display: flex; 
         justify-content: space-between; 
         align-items: center; 
-        padding: 20px 40px; 
-        border-top: 2px solid #000000; 
+        padding: 20px 50px; 
     }
 
     .footer-section {
         display: flex;
-        gap: 30px;
+        gap: 40px;
     }
 </style>
 </head>
 <body>
 
 <div id="boot-sequence">
-    <button id="init-btn">INITIALIZE SYSTEM</button>
+    <button id="init-btn" class="liquid-glass">INITIALIZE SYSTEM</button>
     <div id="terminal-wrapper">
         <div id="terminal-logs"></div>
     </div>
 </div>
 
 <div id="app-container">
-    <header>
+    <header class="liquid-glass">
         <div class="header-controls">
             <button class="std-btn" id="btn-voice">VOICE: 1/10</button>
         </div>
@@ -247,57 +294,55 @@
     </header>
 
     <main>
-        <div class="dashboard">
-            <div class="stat-group">
-                <span class="stat-val" id="level-display">PHASE 01</span>
-                <span class="stat-lbl" id="level-desc">INITIALIZING...</span>
+        <div class="main-panel liquid-glass">
+            <div class="dashboard">
+                <div class="stat-group">
+                    <span class="stat-val" id="level-display">PHASE 01</span>
+                    <span class="stat-lbl" id="level-desc">INITIALIZING...</span>
+                </div>
+                <div class="stat-group">
+                    <span class="stat-val" id="ui-score">00000</span>
+                    <span class="stat-lbl">TOTAL SCORE</span>
+                </div>
+                <div class="stat-group">
+                    <span class="stat-val" id="ui-mult">1.00x</span>
+                    <span class="stat-lbl">MULTIPLIER</span>
+                </div>
             </div>
-            <div class="stat-group">
-                <span class="stat-val" id="ui-score">0000000</span>
-                <span class="stat-lbl">TOTAL SCORE</span>
-            </div>
-            <div class="stat-group">
-                <span class="stat-val" id="ui-mult">1.00x</span>
-                <span class="stat-lbl">MULTIPLIER</span>
-            </div>
-            <div class="stat-group">
-                <span class="stat-val" id="ui-combo">0</span>
-                <span class="stat-lbl">COMBO</span>
-            </div>
-        </div>
 
-        <div class="input-zone">
-            <input type="text" id="console-input" autocomplete="off" spellcheck="false" placeholder="AWAITING AUDIO..." disabled>
-        </div>
-        
-        <div id="visual-feedback"></div>
-        
-        <div id="context-panel">
-            <div id="context-def">CONNECTING TO SECURE LEXICON...</div>
+            <div class="input-zone">
+                <input type="text" id="console-input" autocomplete="off" spellcheck="false" placeholder="AWAITING AUDIO..." disabled>
+            </div>
+            
+            <div id="visual-feedback"></div>
+            
+            <div id="context-panel">
+                <div id="context-def">CONNECTING TO SECURE LEXICON...</div>
+            </div>
         </div>
     </main>
 
-    <footer>
+    <footer class="liquid-glass">
         <div class="footer-section">
             <div class="stat-group">
-                <span class="stat-val" style="font-size: 20px;" id="ui-wpm">0.0</span>
+                <span class="stat-val" style="font-size: 22px;" id="ui-wpm">0.0</span>
                 <span class="stat-lbl">WPM</span>
             </div>
             <div class="stat-group">
-                <span class="stat-val" style="font-size: 20px;" id="ui-acc">100.0%</span>
+                <span class="stat-val" style="font-size: 22px;" id="ui-acc">100%</span>
                 <span class="stat-lbl">PRECISION</span>
             </div>
         </div>
         <div class="footer-section">
             <div class="stat-group" style="align-items: center;">
-                <span class="stat-val" style="font-size: 24px;" id="ui-rem">300</span>
-                <span class="stat-lbl">WORDS REMAINING</span>
+                <span class="stat-val" style="font-size: 28px;" id="ui-rem">10</span>
+                <span class="stat-lbl">TOTAL WORDS REMAINING</span>
             </div>
         </div>
         <div class="footer-section">
             <div class="stat-group" style="align-items: flex-end;">
-                <span class="stat-val" style="font-size: 20px;" id="lvl-progress-text">0%</span>
-                <span class="stat-lbl">PROGRESSION</span>
+                <span class="stat-val" style="font-size: 22px;" id="lvl-progress-text">0/2</span>
+                <span class="stat-lbl">LEVEL PROGRESS</span>
             </div>
         </div>
     </footer>
@@ -306,42 +351,32 @@
 <script>
 /**
  * ==========================================================================
- * HARDCODED LEXICON DATA (1500 REAL WORDS, EXACTLY 300 PER LEVEL)
- * Clean, standard words carefully curated for spelling bees. No numbers.
+ * HARDCODED LEXICON DATA (1500 REAL WORDS)
  * ==========================================================================
  */
-const Lexicon = {
-    lvl1: [
-        "apple","bread","water","earth","light","sound","plant","metal","glass","stone","bird","fish","tree","leaf","grass","wind","rain","snow","cloud","star","moon","sun","sky","hill","road","path","town","city","house","door","room","bed","chair","table","book","pen","clock","shoe","hat","coat","shirt","pant","sock","hand","foot","head","face","eye","ear","nose","mouth","tooth","tongue","arm","leg","back","heart","blood","bone","skin","hair","neck","wing","tail","fur","feather","horn","claw","beak","scale","shell","egg","nest","hive","web","cave","hole","rock","sand","dirt","mud","dust","ash","smoke","fire","heat","cold","ice","steam","fog","mist","dew","drop","wave","tide","current","river","lake","pond","pool","sea","ocean","coast","shore","beach","island","mountain","valley","forest","jungle","desert","plain","field","farm","garden","yard","park","street","bridge","wall","fence","gate","roof","floor","window","stairs","kitchen","bathroom","bedroom","living","dining","school","office","store","shop","market","bank","hospital","clinic","hotel","restaurant","cafe","bar","club","theater","cinema","museum","library","church","temple","mosque","station","airport","port","dock","ship","boat","train","car","bus","truck","bike","plane","jet","rocket","cart","wagon","wheel","engine","motor","brake","gear","tire","seat","window","door","roof","hood","trunk","light","horn","mirror","radio","screen","button","key","lock","handle","switch","plug","cord","wire","pipe","tube","hose","pump","valve","tank","bottle","can","jar","box","bag","sack","basket","bucket","pot","pan","bowl","plate","cup","glass","mug","fork","knife","spoon","dish","tray","napkin","towel","soap","brush","comb","sponge","broom","mop","dustpan","trash","garbage","waste","bin","can","bag","box","cart","truck","dump","landfill","recycle","paper","plastic","metal","glass","wood","cloth","fabric","leather","rubber","cotton","wool","silk","nylon","polyester","denim","canvas","velvet","lace","ribbon","string","thread","yarn","rope","cord","cable","wire","chain","link","knot","tie","bow","loop","ring","hook","clip","pin","needle","nail","screw","bolt","nut","washer","gear","wheel","pulley","lever","wedge","ramp","slope","hill","mountain","valley","canyon","cliff","ridge","peak","summit","base","foot","root","stem","branch","leaf","flower","petal","seed","fruit","nut","berry","bean","corn","wheat","rice","oats","barley","rye","flour","sugar","salt","pepper","spice","herb","oil","vinegar","sauce","soup","stew","broth","meat","beef","pork","lamb","chicken","turkey","duck","goose","fish","crab"
-    ],
-    lvl2: [
-        "algorithm","database","network","protocol","function","variable","compile","execute","memory","system","module","packet","router","server","client","socket","thread","process","kernel","driver","buffer","cache","queue","stack","array","string","object","class","method","event","signal","stream","record","field","index","query","schema","domain","portal","proxy","token","cipher","digest","vector","matrix","tensor","graph","tree","heap","list","queue","stack","hash","map","set","tuple","record","struct","union","enum","pointer","reference","value","type","class","interface","trait","mixin","module","package","namespace","library","framework","engine","platform","environment","system","architecture","design","pattern","model","view","controller","component","service","agent","actor","worker","task","job","process","thread","fiber","coroutine","generator","iterator","observer","listener","handler","callback","promise","future","task","observable","stream","channel","pipe","port","socket","connection","session","transaction","context","state","store","cache","buffer","pool","registry","directory","catalog","index","ledger","log","journal","diary","record","archive","backup","snapshot","image","container","volume","disk","drive","partition","sector","block","chunk","segment","page","frame","packet","datagram","message","payload","header","footer","trailer","body","content","data","information","knowledge","wisdom","insight","understanding","intelligence","logic","reason","thought","idea","concept","notion","theory","hypothesis","premise","axiom","theorem","lemma","corollary","proof","evidence","fact","truth","reality","existence","being","entity","object","thing","item","element","part","piece","component","constituent","ingredient","factor","feature","trait","attribute","property","quality","characteristic","aspect","facet","dimension","variable","parameter","argument","value","literal","constant","symbol","identifier","name","label","tag","marker","flag","sign","signal","symptom","indicator","clue","hint","trace","track","trail","path","route","way","course","direction","bearing","heading","vector","velocity","speed","pace","rate","frequency","period","cycle","rhythm","tempo","beat","pulse","throb","vibration","oscillation","wave","ripple","surge","flow","current","stream","tide","flood","flush","gush","rush","dash","dart","sprint","race","run","walk","stroll","amble","saunter","wander","roam","rove","ramble","explore","search","seek","hunt","chase","pursue","follow","track","trace","trail","tail","shadow","stalk","hound","dog","watch","observe","monitor","inspect","examine","analyze","study","review","survey","scan","browse","skim","read","peruse","study","learn","master","grasp","comprehend","understand","know","realize","recognize","identify","detect","discover","find","locate","uncover","reveal","expose","disclose","publish","broadcast","transmit","send","dispatch","forward","route","relay","transfer","move","shift","slide","slip","glide","skate","ski","surf","sail","navigate","steer","pilot","drive","ride","fly","soar","hover","float","drift","coast","cruise"
-    ],
-    lvl3: [
-        "asynchronous","cryptography","encapsulation","polymorphism","inheritance","abstraction","concurrency","framework","middleware","repository","deployment","virtualization","orchestration","provisioning","scalability","elasticity","redundancy","availability","reliability","durability","consistency","integrity","confidentiality","authentication","authorization","accountability","auditability","traceability","observability","telemetry","monitoring","alerting","logging","tracing","profiling","debugging","troubleshooting","diagnostics","analytics","metrics","statistics","dashboard","visualization","reporting","aggregation","summarization","classification","clustering","regression","prediction","forecasting","modeling","simulation","optimization","heuristic","stochastic","deterministic","probabilistic","statistical","mathematical","algorithmic","computational","analytical","empirical","experimental","theoretical","conceptual","architectural","structural","behavioral","functional","nonfunctional","operational","tactical","strategic","organizational","managerial","administrative","executive","financial","commercial","industrial","technological","scientific","engineering","medical","biological","chemical","physical","astronomical","geological","meteorological","oceanographic","environmental","ecological","sociological","psychological","anthropological","archaeological","historical","geographical","political","economic","cultural","artistic","literary","musical","theatrical","cinematic","photographic","philosophical","theological","mythological","linguistic","grammatical","syntactic","semantic","pragmatic","phonetic","phonological","morphological","lexical","etymological","typographical","calligraphic","cryptographic","steganographic","cartographic","topographical","demographic","epidemiological","pharmacological","toxicological","immunological","genomic","proteomic","metabolomic","transcriptomic","epigenomic","microbiome","ecosystem","biosphere","atmosphere","hydrosphere","lithosphere","cryosphere","magnetosphere","ionosphere","stratosphere","troposphere","mesosphere","thermosphere","exosphere","galaxy","universe","cosmos","multiverse","dimension","continuum","paradigm","framework","methodology","taxonomy","ontology","epistemology","phenomenology","hermeneutics","dialectics","syllogism","tautology","contradiction","paradox","dilemma","enigma","conundrum","mystery","puzzle","labyrinth","maze","network","web","grid","matrix","lattice","mesh","fabric","texture","structure","system","organism","machine","device","instrument","apparatus","equipment","implement","tool","weapon","vehicle","vessel","container","receptacle","vial","flask","beaker","crucible","retort","calorimeter","spectrometer","microscope","telescope","interferometer","accelerometer","gyroscope","magnetometer","barometer","thermometer","hygrometer","anemometer","seismometer","galvanometer","voltmeter","ammeter","ohmmeter","multimeter","oscilloscope","synthesizer","sequencer","sampler","modulator","demodulator","multiplexer","demultiplexer","transducer","transmitter","receiver","transceiver","amplifier","attenuator","filter","equalizer","compressor","expander","limiter","clipper","rectifier","inverter","converter","transformer","generator","alternator","dynamo","motor","engine","turbine","pump","compressor","fan","blower","propeller","impeller","rotor","stator","armature","commutator","brushes","bearings","gears","shafts","axles","wheels","tires","belts","chains","cables","wires","cords","plugs","sockets","switches","relays","contactors","breakers","fuses","resistors","capacitors","inductors","diodes","transistors","thyristors","microprocessors","microcontrollers","sensors","actuators","displays","monitors","screens","projectors","printers","scanners","cameras","microphones","speakers","headphones","earphones","headsets"
-    ],
-    lvl4: [
-        "ephemeral","orthogonal","isomorphic","heuristic","stochastic","deterministic","idempotent","ubiquitous","synergistic","paradigm","asymptote","bifurcation","cybernetics","eigenvector","fibonacci","gaussian","hypervisor","juxtaposition","kinematics","logarithmic","memoization","neural","ontology","qubit","rasterize","tessellation","vectorization","wavelet","xenobiotic","yield","zealous","amalgamation","biodiversity","chromosome","dicotyledon","exoskeleton","photosynthesis","symbiosis","thermodynamics","viscosity","acoustic","ballistic","catalytic","diastolic","elastic","ferromagnetic","galvanic","hydraulic","isometric","kinetic","luminescent","magnetic","pneumatic","quantum","radioactive","supersonic","tectonic","ultrasonic","volcanic","aerodynamic","biometric","calorific","dielectric","endothermic","exothermic","geothermal","hydroelectric","isothermal","kinematic","lithospheric","macroscopic","microscopic","nanoscopic","optoelectronic","photoelectric","quarks","relativistic","stereoscopic","tribological","viscoelastic","xenon","yttrium","zirconium","actuarial","bureaucratic","clandestine","draconian","egalitarian","fiduciary","gubernatorial","hierarchical","imperial","judicial","kleptocratic","legislative","meritocratic","nepotistic","oligarchic","plutocratic","quixotic","republican","secular","theocratic","utilitarian","vanguard","whiggish","xenophobic","yeoman","zealotry","archipelago","bathymetry","cartography","demography","escarpment","fjord","glaciology","hemisphere","isthmus","jurisdiction","karst","latitude","longitude","meridian","nomad","oasis","peninsula","quarry","ravine","strait","tundra","upwelling","volcanology","watershed","xeriscaping","yonder","zenith","altruism","behaviorism","cognitivism","determinism","empiricism","fatalism","gnosticism","humanism","idealism","jingoism","kantianism","libertarianism","materialism","nihilism","objectivism","pragmatism","quietism","rationalism","solipsism","transcendentalism","utilitarianism","vitalism","wahhabism","xenocentrism","yoga","zoroastrianism","alliteration","bildungsroman","cacophony","denouement","euphemism","foreshadowing","hyperbole","irony","jargon","kitsch","litotes","metaphor","neologism","onomatopoeia","personification","quatrain","rhetoric","simile","tautology","understatement","vernacular","wordplay","xylography","yarn","zeugma","arabesque","baroque","chiaroscuro","dadaism","expressionism","fauvism","gothic","cubism","impressionism","japonisme","kitsch","lithography","minimalism","neoclassicism","origami","pointillism","quattrocento","realism","surrealism","trompeloeil","ukiyo","vorticism","watercolor","xylography","yantra","zoomorphic","arpeggio","belcanto","crescendo","diminuendo","embouchure","fortissimo","glissando","harmony","interval","jazz","key","legato","melody","nocturne","ostinato","pizzicato","quaver","rhythm","staccato","tempo","unison","vibrato","waltz","xylophone","yodel","zarzuela","anemone","basilisk","chameleon","dingo","echidna","flamingo","gazelle","hippopotamus","iguana","jaguar","kangaroo","lemur","macaque","narwhal","orangutan","pangolin","quetzal","rhinoceros","salamander","tarantula","uakari","vicuna","wallaby","xantus","yak","zebra","absinthe","baklava","croissant","daiquiri","enchilada","fettuccine","gazpacho","hummus","igname","jalapeno","kielbasa","lasagna","macaroni","nougat","omelet","pastrami","quiche","ravioli","spaghetti","tiramisu","udon","vichyssoise","waffle","xylitol","yogurt","zucchini"
-    ],
-    lvl5: [
-        "sesquipedalian","obfuscation","antidisestablishmentarianism","floccinaucinihilipilification","pseudopseudohypoparathyroidism","incomprehensibilities","unsubstantiatability","supercalifragilisticexpialidocious","honorificabilitudinitatibus","microminiaturization","pneumonoultramicroscopicsilicovolcanoconiosis","hippopotomonstrosesquippedaliophobia","spectrophotofluorometrically","psychoneuroendocrinological","radioimmunoelectrophoresis","otorhinolaryngological","immunoelectrophoretically","macromolecularly","polytetrafluoroethylene","hexakosioihexekontahexaphobia","tetraethyldiaminotriphenylmethane","pseudomyxoma","peritonei","choledocholithiasis","encephalomyocarditis","synecdoche","hemidemisemiquaver","flibbertigibbet","defenestration","gobbledygook","abracadabra","bamboozle","cattywampus","discombobulate","erstwhile","finagle","gargantuan","hullabaloo","indubitably","juxtapose","kerfuffle","lackadaisical","malarkey","nincompoop","obstreperous","persnickety","quagmire","ramshackle","skedaddle","tomfoolery","ubiquitous","verisimilitude","whippersnapper","xenotransplantation","yahoo","zeppelin","acrimonious","belligerent","cantankerous","deleterious","egregious","fastidious","gregarious","hubris","iconoclast","judicious","lugubrious","mellifluous","nefarious","obsequious","paradigm","quixotic","recalcitrant","sycophant","trepidation","ubiquity","vacillate","winsome","xenophobe","yielding","zealous","anachronism","cacophony","diatribe","ephemeral","facetious","grandiloquent","harangue","idiosyncrasy","juggernaut","kaleidoscope","labyrinthine","machiavellian","narcissism","obfuscate","panacea","quandary","rhetoric","serendipity","tautology","umbrage","vicarious","wanderlust","xenomorphic","yashmak","zeitgeist","aberration","bifurcation","conundrum","dichotomy","epistemology","fiduciary","gerrymandering","hegemony","infrastructure","jurisprudence","kleptocracy","lexicography","megalomania","nomenclature","oligarchy","plutocracy","quintessential","reciprocity","stratification","totalitarianism","unilateral","vernacular","whimsical","xenolithic","yeomanry","zoology","anthropomorphism","bibliophile","claustrophobia","dermatologist","entomology","philanthropy","gerontology","herpetology","ichthyology","jurisdiction","kinesiology","lepidoptery","meteorology","neurology","ornithology","paleontology","quantum","radiology","seismology","toxicology","urology","virology","weather","xerography","yachting","zodiac","abstemious","bowdlerize","chicanery","diffident","enervate","fatuous","gauche","homogeneous","incognito","jejune","kinetic","loquacious","misanthrope","nonsectarian","oxidize","parameter","quotidian","recapitulate","sanguine","thermodynamic","usurp","vacuous","wrought","xylose","yokel","ziggurat","alacrity","bourgeois","circumlocution","dearth","ebullient","facet","germane","hackneyed","impetuous","jocose","knell","lachrymose","maudlin","nadir","obdurate","palliate","quagmire","rancor","sacrosanct","taciturn","ubiquitous","vapid","wane","xenial","yore","zephyr","accolade","boisterous","capricious","decorum","eclectic","fallacy","garrulous","haughty","impeccable","jocular","kinetic","labyrinth","macabre","neophyte","obliterate","pacify","quarantine","ramification","sagacious","tangible","ultimatum","validate","waive","xanthic","yearn","zealot","adamant","blandishment","cajole","decadence","elicit","fathom","galvanize","halcyon","illicit","jaded","keen","lament","magnanimous","naive","oblivious","palpable","qualm","radiant","salient","tantamount","uncanny","vanguard","warrant","xenogamy","yield","zenith","aesthetic","benevolent","camaraderie","debilitate","empathy","fortitude","gregarious","hypothesis","inevitable","jubilant","karma","lucid","meticulous","nonchalant","opulent","pragmatic","quaint","resilient","scrutinize","tenacious","unprecedented","venerable","wary","xenogenesis","yonder","zest","amiable","brazen","compassion","diligent","ephemeral","frugal","hinder","integrity","justify","kindle","lingo","mundane","novice","ostentatious","provocative","quell","reverence","subtle","tactful","urbane","vindicate","witty","xenotime","yacht","zealous"
-    ]
+const MasterLexicon = {
+    lvl1: ["apple","bread","water","earth","light","sound","plant","metal","glass","stone","bird","fish","tree","leaf","grass","wind","rain","snow","cloud","star","moon","sun","sky","hill","road","path","town","city","house","door","room","bed","chair","table","book","pen","clock","shoe","hat","coat","shirt","pant","sock","hand","foot","head","face","eye","ear","nose","mouth","tooth","tongue","arm","leg","back","heart","blood","bone","skin","hair","neck","wing","tail","fur","feather","horn","claw","beak","scale","shell","egg","nest","hive","web","cave","hole","rock","sand","dirt","mud","dust","ash","smoke","fire","heat","cold","ice","steam","fog","mist","dew","drop","wave","tide","current","river","lake","pond","pool","sea","ocean","coast","shore","beach","island","mountain","valley","forest","jungle","desert","plain","field","farm","garden","yard","park","street","bridge","wall","fence","gate","roof","floor","window","stairs","kitchen","bathroom","bedroom","living","dining","school","office","store","shop","market","bank","hospital","clinic","hotel","restaurant","cafe","bar","club","theater","cinema","museum","library","church","temple","mosque","station","airport","port","dock","ship","boat","train","car","bus","truck","bike","plane","jet","rocket","cart","wagon","wheel","engine","motor","brake","gear","tire","seat","window","door","roof","hood","trunk","light","horn","mirror","radio","screen","button","key","lock","handle","switch","plug","cord","wire","pipe","tube","hose","pump","valve","tank","bottle","can","jar","box","bag","sack","basket","bucket","pot","pan","bowl","plate","cup","glass","mug","fork","knife","spoon","dish","tray","napkin","towel","soap","brush","comb","sponge","broom","mop","dustpan","trash","garbage","waste","bin","can","bag","box","cart","truck","dump","landfill","recycle","paper","plastic","metal","glass","wood","cloth","fabric","leather","rubber","cotton","wool","silk","nylon","polyester","denim","canvas","velvet","lace","ribbon","string","thread","yarn","rope","cord","cable","wire","chain","link","knot","tie","bow","loop","ring","hook","clip","pin","needle","nail","screw","bolt","nut","washer","gear","wheel","pulley","lever","wedge","ramp","slope","hill","mountain","valley","canyon","cliff","ridge","peak","summit","base","foot","root","stem","branch","leaf","flower","petal","seed","fruit","nut","berry","bean","corn","wheat","rice","oats","barley","rye","flour","sugar","salt","pepper","spice","herb","oil","vinegar","sauce","soup","stew","broth","meat","beef","pork","lamb","chicken","turkey","duck","goose","fish","crab"],
+    lvl2: ["algorithm","database","network","protocol","function","variable","compile","execute","memory","system","module","packet","router","server","client","socket","thread","process","kernel","driver","buffer","cache","queue","stack","array","string","object","class","method","event","signal","stream","record","field","index","query","schema","domain","portal","proxy","token","cipher","digest","vector","matrix","tensor","graph","tree","heap","list","queue","stack","hash","map","set","tuple","record","struct","union","enum","pointer","reference","value","type","class","interface","trait","mixin","module","package","namespace","library","framework","engine","platform","environment","system","architecture","design","pattern","model","view","controller","component","service","agent","actor","worker","task","job","process","thread","fiber","coroutine","generator","iterator","observer","listener","handler","callback","promise","future","task","observable","stream","channel","pipe","port","socket","connection","session","transaction","context","state","store","cache","buffer","pool","registry","directory","catalog","index","ledger","log","journal","diary","record","archive","backup","snapshot","image","container","volume","disk","drive","partition","sector","block","chunk","segment","page","frame","packet","datagram","message","payload","header","footer","trailer","body","content","data","information","knowledge","wisdom","insight","understanding","intelligence","logic","reason","thought","idea","concept","notion","theory","hypothesis","premise","axiom","theorem","lemma","corollary","proof","evidence","fact","truth","reality","existence","being","entity","object","thing","item","element","part","piece","component","constituent","ingredient","factor","feature","trait","attribute","property","quality","characteristic","aspect","facet","dimension","variable","parameter","argument","value","literal","constant","symbol","identifier","name","label","tag","marker","flag","sign","signal","symptom","indicator","clue","hint","trace","track","trail","path","route","way","course","direction","bearing","heading","vector","velocity","speed","pace","rate","frequency","period","cycle","rhythm","tempo","beat","pulse","throb","vibration","oscillation","wave","ripple","surge","flow","current","stream","tide","flood","flush","gush","rush","dash","dart","sprint","race","run","walk","stroll","amble","saunter","wander","roam","rove","ramble","explore","search","seek","hunt","chase","pursue","follow","track","trace","trail","tail","shadow","stalk","hound","dog","watch","observe","monitor","inspect","examine","analyze","study","review","survey","scan","browse","skim","read","peruse","study","learn","master","grasp","comprehend","understand","know","realize","recognize","identify","detect","discover","find","locate","uncover","reveal","expose","disclose","publish","broadcast","transmit","send","dispatch","forward","route","relay","transfer","move","shift","slide","slip","glide","skate","ski","surf","sail","navigate","steer","pilot","drive","ride","fly","soar","hover","float","drift","coast","cruise"],
+    lvl3: ["asynchronous","cryptography","encapsulation","polymorphism","inheritance","abstraction","concurrency","framework","middleware","repository","deployment","virtualization","orchestration","provisioning","scalability","elasticity","redundancy","availability","reliability","durability","consistency","integrity","confidentiality","authentication","authorization","accountability","auditability","traceability","observability","telemetry","monitoring","alerting","logging","tracing","profiling","debugging","troubleshooting","diagnostics","analytics","metrics","statistics","dashboard","visualization","reporting","aggregation","summarization","classification","clustering","regression","prediction","forecasting","modeling","simulation","optimization","heuristic","stochastic","deterministic","probabilistic","statistical","mathematical","algorithmic","computational","analytical","empirical","experimental","theoretical","conceptual","architectural","structural","behavioral","functional","nonfunctional","operational","tactical","strategic","organizational","managerial","administrative","executive","financial","commercial","industrial","technological","scientific","engineering","medical","biological","chemical","physical","astronomical","geological","meteorological","oceanographic","environmental","ecological","sociological","psychological","anthropological","archaeological","historical","geographical","political","economic","cultural","artistic","literary","musical","theatrical","cinematic","photographic","philosophical","theological","mythological","linguistic","grammatical","syntactic","semantic","pragmatic","phonetic","phonological","morphological","lexical","etymological","typographical","calligraphic","cryptographic","steganographic","cartographic","topographical","demographic","epidemiological","pharmacological","toxicological","immunological","genomic","proteomic","metabolomic","transcriptomic","epigenomic","microbiome","ecosystem","biosphere","atmosphere","hydrosphere","lithosphere","cryosphere","magnetosphere","ionosphere","stratosphere","troposphere","mesosphere","thermosphere","exosphere","galaxy","universe","cosmos","multiverse","dimension","continuum","paradigm","framework","methodology","taxonomy","ontology","epistemology","phenomenology","hermeneutics","dialectics","syllogism","tautology","contradiction","paradox","dilemma","enigma","conundrum","mystery","puzzle","labyrinth","maze","network","web","grid","matrix","lattice","mesh","fabric","texture","structure","system","organism","machine","device","instrument","apparatus","equipment","implement","tool","weapon","vehicle","vessel","container","receptacle","vial","flask","beaker","crucible","retort","calorimeter","spectrometer","microscope","telescope","interferometer","accelerometer","gyroscope","magnetometer","barometer","thermometer","hygrometer","anemometer","seismometer","galvanometer","voltmeter","ammeter","ohmmeter","multimeter","oscilloscope","synthesizer","sequencer","sampler","modulator","demodulator","multiplexer","demultiplexer","transducer","transmitter","receiver","transceiver","amplifier","attenuator","filter","equalizer","compressor","expander","limiter","clipper","rectifier","inverter","converter","transformer","generator","alternator","dynamo","motor","engine","turbine","pump","compressor","fan","blower","propeller","impeller","rotor","stator","armature","commutator","brushes","bearings","gears","shafts","axles","wheels","tires","belts","chains","cables","wires","cords","plugs","sockets","switches","relays","contactors","breakers","fuses","resistors","capacitors","inductors","diodes","transistors","thyristors","microprocessors","microcontrollers","sensors","actuators","displays","monitors","screens","projectors","printers","scanners","cameras","microphones","speakers","headphones","earphones","headsets"],
+    lvl4: ["ephemeral","orthogonal","isomorphic","heuristic","stochastic","deterministic","idempotent","ubiquitous","synergistic","paradigm","asymptote","bifurcation","cybernetics","eigenvector","fibonacci","gaussian","hypervisor","juxtaposition","kinematics","logarithmic","memoization","neural","ontology","qubit","rasterize","tessellation","vectorization","wavelet","xenobiotic","yield","zealous","amalgamation","biodiversity","chromosome","dicotyledon","exoskeleton","photosynthesis","symbiosis","thermodynamics","viscosity","acoustic","ballistic","catalytic","diastolic","elastic","ferromagnetic","galvanic","hydraulic","isometric","kinetic","luminescent","magnetic","pneumatic","quantum","radioactive","supersonic","tectonic","ultrasonic","volcanic","aerodynamic","biometric","calorific","dielectric","endothermic","exothermic","geothermal","hydroelectric","isothermal","kinematic","lithospheric","macroscopic","microscopic","nanoscopic","optoelectronic","photoelectric","quarks","relativistic","stereoscopic","tribological","viscoelastic","xenon","yttrium","zirconium","actuarial","bureaucratic","clandestine","draconian","egalitarian","fiduciary","gubernatorial","hierarchical","imperial","judicial","kleptocratic","legislative","meritocratic","nepotistic","oligarchic","plutocratic","quixotic","republican","secular","theocratic","utilitarian","vanguard","whiggish","xenophobic","yeoman","zealotry","archipelago","bathymetry","cartography","demography","escarpment","fjord","glaciology","hemisphere","isthmus","jurisdiction","karst","latitude","longitude","meridian","nomad","oasis","peninsula","quarry","ravine","strait","tundra","upwelling","volcanology","watershed","xeriscaping","yonder","zenith","altruism","behaviorism","cognitivism","determinism","empiricism","fatalism","gnosticism","humanism","idealism","jingoism","kantianism","libertarianism","materialism","nihilism","objectivism","pragmatism","quietism","rationalism","solipsism","transcendentalism","utilitarianism","vitalism","wahhabism","xenocentrism","yoga","zoroastrianism","alliteration","bildungsroman","cacophony","denouement","euphemism","foreshadowing","hyperbole","irony","jargon","kitsch","litotes","metaphor","neologism","onomatopoeia","personification","quatrain","rhetoric","simile","tautology","understatement","vernacular","wordplay","xylography","yarn","zeugma","arabesque","baroque","chiaroscuro","dadaism","expressionism","fauvism","gothic","cubism","impressionism","japonisme","kitsch","lithography","minimalism","neoclassicism","origami","pointillism","quattrocento","realism","surrealism","trompeloeil","ukiyo","vorticism","watercolor","xylography","yantra","zoomorphic","arpeggio","belcanto","crescendo","diminuendo","embouchure","fortissimo","glissando","harmony","interval","jazz","key","legato","melody","nocturne","ostinato","pizzicato","quaver","rhythm","staccato","tempo","unison","vibrato","waltz","xylophone","yodel","zarzuela","anemone","basilisk","chameleon","dingo","echidna","flamingo","gazelle","hippopotamus","iguana","jaguar","kangaroo","lemur","macaque","narwhal","orangutan","pangolin","quetzal","rhinoceros","salamander","tarantula","uakari","vicuna","wallaby","xantus","yak","zebra","absinthe","baklava","croissant","daiquiri","enchilada","fettuccine","gazpacho","hummus","igname","jalapeno","kielbasa","lasagna","macaroni","nougat","omelet","pastrami","quiche","ravioli","spaghetti","tiramisu","udon","vichyssoise","waffle","xylitol","yogurt","zucchini"],
+    lvl5: ["sesquipedalian","obfuscation","antidisestablishmentarianism","floccinaucinihilipilification","pseudopseudohypoparathyroidism","incomprehensibilities","unsubstantiatability","supercalifragilisticexpialidocious","honorificabilitudinitatibus","microminiaturization","pneumonoultramicroscopicsilicovolcanoconiosis","hippopotomonstrosesquippedaliophobia","spectrophotofluorometrically","psychoneuroendocrinological","radioimmunoelectrophoresis","otorhinolaryngological","immunoelectrophoretically","macromolecularly","polytetrafluoroethylene","hexakosioihexekontahexaphobia","tetraethyldiaminotriphenylmethane","pseudomyxoma","peritonei","choledocholithiasis","encephalomyocarditis","synecdoche","hemidemisemiquaver","flibbertigibbet","defenestration","gobbledygook","abracadabra","bamboozle","cattywampus","discombobulate","erstwhile","finagle","gargantuan","hullabaloo","indubitably","juxtapose","kerfuffle","lackadaisical","malarkey","nincompoop","obstreperous","persnickety","quagmire","ramshackle","skedaddle","tomfoolery","ubiquitous","verisimilitude","whippersnapper","xenotransplantation","yahoo","zeppelin","acrimonious","belligerent","cantankerous","deleterious","egregious","fastidious","gregarious","hubris","iconoclast","judicious","lugubrious","mellifluous","nefarious","obsequious","paradigm","quixotic","recalcitrant","sycophant","trepidation","ubiquity","vacillate","winsome","xenophobe","yielding","zealous","anachronism","cacophony","diatribe","ephemeral","facetious","grandiloquent","harangue","idiosyncrasy","juggernaut","kaleidoscope","labyrinthine","machiavellian","narcissism","obfuscate","panacea","quandary","rhetoric","serendipity","tautology","umbrage","vicarious","wanderlust","xenomorphic","yashmak","zeitgeist","aberration","bifurcation","conundrum","dichotomy","epistemology","fiduciary","gerrymandering","hegemony","infrastructure","jurisprudence","kleptocracy","lexicography","megalomania","nomenclature","oligarchy","plutocracy","quintessential","reciprocity","stratification","totalitarianism","unilateral","vernacular","whimsical","xenolithic","yeomanry","zoology","anthropomorphism","bibliophile","claustrophobia","dermatologist","entomology","philanthropy","gerontology","herpetology","ichthyology","jurisdiction","kinesiology","lepidoptery","meteorology","neurology","ornithology","paleontology","quantum","radiology","seismology","toxicology","urology","virology","weather","xerography","yachting","zodiac","abstemious","bowdlerize","chicanery","diffident","enervate","fatuous","gauche","homogeneous","incognito","jejune","kinetic","loquacious","misanthrope","nonsectarian","oxidize","parameter","quotidian","recapitulate","sanguine","thermodynamic","usurp","vacuous","wrought","xylose","yokel","ziggurat","alacrity","bourgeois","circumlocution","dearth","ebullient","facet","germane","hackneyed","impetuous","jocose","knell","lachrymose","maudlin","nadir","obdurate","palliate","quagmire","rancor","sacrosanct","taciturn","ubiquitous","vapid","wane","xenial","yore","zephyr","accolade","boisterous","capricious","decorum","eclectic","fallacy","garrulous","haughty","impeccable","jocular","kinetic","labyrinth","macabre","neophyte","obliterate","pacify","quarantine","ramification","sagacious","tangible","ultimatum","validate","waive","xanthic","yearn","zealot","adamant","blandishment","cajole","decadence","elicit","fathom","galvanize","halcyon","illicit","jaded","keen","lament","magnanimous","naive","oblivious","palpable","qualm","radiant","salient","tantamount","uncanny","vanguard","warrant","xenogamy","yield","zenith","aesthetic","benevolent","camaraderie","debilitate","empathy","fortitude","gregarious","hypothesis","inevitable","jubilant","karma","lucid","meticulous","nonchalant","opulent","pragmatic","quaint","resilient","scrutinize","tenacious","unprecedented","venerable","wary","xenogenesis","yonder","zest","amiable","brazen","compassion","diligent","ephemeral","frugal","hinder","integrity","justify","kindle","lingo","mundane","novice","ostentatious","provocative","quell","reverence","subtle","tactful","urbane","vindicate","witty","xenotime","yacht","zealous"]
 };
 
-// Ensure lists are exact to specifications (300 limit) and properly shuffled
-for(let key in Lexicon) {
-    if(Lexicon[key].length > 300) {
-        Lexicon[key] = Lexicon[key].slice(0, 300);
-    }
-    for (let i = Lexicon[key].length - 1; i > 0; i--) {
+const Lexicon = {};
+
+// Select exactly 2 random words per level to form a 10-word game
+for(let key in MasterLexicon) {
+    let arr = [...MasterLexicon[key]];
+    for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [Lexicon[key][i], Lexicon[key][j]] = [Lexicon[key][j], Lexicon[key][i]];
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
+    Lexicon[key] = arr.slice(0, 2);
 }
 
 /**
  * ==========================================================================
- * AUDIO ENGINE
+ * AUDIO ENGINE - HIGH CLARITY
  * ==========================================================================
  */
 class AudioEngine {
@@ -361,6 +396,13 @@ class AudioEngine {
             let engVoices = allVoices.filter(v => v.lang.startsWith('en'));
             if(engVoices.length === 0) engVoices = allVoices; 
             
+            // Prioritize higher quality, clear voices (Google, Natural, Premium)
+            engVoices.sort((a, b) => {
+                let aQuality = (a.name.includes('Google') || a.name.includes('Natural') || a.name.includes('Premium')) ? -1 : 1;
+                let bQuality = (b.name.includes('Google') || b.name.includes('Natural') || b.name.includes('Premium')) ? -1 : 1;
+                return aQuality - bQuality;
+            });
+
             this.availableVoices = engVoices.slice(0, 10);
             if(this.availableVoices.length > 0) {
                 this.updateVoiceLabel();
@@ -373,7 +415,7 @@ class AudioEngine {
             if(this.availableVoices.length === 0) return;
             this.currentVoiceIndex = (this.currentVoiceIndex + 1) % this.availableVoices.length;
             this.updateVoiceLabel();
-            this.createOsc(1000, 'sine', 0.1, 0.1);
+            this.createOsc(800, 'sine', 0.1, 0.05);
         });
     }
     
@@ -383,15 +425,18 @@ class AudioEngine {
         this.btnVoice.textContent = `VOICE: ${shortName.toUpperCase()} (${this.currentVoiceIndex + 1}/${this.availableVoices.length})`;
     }
     
-    speakWord(text, rate = 1.0, pitch = 1.0) {
+    speakWord(text) {
         if(this.synth.speaking) this.synth.cancel();
         let cleanText = text.replace(/[^a-zA-Z]/g, '');
         let utter = new SpeechSynthesisUtterance(cleanText);
         if(this.availableVoices.length > 0) {
             utter.voice = this.availableVoices[this.currentVoiceIndex];
         }
-        utter.rate = rate;
-        utter.pitch = pitch;
+        
+        // Locked strictly for maximum clarity and enunciation
+        utter.rate = 0.75; 
+        utter.pitch = 1.0;
+        
         this.synth.speak(utter);
     }
     
@@ -411,22 +456,82 @@ class AudioEngine {
         osc.start(); osc.stop(this.ctx.currentTime + time);
     }
     
-    playKeyStroke() { this.createOsc(800 + Math.random()*400, 'sine', 0.05, 0.05); }
+    playKeyStroke() { this.createOsc(600 + Math.random()*200, 'sine', 0.05, 0.02); }
     
-    playSuccess(comboLevel) {
-        let baseFreq = 440 + (comboLevel * 25); 
-        this.createOsc(baseFreq, 'sine', 0.2, 0.1);
-        setTimeout(() => this.createOsc(baseFreq * 1.5, 'triangle', 0.3, 0.1), 100);
+    playSuccess() {
+        this.createOsc(500, 'sine', 0.2, 0.05);
+        setTimeout(() => this.createOsc(750, 'triangle', 0.3, 0.05), 100);
     }
     
     playError() {
-        this.createOsc(200, 'sawtooth', 0.3, 0.2, 100);
-        setTimeout(() => this.createOsc(150, 'square', 0.4, 0.2, 50), 100);
+        this.createOsc(200, 'sawtooth', 0.3, 0.1, 100);
+        setTimeout(() => this.createOsc(150, 'square', 0.4, 0.1, 50), 100);
     }
     
     playLevelUp() {
-        this.createOsc(440, 'triangle', 0.5, 0.2, 880);
+        this.createOsc(440, 'triangle', 0.5, 0.05, 880);
     }
+}
+
+/**
+ * ==========================================================================
+ * CONFETTI SYSTEM
+ * ==========================================================================
+ */
+function createConfetti() {
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '9999';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const colors = ['#000000', '#555555', '#999999', '#cccccc', '#d4af37', '#c0c0c0']; // Elegant metallic & mono colors
+    
+    for(let i = 0; i < 200; i++) {
+        particles.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2 + 100,
+            vx: (Math.random() - 0.5) * 25,
+            vy: (Math.random() - 0.5) * 25 - 15,
+            size: Math.random() * 8 + 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rot: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.4
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.4; // gravity
+            p.rot += p.rotSpeed;
+            if(p.y < canvas.height) active = true;
+            
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+            ctx.restore();
+        });
+        if(active) {
+            requestAnimationFrame(animate);
+        } else {
+            canvas.remove();
+        }
+    }
+    animate();
 }
 
 /**
@@ -439,10 +544,10 @@ class SpellingBeeEngine {
         this.level = 1;
         this.score = 0;
         this.combo = 0;
-        this.maxCombo = 50;
         this.multiplier = 1.0;
         
         this.wordIndex = 0;
+        this.globalWordCount = 0;
         this.wordsTyped = 0;
         this.startTime = 0;
         
@@ -453,7 +558,6 @@ class SpellingBeeEngine {
         
         this.uiScore = document.getElementById('ui-score');
         this.uiMult = document.getElementById('ui-mult');
-        this.uiCombo = document.getElementById('ui-combo');
         this.uiLvl = document.getElementById('level-display');
         this.uiDesc = document.getElementById('level-desc');
         
@@ -483,7 +587,7 @@ class SpellingBeeEngine {
         
         document.getElementById('btn-play').addEventListener('click', () => {
             this.uiInput.focus();
-            this.broadcastWord();
+            this.audio.speakWord(this.currentWord);
         });
         
         document.getElementById('btn-skip').addEventListener('click', () => {
@@ -509,27 +613,25 @@ class SpellingBeeEngine {
             "MASTER LEXICON"
         ];
         this.uiDesc.textContent = descArr[l-1];
-        this.audio.playLevelUp();
+        
+        if (l > 1) {
+            this.audio.playLevelUp();
+        }
+        
         this.nextWord();
     }
     
-    getDDA() {
-        let rate = 0.85 + (this.level * 0.1) + (this.combo * 0.015);
-        let pitch = 1.0 - (this.level * 0.05);
-        return { rate: Math.min(rate, 1.8), pitch: Math.max(pitch, 0.7) };
-    }
-    
-    broadcastWord() {
-        let params = this.getDDA();
-        this.audio.speakWord(this.currentWord, params.rate, params.pitch);
-    }
-    
     nextWord() {
+        
         if(this.wordIndex >= this.list.length) {
-            if(this.level < 5) this.loadLevel(this.level + 1);
-            else this.triggerVictory();
+            if(this.level < 5) {
+                this.loadLevel(this.level + 1);
+            } else {
+                this.triggerVictory();
+            }
             return;
         }
+        this.wordGuesses = 0; // <--- ADD THIS LINE HERE TO RESET GUESSES FOR THE NEW WORD
         
         this.currentWord = this.list[this.wordIndex];
         this.uiInput.value = '';
@@ -538,7 +640,8 @@ class SpellingBeeEngine {
         
         this.uiCtxDef.textContent = `AWAITING AUDIO TRANSCRIPTION...`;
         this.updateDiagnosticsUI();
-        setTimeout(() => this.broadcastWord(), 600);
+        
+        setTimeout(() => this.audio.speakWord(this.currentWord), 600);
     }
     
     validateInput() {
@@ -553,10 +656,11 @@ class SpellingBeeEngine {
     }
     
     handleSuccess() {
-        this.audio.playSuccess(this.combo);
+        this.audio.playSuccess();
         this.combo++;
         this.wordsTyped++;
-        this.multiplier = 1.0 + (Math.min(this.combo, this.maxCombo) * 0.1);
+        this.globalWordCount++;
+        this.multiplier = 1.0 + (Math.min(this.combo, 10) * 0.1);
         
         let basePoints = this.currentWord.length * 20;
         this.score += Math.floor(basePoints * this.multiplier * this.level);
@@ -568,11 +672,18 @@ class SpellingBeeEngine {
     }
     
     handleError() {
+        if (++this.wordGuesses >= 3) { this.wordGuesses = 0; if (++this.strikes >= 3) return this.triggerGameOver(); this.triggerVisualFeedback("STRIKE " + this.strikes, false); this.wordIndex++; this.nextWord(); return; }
         this.audio.playError();
         this.combo = 0;
         this.multiplier = 1.0;
         this.triggerVisualFeedback("INCORRECT", false);
         this.uiInput.value = '';
+        
+        this.uiInput.style.transform = 'translateX(-10px)';
+        setTimeout(() => this.uiInput.style.transform = 'translateX(10px)', 100);
+        setTimeout(() => this.uiInput.style.transform = 'translateX(-10px)', 200);
+        setTimeout(() => this.uiInput.style.transform = 'scale(1.02)', 300);
+        
         this.updateStatsUI();
     }
     
@@ -580,25 +691,27 @@ class SpellingBeeEngine {
         this.uiFeedback.textContent = msg;
         this.uiFeedback.className = isSuccess ? "msg-success" : "msg-error";
         
+        this.uiFeedback.style.transform = 'translateY(10px)';
         this.uiFeedback.style.opacity = '0';
         void this.uiFeedback.offsetWidth;
+        
+        this.uiFeedback.style.transform = 'translateY(0)';
         this.uiFeedback.style.opacity = '1';
         
         setTimeout(() => {
             this.uiFeedback.style.opacity = '0';
-        }, 800);
+            this.uiFeedback.style.transform = 'translateY(-10px)';
+        }, 1000);
     }
     
     updateStatsUI() {
-        this.uiScore.textContent = this.score.toString().padStart(8, '0');
+        this.uiScore.textContent = this.score.toString().padStart(5, '0');
         this.uiMult.textContent = this.multiplier.toFixed(2) + 'x';
-        this.uiCombo.textContent = this.combo;
     }
     
     updateDiagnosticsUI() {
-        this.uiRem.textContent = this.list.length - this.wordIndex;
-        let percent = (this.wordIndex / this.list.length) * 100;
-        this.progressText.textContent = Math.floor(percent) + '%';
+        this.uiRem.textContent = 10 - this.globalWordCount;
+        this.progressText.textContent = `${this.wordIndex}/${this.list.length}`;
     }
     
     updateDiagnostics() {
@@ -608,8 +721,10 @@ class SpellingBeeEngine {
             let wpm = this.wordsTyped / minutes;
             this.uiWPM.textContent = wpm.toFixed(1);
         }
-        if(this.wordIndex > 0) {
-            let acc = (this.wordsTyped / Math.max(this.wordIndex, 1)) * 100;
+        if(this.wordsTyped > 0 || this.globalWordCount > 0) {
+            // Approximation for accuracy assuming each error resets combo
+            let attempts = this.wordsTyped + (this.combo === 0 && this.wordsTyped > 0 ? 1 : 0);
+            let acc = (this.wordsTyped / Math.max(attempts, 1)) * 100;
             this.uiAcc.textContent = Math.min(acc, 100).toFixed(1) + '%';
         }
     }
@@ -617,8 +732,20 @@ class SpellingBeeEngine {
     triggerVictory() {
         this.uiInput.disabled = true;
         this.uiInput.value = "COMPLETE";
-        this.uiCtxDef.textContent = "ALL ASSESSMENTS COMPLETED SUCCESSFULLY.";
-        this.audio.speakWord("Assessment complete.", 1.0, 1.0);
+        this.uiCtxDef.textContent = "ALL 10 SECTORS COMPLETED SUCCESSFULLY.";
+        this.audio.speakWord("Assessment complete. Excellent work.");
+        this.progressText.textContent = `2/2`;
+        this.uiRem.textContent = `0`;
+        
+        createConfetti();
+        setInterval(createConfetti, 1500);
+    }
+
+    triggerGameOver() {
+        this.uiInput.disabled = true;
+        this.uiInput.value = "TERMINATED";
+        this.uiCtxDef.textContent = "TOO MANY CORRUPTIONS. SYSTEM LOCKED.";
+        this.audio.speakWord("Game over. Three strikes recorded.");
     }
 }
 
@@ -635,8 +762,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const bootSequenceLines = [
         "Initializing core services...",
-        "Loading lexicon...",
-        "Secured 1500 terms.",
+        "Loading lexicon subsets...",
+        "Secured 10 randomized terms.",
         "Establishing audio protocols...",
         "Ready."
     ];
