@@ -33,6 +33,8 @@
         user-select: none;
         overflow: hidden; /* Prevents all scrollbars */
     }
+    /* Add this inside the <style> block, under the body, html rules */
+    #app-container { max-height: 100vh; overflow-y: auto; display: flex; flex-direction: column; justify-content: space-between; }
 
     /* ==========================================================================
        EXTREMELY THICK LIQUID GLASS
@@ -78,6 +80,15 @@
         justify-content: center; 
         align-items: center;
         transition: opacity 1s ease;
+    }
+    .main-panel.success-pulse {
+    border-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2), inset 0 2px 25px rgba(255, 255, 255, 1);
+    transform: scale(1.01) translateY(-2px);
+    }
+    .main-panel.error-pulse {
+        border-color: rgba(180, 0, 0, 0.6);
+        box-shadow: 0 20px 40px rgba(180, 0, 0, 0.15), inset 0 2px 15px rgba(255, 255, 255, 1);
     }
 
     #init-btn {
@@ -432,7 +443,8 @@ class AudioEngine {
                 return aQuality - bQuality;
             });
 
-            this.availableVoices = engVoices.slice(0, 10);
+// Replace line 324 (this.availableVoices = engVoices.slice(0, 10);) with this line to allow up to 25 voices:
+            this.availableVoices = engVoices.slice(0, 25);
             if(this.availableVoices.length > 0) {
                 this.updateVoiceLabel();
             }
@@ -629,6 +641,11 @@ class SpellingBeeEngine {
             this.nextWord();
             this.uiInput.focus();
         });
+                window.addEventListener('keydown', (e) => {
+            if (e.key === 'Control') {
+                this.uiCtxDef.textContent = `HINT: Word contains ${this.currentWord.length} letters. Starts with "${this.currentWord[0].toUpperCase()}"`;
+            }
+        });
     }
     
     loadLevel(l) {
@@ -698,6 +715,9 @@ class SpellingBeeEngine {
         
         this.triggerVisualFeedback("CORRECT", true);
         this.wordIndex++;
+        const el = document.querySelector('.main-panel');
+        el.classList.add('success-pulse');
+        setTimeout(() => el.classList.remove('success-pulse'), 400);
         this.updateStatsUI();
         this.nextWord();
     }
@@ -722,7 +742,9 @@ class SpellingBeeEngine {
         setTimeout(() => this.uiInput.style.transform = 'translateX(10px)', 100);
         setTimeout(() => this.uiInput.style.transform = 'translateX(-10px)', 200);
         setTimeout(() => this.uiInput.style.transform = 'scale(1.03)', 300);
-        
+        const el = document.querySelector('.main-panel');
+        el.classList.add('error-pulse');
+        setTimeout(() => el.classList.remove('error-pulse'), 400);
         this.updateStatsUI();
     }
     
