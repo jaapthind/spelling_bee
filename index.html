@@ -3,12 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Professional Spelling Bee Assessment</title>
+<title>Professional Spelling Bee Assessment - Nexus Edition</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2225%22 fill=%22%23ff3b30%22/><text y=%2270%22 x=%2215%22 font-size=%2265%22>🐝</text></svg>">
 <style>
     /* ==========================================================================
        CORE SYSTEM & RESET
        ========================================================================== */
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.4);
+        --glass-border: rgba(255, 255, 255, 0.8);
+        --glass-shadow: rgba(0, 0, 0, 0.1);
+        --text-main: #111111;
+        --text-muted: #555555;
+        --accent-red: #ff3b30;
+        --accent-green: #34c759;
+        --accent-blue: #007aff;
+    }
+
     * { 
         box-sizing: border-box; 
         margin: 0; 
@@ -26,10 +37,10 @@
     body, html {
         width: 100%; 
         height: 100%; 
-        background: linear-gradient(-45deg, #e6ebf2, #ffffff, #d5dde6, #ffffff);
+        background: linear-gradient(-45deg, #e6ebf2, #ffffff, #d5dde6, #f0f4f8);
         background-size: 400% 400%;
-        animation: liquidBg 25s ease infinite;
-        color: #000000;
+        animation: liquidBg 30s ease infinite;
+        color: var(--text-main);
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         user-select: none;
         overflow: hidden; 
@@ -39,18 +50,18 @@
        EXTREMELY THICK LIQUID GLASS
        ========================================================================== */
     .liquid-glass {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.15));
-        backdrop-filter: blur(40px) saturate(120%);
-        -webkit-backdrop-filter: blur(40px) saturate(120%);
-        border: 2px solid rgba(255, 255, 255, 0.8);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.2));
+        backdrop-filter: blur(40px) saturate(150%);
+        -webkit-backdrop-filter: blur(40px) saturate(150%);
+        border: 2px solid var(--glass-border);
         border-bottom-color: rgba(255, 255, 255, 0.3);
         border-right-color: rgba(255, 255, 255, 0.3);
         box-shadow: 
-            0 30px 60px rgba(0, 0, 0, 0.12),
+            0 30px 60px var(--glass-shadow),
             inset 0 2px 15px rgba(255, 255, 255, 1),
             inset 0 -2px 15px rgba(0, 0, 0, 0.05);
         border-radius: 32px;
-        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease;
         position: relative;
     }
 
@@ -59,49 +70,64 @@
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         border-radius: 30px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 40%);
+        background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 40%);
         pointer-events: none;
     }
 
-    .main-panel.success-pulse {
-        border-color: rgba(0, 0, 0, 0.8);
-        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2), inset 0 2px 25px rgba(255, 255, 255, 1);
+    .liquid-glass-panel {
+        background: rgba(255, 255, 255, 0.45);
+        border-radius: 24px;
+        padding: 25px;
+        border: 1px solid rgba(255,255,255,0.7);
+        box-shadow: inset 0 2px 10px rgba(255,255,255,0.8), 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .success-pulse {
+        border-color: rgba(52, 199, 89, 0.8) !important;
+        box-shadow: 0 40px 80px rgba(52, 199, 89, 0.2), inset 0 2px 25px rgba(255, 255, 255, 1) !important;
         transform: scale(1.01) translateY(-2px);
     }
-    .main-panel.error-pulse {
-        border-color: rgba(180, 0, 0, 0.6);
-        box-shadow: 0 20px 40px rgba(180, 0, 0, 0.15), inset 0 2px 15px rgba(255, 255, 255, 1);
+    .error-pulse {
+        border-color: rgba(255, 59, 48, 0.8) !important;
+        box-shadow: 0 20px 40px rgba(255, 59, 48, 0.15), inset 0 2px 15px rgba(255, 255, 255, 1) !important;
+        transform: translateX(5px);
     }
 
     .std-btn {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
         border: 1px solid rgba(255,255,255,0.9);
         border-bottom-color: rgba(0,0,0,0.1);
         color: #000; 
-        padding: 14px 28px; 
-        font-size: 13px; 
+        padding: 16px 32px; 
+        font-size: 14px; 
         font-weight: 800;
         cursor: pointer; 
         letter-spacing: 2px;
         text-transform: uppercase;
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
-        border-radius: 16px;
+        border-radius: 20px;
         backdrop-filter: blur(20px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.8);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05), inset 0 2px 5px rgba(255,255,255,0.9);
+        position: relative;
+        overflow: hidden;
     }
 
     .std-btn:hover { 
         transform: translateY(-3px);
         box-shadow: 0 15px 35px rgba(0,0,0,0.1), inset 0 2px 5px rgba(255,255,255,1);
     }
-
     .std-btn:active {
         transform: translateY(1px);
         box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
+    .std-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
 
     /* ==========================================================================
-       SCREEN LAYOUTS
+       SCREEN LAYOUTS & NAVIGATION
        ========================================================================== */
     .screen-overlay {
         position: fixed; 
@@ -109,19 +135,25 @@
         display: none; 
         flex-direction: column;
         justify-content: center; align-items: center;
-        z-index: 10000;
-        background: linear-gradient(-45deg, rgba(230,235,242,0.9), rgba(255,255,255,0.9));
-        backdrop-filter: blur(10px);
+        z-index: 100;
+        background: transparent;
+        padding: 40px;
     }
 
     .active-screen {
         display: flex !important;
+        animation: screenFadeIn 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    }
+
+    @keyframes screenFadeIn {
+        0% { opacity: 0; transform: scale(0.98) translateY(10px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .panel-box {
         width: 100%;
-        max-width: 600px;
-        padding: 50px;
+        max-width: 650px;
+        padding: 60px;
         text-align: center;
         display: flex;
         flex-direction: column;
@@ -129,171 +161,296 @@
     }
 
     .title-text {
-        font-size: 24px;
+        font-size: 28px;
         letter-spacing: 6px;
         font-weight: 900;
-        color: #111;
+        color: var(--text-main);
         text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+    
+    .subtitle-text {
+        font-size: 14px;
+        letter-spacing: 3px;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        margin-top: -20px;
     }
 
     .huge-input {
         width: 100%; 
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.7);
         border: 2px solid rgba(255,255,255,1);
         border-bottom-color: rgba(0,0,0,0.1);
-        border-radius: 20px;
-        color: #000000; 
-        font-size: 36px; 
-        padding: 20px; 
+        border-radius: 24px;
+        color: var(--text-main); 
+        font-size: 42px; 
+        padding: 25px; 
         text-align: center; 
         outline: none;
         font-family: 'Helvetica Neue', sans-serif; 
-        letter-spacing: 5px; 
+        letter-spacing: 8px; 
         font-weight: 300;
         text-transform: uppercase; 
-        transition: all 0.4s ease;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         box-shadow: inset 0 5px 15px rgba(0,0,0,0.02), 0 15px 35px rgba(0,0,0,0.05);
     }
 
     .huge-input:focus {
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.95);
         box-shadow: inset 0 5px 15px rgba(0,0,0,0.01), 0 25px 50px rgba(0,0,0,0.1);
         transform: scale(1.02);
     }
 
     .mode-btn {
         width: 100%;
-        padding: 25px;
+        padding: 30px;
         font-size: 18px;
-        letter-spacing: 4px;
+        letter-spacing: 5px;
         margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .mode-desc {
+        font-size: 11px;
+        color: var(--text-muted);
+        letter-spacing: 2px;
+        font-weight: 600;
     }
 
     #terminal-wrapper {
-        width: 100%; max-width: 600px; height: 150px; overflow: hidden; margin-top: 30px;
+        width: 100%; max-width: 600px; height: 200px; overflow: hidden; margin-top: 30px;
+        background: rgba(255,255,255,0.3); border-radius: 20px; padding: 20px;
+        border: 1px solid rgba(255,255,255,0.6);
     }
     #terminal-logs {
-        color: #333333; font-family: 'Courier New', Courier, monospace;
-        font-size: 14px; line-height: 1.6;
+        color: #222; font-family: 'Courier New', Courier, monospace;
+        font-size: 14px; line-height: 1.8; font-weight: 700;
         display: flex; flex-direction: column; justify-content: flex-end; height: 100%;
     }
 
     /* ==========================================================================
-       MAIN APP & TIMER
+       TOAST & MODAL SYSTEM
        ========================================================================== */
-    #app-container { 
-        max-height: 100vh; overflow-y: auto; display: none; flex-direction: column; justify-content: space-between; padding: 2vh 2vw; gap: 2vh;
+    #toast-container {
+        position: fixed; top: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 9999;
     }
-
-    header, footer {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 20px 40px; border-radius: 24px; z-index: 2;
+    .toast {
+        background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border: 1px solid white;
+        padding: 20px 30px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        font-weight: 800; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+        animation: toastIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; transform-origin: right center;
     }
+    @keyframes toastIn { 0% { opacity: 0; transform: translateX(50px) scale(0.9); } 100% { opacity: 1; transform: translateX(0) scale(1); } }
+    @keyframes toastOut { 0% { opacity: 1; transform: translateX(0) scale(1); } 100% { opacity: 0; transform: translateX(50px) scale(0.9); } }
 
-    .header-controls { display: flex; gap: 20px; }
-
-    main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-
-    .main-panel { width: 100%; max-width: 950px; padding: 60px; display: flex; flex-direction: column; align-items: center; }
-
-    .dashboard { display: flex; gap: 80px; margin-bottom: 40px; text-align: center; z-index: 2; }
-    
-    .stat-group { display: flex; flex-direction: column; }
-    .stat-val { font-size: 42px; font-weight: 900; letter-spacing: 2px; color: #111; text-shadow: 0 4px 10px rgba(255,255,255,0.8); }
-    .stat-lbl { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; color: #555; margin-top: 10px; font-weight: 700; }
-
-    .timer-container {
-        width: 100%; max-width: 750px; height: 10px; background: rgba(0,0,0,0.1); border-radius: 10px;
-        margin-bottom: 30px; overflow: hidden; display: none; z-index: 2;
+    #modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.3);
+        backdrop-filter: blur(10px); z-index: 5000; display: none; justify-content: center; align-items: center;
     }
-    .timer-bar {
-        height: 100%; width: 100%; background: #111; transition: width 0.1s linear;
+    .modal-content {
+        width: 100%; max-width: 500px; padding: 50px; text-align: center;
     }
-
-    .input-zone { position: relative; width: 100%; max-width: 750px; margin-bottom: 20px; z-index: 2; }
-    #console-input {
-        width: 100%; background: rgba(255, 255, 255, 0.6); border: 2px solid rgba(255,255,255,1);
-        border-bottom-color: rgba(0,0,0,0.1); border-radius: 20px; color: #000000; 
-        font-size: 64px; padding: 30px 20px; text-align: center; outline: none;
-        font-family: 'Helvetica Neue', sans-serif; letter-spacing: 14px; font-weight: 300;
-        text-transform: uppercase; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        box-shadow: inset 0 5px 15px rgba(0,0,0,0.02), 0 15px 35px rgba(0,0,0,0.05);
-        backdrop-filter: blur(10px);
-    }
-    #console-input:focus { background: rgba(255, 255, 255, 0.9); box-shadow: inset 0 5px 15px rgba(0,0,0,0.01), 0 25px 50px rgba(0,0,0,0.1); transform: scale(1.03); }
-    #console-input:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    #visual-feedback { height: 35px; font-size: 20px; letter-spacing: 4px; font-weight: 900; text-align: center; opacity: 0; transition: opacity 0.3s, transform 0.3s; text-transform: uppercase; transform: translateY(15px); z-index: 2; }
-    .msg-success { color: #000000; text-shadow: 0 0 15px rgba(255,255,255,1); }
-    .msg-error { color: #777777; text-decoration: line-through; }
-
-    #context-panel { margin-top: 30px; font-size: 15px; color: #444444; text-align: center; letter-spacing: 3px; text-transform: uppercase; font-weight: 800; z-index: 2; background: rgba(255,255,255,0.4); padding: 15px 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.6); }
-
-    .footer-section { display: flex; gap: 50px; z-index: 2; }
+    .modal-actions { display: flex; gap: 20px; margin-top: 40px; justify-content: center; }
 
     /* ==========================================================================
-       P2P LOBBY & RACE MODE
+       SOLO GAME INTERFACE
        ========================================================================== */
-    .lobby-list {
-        display: flex; flex-direction: column; gap: 15px; max-height: 400px; overflow-y: auto; padding: 10px; margin-top: 20px;
+    header, footer {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 25px 50px; border-radius: 28px; z-index: 2; width: 100%;
     }
+
+    .header-controls { display: flex; gap: 20px; align-items: center; }
+    
+    .status-badge {
+        background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); padding: 10px 20px;
+        border-radius: 12px; font-weight: 900; letter-spacing: 2px; font-size: 14px;
+    }
+
+    main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 0; width: 100%; }
+
+    .main-panel { width: 100%; max-width: 1000px; padding: 70px; display: flex; flex-direction: column; align-items: center; }
+
+    .dashboard { display: flex; gap: 100px; margin-bottom: 50px; text-align: center; z-index: 2; width: 100%; justify-content: center;}
+    
+    .stat-group { display: flex; flex-direction: column; align-items: center;}
+    .stat-val { font-size: 48px; font-weight: 900; letter-spacing: 2px; color: var(--text-main); text-shadow: 0 4px 15px rgba(255,255,255,1); }
+    .stat-lbl { font-size: 13px; text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-top: 12px; font-weight: 800; }
+
+    .timer-container {
+        width: 100%; max-width: 800px; height: 12px; background: rgba(0,0,0,0.08); border-radius: 12px;
+        margin-bottom: 40px; overflow: hidden; display: none; z-index: 2; border: 1px solid rgba(255,255,255,0.8);
+    }
+    .timer-bar {
+        height: 100%; width: 100%; background: var(--text-main); transition: width 0.1s linear, background-color 0.3s;
+    }
+
+    .input-zone { position: relative; width: 100%; max-width: 800px; margin-bottom: 25px; z-index: 2; }
+    #console-input {
+        width: 100%; background: rgba(255, 255, 255, 0.65); border: 2px solid rgba(255,255,255,1);
+        border-bottom-color: rgba(0,0,0,0.1); border-radius: 24px; color: var(--text-main); 
+        font-size: 72px; padding: 35px 20px; text-align: center; outline: none;
+        font-family: 'Helvetica Neue', sans-serif; letter-spacing: 16px; font-weight: 300;
+        text-transform: uppercase; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        box-shadow: inset 0 5px 20px rgba(0,0,0,0.03), 0 20px 40px rgba(0,0,0,0.06);
+        backdrop-filter: blur(15px);
+    }
+    #console-input:focus { background: rgba(255, 255, 255, 0.95); box-shadow: inset 0 5px 15px rgba(0,0,0,0.01), 0 30px 60px rgba(0,0,0,0.12); transform: scale(1.03); }
+    #console-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #visual-feedback { height: 40px; font-size: 22px; letter-spacing: 5px; font-weight: 900; text-align: center; opacity: 0; transition: opacity 0.3s, transform 0.3s; text-transform: uppercase; transform: translateY(15px); z-index: 2; }
+    .msg-success { color: var(--text-main); text-shadow: 0 0 20px rgba(255,255,255,1); }
+    .msg-error { color: var(--accent-red); text-decoration: line-through; text-shadow: 0 0 20px rgba(255,59,48,0.3); }
+
+    #context-panel { margin-top: 30px; font-size: 16px; color: var(--text-muted); text-align: center; letter-spacing: 4px; text-transform: uppercase; font-weight: 800; z-index: 2; background: rgba(255,255,255,0.5); padding: 20px 40px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.7); box-shadow: 0 10px 20px rgba(0,0,0,0.03); }
+
+    /* ==========================================================================
+       P2P LOBBY (WEBRTC SIGNALING)
+       ========================================================================== */
+    .lobby-header { display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 30px;}
+    
+    .radar-spinner {
+        width: 30px; height: 30px; border: 3px solid rgba(0,0,0,0.1); border-top-color: var(--text-main);
+        border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .lobby-list {
+        display: flex; flex-direction: column; gap: 20px; max-height: 450px; overflow-y: auto; padding: 10px; width: 100%;
+        /* Custom scrollbar */
+    }
+    .lobby-list::-webkit-scrollbar { width: 8px; }
+    .lobby-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
+    .lobby-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
+
     .lobby-item {
-        display: flex; justify-content: space-between; align-items: center; padding: 15px 25px;
-        background: rgba(255,255,255,0.5); border-radius: 16px; border: 1px solid rgba(255,255,255,0.8);
-        transition: all 0.2s ease; cursor: pointer;
+        display: flex; justify-content: space-between; align-items: center; padding: 25px 35px;
+        background: rgba(255,255,255,0.6); border-radius: 20px; border: 1px solid rgba(255,255,255,0.9);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.02);
     }
     .lobby-item:hover {
-        background: rgba(255,255,255,0.9); transform: translateX(5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        background: rgba(255,255,255,1); transform: scale(1.02) translateX(5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--text-main);
     }
-    .lobby-item .peer-name { font-weight: 800; font-size: 18px; letter-spacing: 2px; }
-    .lobby-item .peer-ping { font-size: 12px; color: #555; letter-spacing: 1px; font-weight: 600;}
+    .peer-info { display: flex; flex-direction: column; align-items: flex-start; gap: 5px;}
+    .peer-name { font-weight: 900; font-size: 20px; letter-spacing: 3px; color: var(--text-main);}
+    .peer-id { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; font-family: monospace;}
+    .peer-action { font-size: 13px; font-weight: 800; letter-spacing: 2px; padding: 10px 20px; background: var(--text-main); color: white; border-radius: 12px; transition: 0.2s;}
+    .lobby-item:hover .peer-action { transform: scale(1.05); background: var(--accent-blue); }
 
-    #race-container {
-        display: none; flex-direction: column; height: 100vh; width: 100vw; padding: 4vh 4vw; gap: 3vh;
+    /* ==========================================================================
+       P2P RACE MODE UI
+       ========================================================================== */
+    .race-grid {
+        display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; gap: 30px;
+        width: 100%; height: 100%; max-width: 1400px; margin: 0 auto;
     }
-    .race-header { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; z-index: 2;}
-    .race-competitor { font-size: 24px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase;}
+
+    .race-header-panel {
+        display: flex; justify-content: space-between; align-items: center; padding: 30px 50px;
+    }
     
-    .race-progress-wrapper { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; z-index: 2;}
-    .race-track { width: 100%; height: 20px; background: rgba(0,0,0,0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.8); position: relative; overflow: hidden;}
-    .race-fill-me { height: 100%; width: 0%; background: #111; transition: width 0.1s linear; border-radius: 10px;}
-    .race-fill-opp { height: 100%; width: 0%; background: #ff3b30; transition: width 0.1s linear; border-radius: 10px;}
-    .race-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: -15px; color: #444;}
+    .racer-card {
+        display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .racer-name { font-size: 28px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
+    .racer-wpm { font-size: 16px; font-weight: 800; letter-spacing: 2px; color: var(--text-muted); }
+    
+    .vs-badge {
+        font-size: 32px; font-weight: 900; font-style: italic; color: rgba(0,0,0,0.2); letter-spacing: 5px;
+    }
 
-    .race-main { flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; z-index: 2;}
+    .race-track-panel {
+        display: flex; flex-direction: column; gap: 25px; padding: 40px 50px;
+    }
+    
+    .track-wrapper { display: flex; flex-direction: column; gap: 10px; }
+    .track-label { display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: var(--text-main);}
+    .race-track { width: 100%; height: 24px; background: rgba(0,0,0,0.06); border-radius: 12px; border: 1px solid rgba(255,255,255,0.9); position: relative; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);}
+    .race-fill-me { height: 100%; width: 0%; background: linear-gradient(90deg, #111, #333); transition: width 0.1s linear; border-radius: 12px; box-shadow: 0 0 15px rgba(0,0,0,0.3);}
+    .race-fill-opp { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-red), #ff6b6b); transition: width 0.1s linear; border-radius: 12px; box-shadow: 0 0 15px rgba(255,59,48,0.4);}
+
+    .race-main-panel {
+        display: flex; justify-content: center; align-items: center; padding: 50px; position: relative;
+    }
     
     .uncopyable {
         user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
-        pointer-events: none;
     }
 
     #race-paragraph {
-        font-size: 32px; line-height: 1.6; font-weight: 400; letter-spacing: 2px; color: rgba(0,0,0,0.3);
-        text-align: left; width: 100%; max-width: 1200px; padding: 50px;
+        font-size: 38px; line-height: 1.6; font-weight: 500; letter-spacing: 2px; color: rgba(0,0,0,0.2);
+        text-align: left; width: 100%; outline: none; transition: all 0.2s;
     }
-    #race-paragraph span.correct { color: #000; font-weight: 700; }
-    #race-paragraph span.current { border-bottom: 3px solid #111; color: #000; background: rgba(0,0,0,0.05);}
-    #race-paragraph span.error { color: #ff3b30; background: rgba(255,59,48,0.1); border-bottom: 3px solid #ff3b30;}
+    
+    #race-paragraph span { transition: color 0.1s, background 0.1s; border-radius: 4px; padding: 0 2px;}
+    #race-paragraph span.correct { color: var(--text-main); font-weight: 700; text-shadow: 0 0 1px rgba(0,0,0,0.1);}
+    #race-paragraph span.current { border-bottom: 4px solid var(--text-main); color: var(--text-main); background: rgba(0,0,0,0.08); animation: cursorBlink 1s infinite;}
+    #race-paragraph span.error { color: white; background: var(--accent-red); border-bottom: 4px solid #cc2e26; font-weight: 700;}
+    
+    #race-paragraph span.opp-cursor { position: relative; }
+    #race-paragraph span.opp-cursor::after {
+        content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 4px; background: var(--accent-red); opacity: 0.7;
+    }
 
+    @keyframes cursorBlink { 0%, 100% { border-color: transparent; } 50% { border-color: var(--text-main); } }
+
+    .overlay-message {
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        font-size: 80px; font-weight: 900; letter-spacing: 10px; text-transform: uppercase;
+        color: var(--text-main); text-shadow: 0 10px 30px rgba(255,255,255,1);
+        display: none; z-index: 10; pointer-events: none;
+        background: rgba(255,255,255,0.8); padding: 40px 80px; border-radius: 40px; backdrop-filter: blur(20px); border: 2px solid white;
+    }
 </style>
 </head>
 <body oncontextmenu="return false;">
 
+<div id="toast-container"></div>
+
+<div id="modal-overlay">
+    <div class="liquid-glass modal-content">
+        <div class="title-text" id="modal-title">INCOMING LINK</div>
+        <div class="subtitle-text" id="modal-desc" style="margin-top: 10px; font-size: 16px;">User wants to race.</div>
+        <div class="modal-actions">
+            <button class="std-btn" id="btn-modal-accept" style="background: var(--text-main); color: white;">ACCEPT</button>
+            <button class="std-btn" id="btn-modal-decline">DECLINE</button>
+        </div>
+    </div>
+</div>
+
 <div id="name-screen" class="screen-overlay active-screen">
     <div class="panel-box liquid-glass">
-        <div class="title-text">Identity Registration</div>
-        <input type="text" id="player-name-input" class="huge-input" autocomplete="off" spellcheck="false" placeholder="ENTER ALIAS" maxlength="16">
-        <button id="btn-submit-name" class="std-btn">INITIALIZE</button>
+        <div class="title-text">Nexus Registration</div>
+        <div class="subtitle-text">Enter System Alias</div>
+        <input type="text" id="player-name-input" class="huge-input" autocomplete="off" spellcheck="false" placeholder="GUEST_USER" maxlength="16">
+        <button id="btn-submit-name" class="std-btn">INITIALIZE CONNECTION</button>
     </div>
 </div>
 
 <div id="mode-screen" class="screen-overlay">
-    <div class="panel-box liquid-glass" style="max-width: 700px;">
-        <div class="title-text" style="margin-bottom: 20px;">Select Assessment Mode</div>
-        <button id="btn-mode-regular" class="std-btn mode-btn">REGULAR (SOLO)</button>
-        <button id="btn-mode-timed" class="std-btn mode-btn">TIMED (10s BURST)</button>
-        <button id="btn-mode-race" class="std-btn mode-btn">P2P RACE (MULTIPLAYER)</button>
+    <div class="panel-box liquid-glass" style="max-width: 750px;">
+        <div class="title-text">Protocol Selection</div>
+        <div class="subtitle-text" style="margin-bottom: 20px;">Choose Assessment Vector</div>
+        
+        <button id="btn-mode-regular" class="std-btn mode-btn">
+            <span>SOLO ASSESSMENT</span>
+            <span class="mode-desc">Standard Audio Transcription Protocol. No time limits.</span>
+        </button>
+        
+        <button id="btn-mode-timed" class="std-btn mode-btn">
+            <span>TIMED BURST (10s)</span>
+            <span class="mode-desc">High-pressure cognitive test. 10 seconds per transcription.</span>
+        </button>
+        
+        <button id="btn-mode-race" class="std-btn mode-btn" style="border-color: var(--text-main);">
+            <span>WEBRTC MULTIPLAYER RACE</span>
+            <span class="mode-desc">Live Peer-to-Peer Typography Duel against local network nodes.</span>
+        </button>
     </div>
 </div>
 
@@ -306,23 +463,40 @@
 </div>
 
 <div id="lobby-screen" class="screen-overlay">
-    <div class="panel-box liquid-glass" style="max-width: 800px;">
-        <div class="title-text">P2P Node Discovery</div>
-        <div id="lobby-status" style="font-size: 14px; font-weight: 700; letter-spacing: 2px; color: #555;">SCANNING WEBRTC PEERS...</div>
+    <div class="panel-box liquid-glass" style="max-width: 900px; height: 80vh; max-height: 800px;">
+        <div class="lobby-header">
+            <div style="text-align: left;">
+                <div class="title-text" style="font-size: 24px;">Local Node Discovery</div>
+                <div class="subtitle-text" style="margin-top: 5px;">Broadcasting via BroadcastChannel API</div>
+            </div>
+            <button class="std-btn" id="btn-refresh-lobby" style="padding: 12px 24px; font-size: 12px;">PULSE NETWORK</button>
+        </div>
+        
+        <div id="lobby-status-container" style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <div class="radar-spinner"></div>
+            <div id="lobby-status" style="font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--text-muted);">AWAITING PEER RESPONSES...</div>
+        </div>
+        
         <div class="lobby-list" id="peer-list">
             </div>
+        
+        <div style="margin-top: auto;">
+            <button class="std-btn" id="btn-leave-lobby" style="width: 100%;">DISCONNECT FROM LOBBY</button>
+        </div>
     </div>
 </div>
 
-<div id="app-container">
+<div id="app-container" class="screen-overlay" style="padding: 2vh 2vw;">
     <header class="liquid-glass">
         <div class="header-controls">
-            <span id="display-player-name" style="font-weight: 900; letter-spacing: 2px; font-size: 18px;">GUEST</span>
+            <div class="status-badge" id="display-player-name">GUEST</div>
+            <div class="status-badge" id="display-mode-name" style="background: var(--text-main); color: white;">SOLO</div>
         </div>
         <div class="header-controls">
-            <button class="std-btn" id="btn-voice">VOICE: 1/10</button>
+            <button class="std-btn" id="btn-voice">VOICE: AUTO</button>
             <button class="std-btn" id="btn-play">RE-BROADCAST</button>
             <button class="std-btn" id="btn-skip">OVERRIDE</button>
+            <button class="std-btn" id="btn-exit-solo" style="border-color: var(--accent-red); color: var(--accent-red);">EXIT</button>
         </div>
     </header>
 
@@ -330,12 +504,12 @@
         <div class="main-panel liquid-glass">
             <div class="dashboard">
                 <div class="stat-group">
-                    <span class="stat-val" id="level-display">PHASE 01</span>
-                    <span class="stat-lbl" id="level-desc">INITIALIZING...</span>
+                    <span class="stat-val" id="level-display">P-01</span>
+                    <span class="stat-lbl" id="level-desc">INIT</span>
                 </div>
                 <div class="stat-group">
                     <span class="stat-val" id="ui-score">00000</span>
-                    <span class="stat-lbl">TOTAL SCORE</span>
+                    <span class="stat-lbl">SCORE</span>
                 </div>
                 <div class="stat-group">
                     <span class="stat-val" id="ui-mult">1.00x</span>
@@ -354,7 +528,7 @@
             <div id="visual-feedback"></div>
             
             <div id="context-panel">
-                <div id="context-def">CONNECTING TO SECURE LEXICON...</div>
+                <div id="context-def">SYSTEM SECURED. READY FOR INPUT.</div>
             </div>
         </div>
     </main>
@@ -362,97 +536,170 @@
     <footer class="liquid-glass">
         <div class="footer-section">
             <div class="stat-group">
-                <span class="stat-val" style="font-size: 26px;" id="ui-wpm">0.0</span>
+                <span class="stat-val" style="font-size: 32px;" id="ui-wpm">0.0</span>
                 <span class="stat-lbl">WPM</span>
             </div>
             <div class="stat-group">
-                <span class="stat-val" style="font-size: 26px;" id="ui-acc">100%</span>
+                <span class="stat-val" style="font-size: 32px;" id="ui-acc">100%</span>
                 <span class="stat-lbl">PRECISION</span>
             </div>
         </div>
-        <div class="footer-section">
+        <div class="footer-section" style="justify-content: center; flex: 1;">
             <div class="stat-group" style="align-items: center;">
-                <span class="stat-val" style="font-size: 32px;" id="ui-rem">10</span>
-                <span class="stat-lbl">TOTAL WORDS REMAINING</span>
+                <span class="stat-val" style="font-size: 48px; color: var(--accent-blue);" id="ui-rem">10</span>
+                <span class="stat-lbl">WORDS REMAINING</span>
             </div>
         </div>
         <div class="footer-section">
             <div class="stat-group" style="align-items: flex-end;">
-                <span class="stat-val" style="font-size: 26px;" id="lvl-progress-text">0/2</span>
+                <span class="stat-val" style="font-size: 32px;" id="lvl-progress-text">0/2</span>
                 <span class="stat-lbl">LEVEL PROGRESS</span>
             </div>
         </div>
     </footer>
 </div>
 
-<div id="race-container">
-    <div class="liquid-glass p-4" style="padding: 30px; border-radius: 24px;">
-        <div class="race-header">
-            <div class="race-competitor" id="race-p1-name">YOU</div>
-            <div class="race-competitor" style="color: #ff3b30;">VS</div>
-            <div class="race-competitor" id="race-p2-name">OPPONENT</div>
-        </div>
-    </div>
-    
-    <div class="race-progress-wrapper liquid-glass" style="padding: 30px; border-radius: 24px;">
-        <div class="race-label"><span>YOUR UPLINK</span><span id="p1-percent">0%</span></div>
-        <div class="race-track"><div class="race-fill-me" id="p1-bar"></div></div>
-        
-        <div class="race-label" style="margin-top: 10px;"><span>OPPONENT UPLINK</span><span id="p2-percent">0%</span></div>
-        <div class="race-track"><div class="race-fill-opp" id="p2-bar"></div></div>
-    </div>
-
-    <div class="race-main">
-        <div class="liquid-glass uncopyable" id="race-paragraph" unselectable="on" onselectstart="return false;" ondragstart="return false;">
+<div id="race-container" class="screen-overlay" style="padding: 3vh 3vw;">
+    <div class="race-grid">
+        <div class="liquid-glass race-header-panel">
+            <div class="racer-card">
+                <div class="racer-name" id="race-p1-name">YOU</div>
+                <div class="racer-wpm" id="race-p1-wpm">0 WPM</div>
             </div>
+            <div class="vs-badge">VERSUS</div>
+            <div class="racer-card">
+                <div class="racer-name" id="race-p2-name">OPPONENT</div>
+                <div class="racer-wpm" id="race-p2-wpm">0 WPM</div>
+            </div>
+            <button class="std-btn" id="btn-exit-race" style="position: absolute; top: 40px; right: 50px; padding: 10px 20px; font-size: 12px;">ABORT</button>
+        </div>
+        
+        <div class="liquid-glass race-track-panel">
+            <div class="track-wrapper">
+                <div class="track-label"><span id="lbl-p1">LOCAL UPLINK</span><span id="p1-percent">0%</span></div>
+                <div class="race-track"><div class="race-fill-me" id="p1-bar"></div></div>
+            </div>
+            <div class="track-wrapper">
+                <div class="track-label"><span id="lbl-p2">REMOTE UPLINK</span><span id="p2-percent">0%</span></div>
+                <div class="race-track"><div class="race-fill-opp" id="p2-bar"></div></div>
+            </div>
+        </div>
+
+        <div class="liquid-glass race-main-panel">
+            <div id="race-overlay-msg" class="overlay-message">READY</div>
+            <div class="uncopyable" id="race-paragraph" tabindex="0">
+                </div>
+        </div>
     </div>
 </div>
 
 <script>
 /**
  * ==========================================================================
- * GLOBAL STATE & UTILS
+ * UTILITY & GLOBAL STATE
  * ==========================================================================
  */
 const GlobalState = {
-    playerName: "GUEST",
+    playerName: "GUEST_" + Math.floor(Math.random() * 9999),
+    peerId: "NODE_" + Math.random().toString(36).substr(2, 9).toUpperCase(),
     gameMode: "regular", // regular, timed, race
-    opponent: null
+    opponentName: null,
+    opponentId: null
 };
 
-function switchScreen(hideId, showId) {
-    document.getElementById(hideId).classList.remove('active-screen');
-    document.getElementById(showId).classList.add('active-screen');
-}
+const UIManager = {
+    switchScreen: (showId) => {
+        document.querySelectorAll('.screen-overlay').forEach(el => el.classList.remove('active-screen'));
+        document.getElementById(showId).classList.add('active-screen');
+    },
+    showToast: (msg, type="info") => {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        if(type === "error") toast.style.color = "var(--accent-red)";
+        if(type === "success") toast.style.color = "var(--accent-green)";
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = "toastOut 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards";
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    },
+    showModal: (title, desc, onAccept, onDecline) => {
+        const overlay = document.getElementById('modal-overlay');
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-desc').textContent = desc;
+        overlay.style.display = 'flex';
+        
+        const btnAcc = document.getElementById('btn-modal-accept');
+        const btnDec = document.getElementById('btn-modal-decline');
+        
+        // Clear previous listeners
+        const newAcc = btnAcc.cloneNode(true);
+        const newDec = btnDec.cloneNode(true);
+        btnAcc.parentNode.replaceChild(newAcc, btnAcc);
+        btnDec.parentNode.replaceChild(newDec, btnDec);
+        
+        newAcc.onclick = () => { overlay.style.display = 'none'; if(onAccept) onAccept(); };
+        newDec.onclick = () => { overlay.style.display = 'none'; if(onDecline) onDecline(); };
+    }
+};
 
 /**
  * ==========================================================================
- * HARDCODED LEXICON DATA
+ * MASSIVE LEXICON & 40 PARAGRAPHS
  * ==========================================================================
  */
 const MasterLexicon = {
-    lvl1: [
-        "apple","bread","water","earth","light","sound","plant","metal","glass","stone","bird","fish","tree","leaf","grass","wind","rain","snow","cloud","star","moon","sun","sky","hill","road","path","town","city","house","door","room","bed","chair","table","book","pen","clock","shoe","hat","coat","shirt","pant","sock","hand","foot","head","face","eye","ear","nose","mouth","tooth","tongue","arm","leg","back","heart","blood","bone","skin","hair","neck","wing","tail","fur","feather","horn","claw","beak","scale","shell","egg","nest","hive","web","cave","hole","rock","sand","dirt","mud","dust","ash","smoke","fire","heat","cold","ice","steam","fog","mist","dew","drop","wave","tide","current","river","lake","pond","pool","sea","ocean","coast","shore","beach","island","mountain","valley","forest","jungle","desert","plain","field","farm","garden","yard","park","street","bridge","wall","fence","gate","roof","floor","window","stairs","kitchen","bathroom","bedroom","living","dining","school","office","store","shop","market","bank","hospital","clinic","hotel","restaurant","cafe","bar","club","theater","cinema","museum","library","church","temple","mosque","station","airport","port","dock","ship","boat","train","car","bus","truck","bike","plane","jet","rocket","cart","wagon","wheel","engine","motor","brake","gear","tire","seat","hood","trunk","mirror","radio","screen","button","key","lock","handle","switch","plug","cord","wire","pipe","tube","hose","pump","valve","tank","bottle","can","jar","box","bag","sack","basket","bucket","pot","pan","bowl","plate","cup","mug","fork","knife","spoon","dish","tray","napkin","towel","soap","brush","comb","sponge","broom","mop","dustpan","trash","garbage","waste","bin","dump","landfill","recycle","paper","plastic","wood","cloth","fabric","leather","rubber","cotton","wool","silk","nylon","polyester","denim","canvas","velvet","lace","ribbon","string","thread","yarn","rope","chain","link","knot","tie","bow","loop","ring","hook","clip","pin","needle","nail","screw","bolt","nut","washer","pulley","lever","wedge","ramp","slope","canyon","cliff","ridge","peak","summit","base","root","stem","branch","flower","petal","seed","fruit","berry","bean","corn","wheat","rice","oats","barley","rye","flour","sugar","salt","pepper","spice","herb","oil","vinegar","sauce","soup","stew","broth","meat","beef","pork","lamb","chicken","turkey","duck","goose","crab","bench","stool","desk","shelf","drawer","closet","cabinet","mirror","rug","carpet","curtain","blind","pillow","sheet","blanket","quilt","mattress","lamp","bulb","torch","candle","match","flame","spark","glow","beam","ray","shadow","shade","gloom","dark","dusk","dawn","morning","noon","night","week","month","year","time","date","hour","minute","second","past","present","future","age","era","gold","silver","copper","iron","steel","brass","bronze","lead","tin","zinc","clay","brick","tile","cement","lime","chalk","coal","coke","peat","fuel","gas","oil","petrol","diesel","power","force","energy","work","play","game","sport","toy","doll","ball","bat","net","racket","skate","sled","skis","board","card","dice","piece","pawn","king","queen","knight","bishop","rook","team","player","coach","match","race","run","jump","hop","skip","walk","march","pace","step","stride","trip","fall","slip","slide","glide","swim","dive","float","sail","row","fly","soar","ride","drive","steep","flat","wide","long","tall","short","high","low","deep","shallow","thin","thick","heavy","light","hard","soft","rough","smooth","sharp","blunt","wet","dry","hot","cold","warm","cool","clean","dirty","fresh","stale","sweet","sour","bitter","salty","loud","soft","quiet","silent","fast","slow","quick","rapid","swift","sudden","calm","bold","brave","wise","smart","kind","proud","fair","free","rich","poor","weak","strong","sick","well","dead","alive","safe","sure","true","real","pure","good","bad","fine","nice","dear","cheap","new","old","young","babe","child","boy","girl","man","woman","folks","friend","guest","host","boss","crew","gang","band","crowd","mass","heap","pile","load","pack","bunch","flock","herd","pack","swarm","school","shoal","pair","span","suit","set","sort","kind","type","form","shape","size","line","row","file","rank","loop","mesh","grid","comb","web","net","lace","trim","edge","rim","brink","verge","border","fringe","bound","limit","end","tip","top","peak","crest","crown","brow","face","front","back","rear","side","flank","part","piece","bit","scrap","shred","slice","chunk","lump","block","cube","cone","ball","globe","orb","ring","band","belt","cord","wire","line","strip","tape","band","rib","bar","rod","pole","post","stake","stud","pin","peg","nail","stud","rivet","hook","eye","ring","loop","slot","slit","hole","vent","pore","gap","space","blank"
-    ],
-    lvl2: [
-        "algorithm","database","network","protocol","function","variable","compile","execute","memory","system","module","packet","router","server","client","socket","thread","process","kernel","driver","buffer","cache","queue","stack","array","string","object","class","method","event","signal","stream","record","field","index","query","schema","domain","portal","proxy","token","cipher","digest","vector","matrix","tensor","graph","tree","heap","list","hash","map","set","tuple","struct","union","enum","pointer","reference","value","type","interface","trait","mixin","package","namespace","library","framework","engine","platform","environment","architecture","design","pattern","model","view","controller","component","service","agent","actor","worker","task","job","fiber","coroutine","generator","iterator","observer","listener","handler","callback","promise","future","observable","channel","pipe","port","connection","session","transaction","context","state","store","pool","registry","directory","catalog","ledger","log","journal","diary","archive","backup","snapshot","image","container","volume","disk","drive","partition","sector","block","chunk","segment","page","frame","datagram","message","payload","header","footer","trailer","body","content","data","information","knowledge","wisdom","insight","understanding","intelligence","logic","reason","thought","idea","concept","notion","theory","hypothesis","premise","axiom","theorem","lemma","corollary","proof","evidence","fact","truth","reality","existence","being","entity","thing","item","element","part","piece","constituent","ingredient","factor","feature","trait","attribute","property","quality","characteristic","aspect","facet","dimension","parameter","argument","literal","constant","symbol","identifier","name","label","tag","marker","flag","sign","symptom","indicator","clue","hint","trace","track","trail","course","direction","bearing","heading","velocity","speed","pace","rate","frequency","period","cycle","rhythm","tempo","beat","pulse","throb","vibration","oscillation","wave","ripple","surge","flow","current","flood","flush","gush","rush","dash","dart","sprint","race","stroll","amble","saunter","wander","roam","rove","ramble","explore","search","seek","hunt","chase","pursue","follow","tail","shadow","stalk","hound","watch","observe","monitor","inspect","examine","analyze","study","review","survey","scan","browse","skim","read","peruse","learn","master","grasp","comprehend","realize","recognize","identify","detect","discover","find","locate","uncover","reveal","expose","disclose","publish","broadcast","transmit","send","dispatch","forward","relay","transfer","move","shift","slide","slip","glide","skate","ski","surf","sail","navigate","steer","pilot","ride","fly","soar","hover","drift","coast","cruise","journey","travel","voyage","flight","safari","trek","tour","trip","excursion","outing","picnic","gala","feast","festival","carnival","pageant","parade","show","display","exhibit","fair","bazaar","market","expo","rally","meet","match","contest","game","tournament","championship","olympiad","race","derby","marathon","sprint","relay","hurdle","vault","jump","dive","swim","row","paddle","cruise","steer","anchor","dock","moor","berth","land","takeoff","ascend","descend","climb","scale","mount","rise","fall","drop","sink","plunge","dive","plummet","tumble","stumble","slip","slide","coast","glide","float","drift","flow","stream","gush","trickle","leak","ooze","seep","drain","filter","sift","strain","purify","cleanse","wash","rinse","scrub","polish","shine","gleam","sparkle","glitter","glisten","shimmer","twinkle","flash","flare","blaze","glow","burn","scorch","char","singe","smoke","fume","steam","vapor","gas","fluid","liquid","solid","crystal","grain","powder","dust","ash","cinder","slag","debris","rubble","wreck","ruin","waste","refuse","scrap","litter","rubbish","garbage","trash","debris","detritus","remnant","residue","leavings","remains","relic","antique","artifact","specimen","sample","instance","example","illustration","case","item","detail","particular","feature","aspect","facet","side","phase","stage","step","period","epoch","era","age","generation","lifetime","span","duration","interval","intermission","pause","break","gap","hiatus","lacuna","void","vacuum","space","expanse","extent","range","scope","compass","reach","stretch","domain","sphere","realm","province","territory","region","zone","district","sector","quarter","locality","venue","site","location","spot","point","position","station","post","office","bureau","department","agency","faculty","board","council","committee","forum","tribunal","court","bench","bar","dock"
-    ],
-    lvl3: [
-        "asynchronous","cryptography","encapsulation","polymorphism","inheritance","abstraction","concurrency","framework","middleware","repository","deployment","virtualization","orchestration","provisioning","scalability","elasticity","redundancy","availability","reliability","durability","consistency","integrity","confidentiality","authentication","authorization","accountability","auditability","traceability","observability","telemetry","monitoring","alerting","logging","tracing","profiling","debugging","troubleshooting","diagnostics","analytics","metrics","statistics","dashboard","visualization","reporting","aggregation","summarization","classification","clustering","regression","prediction","forecasting","modeling","simulation","optimization","heuristic","stochastic","deterministic","probabilistic","statistical","mathematical","algorithmic","computational","analytical","empirical","experimental","theoretical","conceptual","architectural","structural","behavioral","functional","nonfunctional","operational","tactical","strategic","organizational","managerial","administrative","executive","financial","commercial","industrial","technological","scientific","engineering","medical","biological","chemical","physical","astronomical","geological","meteorological","oceanographic","environmental","ecological","sociological","psychological","anthropological","archaeological","historical","geographical","political","economic","cultural","artistic","literary","musical","theatrical","cinematic","photographic","philosophical","theological","mythological","linguistic","grammatical","syntactic","semantic","pragmatic","phonetic","phonological","morphological","lexical","etymological","typographical","calligraphic","steganographic","cartographic","topographical","demographic","epidemiological","pharmacological","toxicological","immunological","genomic","proteomic","metabolomic","transcriptomic","epigenomic","microbiome","ecosystem","biosphere","atmosphere","hydrosphere","lithosphere","cryosphere","magnetosphere","ionosphere","stratosphere","troposphere","mesosphere","thermosphere","exosphere","galaxy","universe","cosmos","multiverse","dimension","continuum","paradigm","taxonomy","ontology","epistemology","phenomenology","hermeneutics","dialectics","syllogism","tautology","contradiction","paradox","dilemma","enigma","conundrum","mystery","puzzle","labyrinth","maze","web","grid","matrix","lattice","mesh","fabric","texture","structure","system","organism","machine","device","instrument","apparatus","equipment","implement","tool","weapon","vehicle","vessel","container","receptacle","vial","flask","beaker","crucible","retort","calorimeter","spectrometer","microscope","telescope","interferometer","accelerometer","gyroscope","magnetometer","barometer","thermometer","hygrometer","anemometer","seismometer","galvanometer","voltmeter","ammeter","ohmmeter","multimeter","oscilloscope","synthesizer","sequencer","sampler","modulator","demodulator","multiplexer","demultiplexer","transducer","transmitter","receiver","transceiver","amplifier","attenuator","filter","equalizer","compressor","expander","limiter","clipper","rectifier","inverter","converter","transformer","generator","alternator","dynamo","motor","engine","turbine","pump","fan","blower","propeller","impeller","rotor","stator","armature","commutator","brushes","bearings","gears","shafts","axles","wheels","tires","belts","chains","cables","wires","cords","plugs","sockets","switches","relays","contactors","breakers","fuses","resistors","capacitors","inductors","diodes","transistors","thyristors","microprocessors","microcontrollers","sensors","actuators","displays","monitors","screens","projectors","printers","scanners","cameras","microphones","speakers","headphones","earphones","headsets","components","circuits","conductors","insulators","semiconductors","superconductors","dielectrics","piezoelectrics","ferroelectrics","ferromagnets","paramagnets","diamagnets","electromagnets","solenoids","inductors","transformers","generators","alternators","dynamos","motors","turbines","engines","compressors","pumps","actuators","valves","regulators","controllers","processors","memories","registers","buses","interfaces","peripherals","terminals","consoles","workstations","servers","routers","switches","hubs","gateways","bridges","modems","multiplexers","demultiplexers","transmitters","receivers","transceivers","antennas","waveguides","wavefronts","oscillations","vibrations","frequencies","wavelengths","amplitudes","phases","spectrums","harmonics","resonances","interferences","diffractions","refractions","reflections","absorptions","emissions","scatterings","dispersions","polarizations","attenuations","amplifications","modulations","demodulations","multiplexings","packetizations","quantizations","encodings","decodings","compressions","decompressions","encryptings","decryptings","authentications","authorizations","validations","verifications","evaluations","assessments","estimations","calculations","computations","formulations","derivations","integrations","differentiations","transformations","convolutions","correlations","convolutions","projections","mappings","translations","rotations","scalings","dilations"
-    ],
-    lvl4: [
-        "ephemeral","orthogonal","isomorphic","heuristic","stochastic","deterministic","idempotent","ubiquitous","synergistic","paradigm","asymptote","bifurcation","cybernetics","eigenvector","fibonacci","gaussian","hypervisor","juxtaposition","kinematics","logarithmic","memoization","neural","ontology","qubit","rasterize","tessellation","vectorization","wavelet","xenobiotic","yield","zealous","amalgamation","biodiversity","chromosome","dicotyledon","exoskeleton","photosynthesis","symbiosis","thermodynamics","viscosity","acoustic","ballistic","catalytic","diastolic","elastic","ferromagnetic","galvanic","hydraulic","isometric","kinetic","luminescent","magnetic","pneumatic","quantum","radioactive","supersonic","tectonic","ultrasonic","volcanic","aerodynamic","biometric","calorific","dielectric","endothermic","exothermic","geothermal","hydroelectric","isothermal","kinematic","lithospheric","macroscopic","microscopic","nanoscopic","optoelectronic","photoelectric","quarks","relativistic","stereoscopic","tribological","viscoelastic","xenon","yttrium","zirconium","actuarial","bureaucratic","clandestine","draconian","egalitarian","fiduciary","gubernatorial","hierarchical","imperial","judicial","kleptocratic","legislative","meritocratic","nepotistic","oligarchic","plutocratic","quixotic","republican","secular","theocratic","utilitarian","vanguard","whiggish","xenophobic","yeoman","zealotry","archipelago","bathymetry","cartography","demography","escarpment","fjord","glaciology","hemisphere","isthmus","jurisdiction","karst","latitude","longitude","meridian","nomad","oasis","peninsula","quarry","ravine","strait","tundra","upwelling","volcanology","watershed","xeriscaping","yonder","zenith","altruism","behaviorism","cognitivism","determinism","empiricism","fatalism","gnosticism","humanism","idealism","jingoism","kantianism","libertarianism","materialism","nihilism","objectivism","pragmatism","quietism","rationalism","solipsism","transcendentalism","utilitarianism","vitalism","wahhabism","xenocentrism","yoga","zoroastrianism","alliteration","bildungsroman","cacophony","denouement","euphemism","foreshadowing","hyperbole","irony","jargon","kitsch","litotes","metaphor","neologism","onomatopoeia","personification","quatrain","rhetoric","simile","tautology","understatement","vernacular","wordplay","xylography","yarn","zeugma","arabesque","baroque","chiaroscuro","dadaism","expressionism","fauvism","gothic","cubism","impressionism","japonisme","lithography","minimalism","neoclassicism","origami","pointillism","quattrocento","realism","surrealism","trompeloeil","ukiyo","vorticism","watercolor","yantra","zoomorphic","arpeggio","belcanto","crescendo","diminuendo","embouchure","fortissimo","glissando","harmony","interval","jazz","key","legato","melody","nocturne","ostinato","pizzicato","quaver","rhythm","staccato","tempo","unison","vibrato","waltz","xylophone","yodel","zarzuela","anemone","basilisk","chameleon","dingo","echidna","flamingo","gazelle","hippopotamus","iguana","jaguar","kangaroo","lemur","macaque","narwhal","orangutan","pangolin","quetzal","rhinoceros","salamander","tarantula","uakari","vicuna","wallaby","xantus","yak","zebra","absinthe","baklava","croissant","daiquiri","enchilada","fettuccine","gazpacho","hummus","igname","jalapeno","kielbasa","lasagna","macaroni","nougat","omelet","pastrami","quiche","ravioli","spaghetti","tiramisu","udon","vichyssoise","waffle","xylitol","yogurt","zucchini","aberration","anachronism","anathema","bellicose","capricious","chimerical","deleterious","enervate","evanescent","garrulous","hackneyed","iconoclast","impugn","loquacious","malleable","nefarious","obfuscate","pariah","pugnacious","recalcitrant","salubrious","sycophant","timorous","unctuous","vacillate","vociferous","wanton","antiquity","byzantine","caravanserai","feudalism","iconography","manuscript","palaeography","renaissance","scholasticism","vassalage","visigoth","merovingian","carolingian","absolutism","hegemony","irredentism","mercantilism","protectorate","sovereignty","suzerainty","totalitarianism","unicameral","zollverein","bourgeoisie","proletariat","syndicalism","autarky","bimetallism","deflation","econometrics","macroeconomics","microeconomics","monopoly","oligopoly","physiocracy","stagflation","tariff","utopia","dystopia","existentialism","phenomenology","pragmatism","structuralism","poststructuralism","deconstruction","hermeneutics","teleology","epistemology","cosmology","metaphysics","solipsism","stoicism","epicureanism","scholasticism","rationalism","empiricism","utilitarianism","nihilism","aesthetic","sublime","dialectic","monad","noumenon","phenomenon","transcendental","categorical","imperative","utilitarian","panopticon","alienation","anomie","hegemony","habitus","intersectionality","meritocracy","pluralism","stratification","subaltern","surveillance","communism","socialism","capitalism","anarchism","fascism","nationalism","liberalism","conservativism","libertarianism","populism","theocracy","plutocracy","oligarchy","aristocracy","democracy","republic","monarchy","dictatorship","totalitarian","authoritarian","egalitarian","libertarian","utilitarian"
-    ],
-    lvl5: [
-        "sesquipedalian","obfuscation","antidisestablishmentarianism","floccinaucinihilipilification","pseudopseudohypoparathyroidism","incomprehensibilities","unsubstantiatability","supercalifragilisticexpialidocious","honorificabilitudinitatibus","microminiaturization","pneumonoultramicroscopicsilicovolcanoconiosis","hippopotomonstrosesquippedaliophobia","spectrophotofluorometrically","psychoneuroendocrinological","radioimmunoelectrophoresis","otorhinolaryngological","immunoelectrophoretically","macromolecularly","polytetrafluoroethylene","hexakosioihexekontahexaphobia","tetraethyldiaminotriphenylmethane","pseudomyxoma","peritonei","choledocholithiasis","encephalomyocarditis","synecdoche","hemidemisemiquaver","flibbertigibbet","defenestration","gobbledygook","abracadabra","bamboozle","cattywampus","discombobulate","erstwhile","finagle","gargantuan","hullabaloo","indubitably","juxtapose","kerfuffle","lackadaisical","malarkey","nincompoop","obstreperous","persnickety","quagmire","ramshackle","skedaddle","tomfoolery","ubiquitous","verisimilitude","whippersnapper","xenotransplantation","yahoo","zeppelin","acrimonious","belligerent","cantankerous","deleterious","egregious","fastidious","gregarious","hubris","iconoclast","judicious","lugubrious","mellifluous","nefarious","obsequious","paradigm","quixotic","recalcitrant","sycophant","trepidation","ubiquity","vacillate","winsome","xenophobe","yielding","zealous","anachronism","cacophony","diatribe","ephemeral","facetious","grandiloquent","harangue","idiosyncrasy","juggernaut","kaleidoscope","labyrinthine","machiavellian","narcissism","obfuscate","panacea","quandary","rhetoric","serendipity","tautology","umbrage","vicarious","wanderlust","xenomorphic","yashmak","zeitgeist","aberration","bifurcation","conundrum","dichotomy","epistemology","fiduciary","gerrymandering","hegemony","infrastructure","jurisprudence","kleptocracy","lexicography","megalomania","nomenclature","oligarchy","plutocracy","quintessential","reciprocity","stratification","totalitarianism","unilateral","vernacular","whimsical","xenolithic","yeomanry","zoology","anthropomorphism","bibliophile","claustrophobia","dermatologist","entomology","philanthropy","gerontology","herpetology","ichthyology","jurisdiction","kinesiology","lepidoptery","meteorology","neurology","ornithology","paleontology","quantum","radiology","seismology","toxicology","urology","virology","weather","xerography","yachting","zodiac","abstemious","bowdlerize","chicanery","diffident","enervate","fatuous","gauche","homogeneous","incognito","jejune","kinetic","loquacious","misanthrope","nonsectarian","oxidize","parameter","quotidian","recapitulate","sanguine","thermodynamic","usurp","vacuous","wrought","xylose","yokel","ziggurat","alacrity","bourgeois","circumlocution","dearth","ebullient","facet","germane","hackneyed","impetuous","jocose","knell","lachrymose","maudlin","nadir","obdurate","palliate","quagmire","rancor","sacrosanct","taciturn","ubiquitous","vapid","wane","xenial","yore","zephyr","accolade","boisterous","capricious","decorum","eclectic","fallacy","garrulous","haughty","impeccable","jocular","labyrinth","macabre","neophyte","obliterate","pacify","quarantine","ramification","sagacious","tangible","ultimatum","validate","waive","xanthic","yearn","zealot","adamant","blandishment","cajole","decadence","elicit","fathom","galvanize","halcyon","illicit","jaded","keen","lament","magnanimous","naive","oblivious","palpable","qualm","radiant","salient","tantamount","uncanny","vanguard","warrant","xenogamy","yield","zenith","aesthetic","benevolent","camaraderie","debilitate","empathy","fortitude","gregarious","hypothesis","inevitable","jubilant","karma","lucid","meticulous","nonchalant","opulent","pragmatic","quaint","resilient","scrutinize","tenacious","unprecedented","venerable","wary","xenogenesis","yonder","zest","amiable","brazen","compassion","diligent","ephemeral","frugal","hinder","integrity","justify","kindle","lingo","mundane","novice","ostentatious","provocative","quell","reverence","subtle","tactful","urbane","vindicate","witty","xenotime","yacht","zealous","absquatulate","adumbrate","aliquot","amphiarthrosis","anacoluthon","anadiplosis","anamorphosis","anaphora","anathematize","androgynous","anemophilous","angstrom","animadversion","anisometropia","anteambulo","antediluvian","anthocyanin","anthropocentric","anticlimax","antinomianism","antithetical","apocalypse","apocryphal","apoplectic","apotheosis","appurtenances","archaeopteryx","archetypal","argillaceous","asymptomatic","asymmetrical","asymptote","asynchrony","atherosclerosis","attainder","attenuate","authoritarianism","autocthonous","autodidact","automaton","avantgarde","averruncate","avunculate","axial","azimuth","baccalaureate","badinage","balistraria","balthazar","banausic","barathea","barbican","baratry","basaltic","bathyscaphe","beatification","bellwether","beneficent","bibliopole","bifurcated","bilateralism","bildungsroman","biodegradable","bioluminescence","bipartisanship","bissextile","bivouac","blunderbuss","boanerges","boustrophedon","brachycephalic","breviary","briolette","brouhaha","bucolic","bureaucracy","cachinnation","cacography","caduceus","caesura","calamitous","calcification","calorimeter","camaraderie","campanile","canaliculate","cantankerous","capitulation","caprimulgid","caravanserai","carcinogenic","cardiovascular","carillon","carmagnole","catachresis","cataclysmic","catastrophic","catechumen","categorical","catenary","catharsis","catoptric","cauliflower","cavalcade","celebrated","celestial","centrifugal","centripetal","cephalopod","cerulean","chalybeate","charlatanism","chartaceous","chiaroscuro","chiliastic","chimerical","chirography","chiropodist","chivalrous","cholecystitis","choreography","chrestomathy","chromatography","chronological","chrysanthemum","chthonic","churlishness","chyron","cinematography","circumnavigate","circumscription","circumstantial","clandestine","clastogenic","clausura","clepsydra","clericalism","coadunation","coalescence","coaxial","cockerel","codicil","coelenterate","cogitation","cognizance","collateral","colloquialism","colloquium","collusion","columbarium","commensurate","comminution","commiserate","commodious","commonwealth","compartmentalization","compatriot","compendious","complaisance","compostela","compressibility","compunction","computational","concatenation","conceptualization","concessionaire","concomitant","concupiscent","concurrency","condescension","confectionery","confederacy","confraternity","congelation","conglomeration","congratulatory","connoisseurship","connubial","consanguinity","conscientiousness","conscript","consecration","consequential","conservatoire","consignment","consolidation","consonantal","consortium","conspicuous","conspiratorial","constellation","constituency","constitutional","constriction","consubstantiation","contemporaneous","contemptible","contextualization","contingency","continuum","contraband","contradistinctive","contraposition","contravention","contretemps","contumacious","conundrum","convalescence","convection","conventionalism","conventicle","convergence","conversazione","cooperage","coparcenary","copious","cordillera","cornucopia","coronator","corporal","corporeal","corps","corregidor","corroboration","coruscation","cosmopolitan","costermonger","coterminous","counterbalance","counterfeiter","countermanned","counterpoint","countervailing","coureurs","courtesan","covenanter","covenous","crabbed","cramoisy","craniometry","crassitude","craven","crepuscular","crescendo","cretonne","criminality","criminology","crispate","criterion","croquembouche","cruciform","cryptography","crystallography","cubiculand","cuckold","culinary","culminate","cultivator","cummerbund","cuneiform","cupidity","curator","curmudgeon","curricle","cursory","curvilinear","cybernetics","cyclical","cyclone","cygnographic","cylindrical","cynical","cynosure","cytoplasm","dactylozoic","dadaism","daguerreotype","dalmatic","damascened"
-    ]
+    lvl1: ["apple","bread","water","earth","light","sound","plant","metal","glass","stone","bird","fish","tree","leaf","grass","wind","rain","snow","cloud","star","moon","sun","sky","hill","road","path","town","city","house","door","room","bed","chair","table","book","pen","clock","shoe","hat","coat","shirt","pant","sock","hand","foot","head","face","eye","ear","nose","mouth","tooth","tongue","arm","leg","back","heart","blood","bone","skin","hair","neck","wing","tail","fur","feather","horn","claw","beak","scale","shell","egg","nest","hive","web","cave","hole","rock","sand","dirt","mud","dust","ash","smoke","fire","heat","cold","ice","steam","fog","mist","dew","drop","wave","tide","current","river","lake","pond","pool","sea","ocean","coast","shore","beach","island","mountain","valley","forest","jungle","desert","plain","field","farm","garden","yard","park","street","bridge","wall","fence","gate","roof","floor","window","stairs","kitchen","bathroom","bedroom","living","dining","school","office","store","shop","market","bank","hospital","clinic","hotel","restaurant","cafe","bar","club","theater","cinema","museum","library","church","temple","mosque","station","airport","port","dock","ship","boat","train","car","bus","truck","bike","plane","jet","rocket","cart","wagon","wheel","engine","motor","brake","gear","tire","seat","hood","trunk","mirror","radio","screen","button","key","lock","handle","switch","plug","cord","wire","pipe","tube","hose","pump","valve","tank","bottle","can","jar","box","bag","sack","basket","bucket","pot","pan","bowl","plate","cup","mug","fork","knife","spoon","dish","tray","napkin","towel","soap","brush","comb","sponge","broom","mop","dustpan","trash","garbage","waste","bin","dump","landfill","recycle","paper","plastic","wood","cloth","fabric","leather","rubber","cotton","wool","silk","nylon","polyester","denim","canvas","velvet","lace","ribbon","string","thread","yarn","rope","chain","link","knot","tie","bow","loop","ring","hook","clip","pin","needle","nail","screw","bolt","nut","washer","pulley","lever","wedge","ramp","slope","canyon","cliff","ridge","peak","summit","base","root","stem","branch","flower","petal","seed","fruit","berry","bean","corn","wheat","rice","oats","barley","rye","flour","sugar","salt","pepper","spice","herb","oil","vinegar","sauce","soup","stew","broth","meat","beef","pork","lamb","chicken","turkey","duck","goose","crab"],
+    lvl2: ["algorithm","database","network","protocol","function","variable","compile","execute","memory","system","module","packet","router","server","client","socket","thread","process","kernel","driver","buffer","cache","queue","stack","array","string","object","class","method","event","signal","stream","record","field","index","query","schema","domain","portal","proxy","token","cipher","digest","vector","matrix","tensor","graph","tree","heap","list","hash","map","set","tuple","struct","union","enum","pointer","reference","value","type","interface","trait","mixin","package","namespace","library","framework","engine","platform","environment","architecture","design","pattern","model","view","controller","component","service","agent","actor","worker","task","job","fiber","coroutine","generator","iterator","observer","listener","handler","callback","promise","future","observable","channel","pipe","port","connection","session","transaction","context","state","store","pool","registry","directory","catalog","ledger","log","journal","diary","archive","backup","snapshot","image","container","volume","disk","drive","partition","sector","block","chunk","segment","page","frame","datagram","message","payload","header","footer","trailer","body","content","data","information","knowledge","wisdom","insight","understanding","intelligence","logic","reason","thought","idea","concept","notion","theory","hypothesis","premise","axiom","theorem","lemma","corollary","proof","evidence","fact","truth","reality","existence","being","entity","thing","item","element","part","piece","constituent","ingredient","factor","feature","trait","attribute","property","quality","characteristic","aspect","facet","dimension","parameter","argument","literal","constant","symbol","identifier","name","label","tag","marker","flag","sign","symptom","indicator","clue","hint","trace","track","trail","course","direction","bearing","heading","velocity","speed","pace","rate","frequency","period","cycle","rhythm","tempo","beat","pulse","throb","vibration","oscillation","wave","ripple","surge","flow","current","flood","flush","gush","rush","dash","dart","sprint","race","stroll","amble","saunter","wander","roam","rove","ramble","explore","search","seek","hunt","chase","pursue","follow","tail","shadow","stalk","hound","watch","observe","monitor","inspect","examine","analyze","study","review","survey","scan","browse","skim","read","peruse","learn","master","grasp","comprehend","realize","recognize","identify","detect","discover","find","locate","uncover","reveal","expose","disclose","publish","broadcast","transmit","send","dispatch","forward","relay","transfer","move","shift","slide","slip","glide","skate","ski","surf","sail","navigate","steer","pilot","ride","fly","soar","hover","drift","coast","cruise"],
+    lvl3: ["asynchronous","cryptography","encapsulation","polymorphism","inheritance","abstraction","concurrency","framework","middleware","repository","deployment","virtualization","orchestration","provisioning","scalability","elasticity","redundancy","availability","reliability","durability","consistency","integrity","confidentiality","authentication","authorization","accountability","auditability","traceability","observability","telemetry","monitoring","alerting","logging","tracing","profiling","debugging","troubleshooting","diagnostics","analytics","metrics","statistics","dashboard","visualization","reporting","aggregation","summarization","classification","clustering","regression","prediction","forecasting","modeling","simulation","optimization","heuristic","stochastic","deterministic","probabilistic","statistical","mathematical","algorithmic","computational","analytical","empirical","experimental","theoretical","conceptual","architectural","structural","behavioral","functional","nonfunctional","operational","tactical","strategic","organizational","managerial","administrative","executive","financial","commercial","industrial","technological","scientific","engineering","medical","biological","chemical","physical","astronomical","geological","meteorological","oceanographic","environmental","ecological","sociological","psychological","anthropological","archaeological","historical","geographical","political","economic","cultural","artistic","literary","musical","theatrical","cinematic","photographic","philosophical","theological","mythological","linguistic","grammatical","syntactic","semantic","pragmatic","phonetic","phonological","morphological","lexical","etymological","typographical","calligraphic","steganographic","cartographic","topographical","demographic","epidemiological","pharmacological","toxicological","immunological","genomic","proteomic","metabolomic","transcriptomic","epigenomic","microbiome","ecosystem","biosphere","atmosphere","hydrosphere","lithosphere","cryosphere","magnetosphere","ionosphere","stratosphere","troposphere","mesosphere","thermosphere","exosphere","galaxy","universe","cosmos","multiverse","dimension","continuum","paradigm","taxonomy","ontology","epistemology","phenomenology","hermeneutics","dialectics","syllogism","tautology","contradiction","paradox","dilemma","enigma","conundrum","mystery","puzzle","labyrinth","maze","web","grid","matrix","lattice","mesh","fabric","texture","structure","system","organism","machine","device","instrument","apparatus","equipment","implement","tool","weapon","vehicle","vessel","container","receptacle","vial","flask","beaker","crucible","retort","calorimeter","spectrometer","microscope","telescope","interferometer","accelerometer","gyroscope","magnetometer","barometer","thermometer","hygrometer","anemometer","seismometer","galvanometer","voltmeter","ammeter","ohmmeter","multimeter","oscilloscope","synthesizer","sequencer","sampler","modulator","demodulator","multiplexer","demultiplexer","transducer","transmitter","receiver","transceiver","amplifier","attenuator","filter","equalizer","compressor","expander","limiter","clipper","rectifier","inverter","converter","transformer","generator","alternator","dynamo","motor","engine","turbine","pump"],
+    lvl4: ["ephemeral","orthogonal","isomorphic","heuristic","stochastic","deterministic","idempotent","ubiquitous","synergistic","paradigm","asymptote","bifurcation","cybernetics","eigenvector","fibonacci","gaussian","hypervisor","juxtaposition","kinematics","logarithmic","memoization","neural","ontology","qubit","rasterize","tessellation","vectorization","wavelet","xenobiotic","yield","zealous","amalgamation","biodiversity","chromosome","dicotyledon","exoskeleton","photosynthesis","symbiosis","thermodynamics","viscosity","acoustic","ballistic","catalytic","diastolic","elastic","ferromagnetic","galvanic","hydraulic","isometric","kinetic","luminescent","magnetic","pneumatic","quantum","radioactive","supersonic","tectonic","ultrasonic","volcanic","aerodynamic","biometric","calorific","dielectric","endothermic","exothermic","geothermal","hydroelectric","isothermal","kinematic","lithospheric","macroscopic","microscopic","nanoscopic","optoelectronic","photoelectric","quarks","relativistic","stereoscopic","tribological","viscoelastic","xenon","yttrium","zirconium","actuarial","bureaucratic","clandestine","draconian","egalitarian","fiduciary","gubernatorial","hierarchical","imperial","judicial","kleptocratic","legislative","meritocratic","nepotistic","oligarchic","plutocratic","quixotic","republican","secular","theocratic","utilitarian","vanguard","whiggish","xenophobic","yeoman","zealotry","archipelago","bathymetry","cartography","demography","escarpment","fjord","glaciology","hemisphere","isthmus","jurisdiction","karst","latitude","longitude","meridian","nomad","oasis","peninsula","quarry","ravine","strait","tundra","upwelling","volcanology","watershed","xeriscaping","yonder","zenith","altruism","behaviorism","cognitivism","determinism","empiricism","fatalism","gnosticism","humanism","idealism","jingoism","kantianism","libertarianism","materialism","nihilism","objectivism","pragmatism","quietism","rationalism","solipsism","transcendentalism","utilitarianism","vitalism","wahhabism","xenocentrism","yoga","zoroastrianism","alliteration","bildungsroman","cacophony","denouement","euphemism","foreshadowing","hyperbole","irony","jargon","kitsch","litotes","metaphor","neologism","onomatopoeia","personification","quatrain","rhetoric","simile","tautology","understatement","vernacular","wordplay","xylography","yarn","zeugma","arabesque","baroque","chiaroscuro","dadaism","expressionism","fauvism","gothic","cubism","impressionism","japonisme","lithography","minimalism","neoclassicism","origami","pointillism","quattrocento","realism","surrealism","trompeloeil","ukiyo","vorticism","watercolor","yantra","zoomorphic","arpeggio","belcanto","crescendo","diminuendo","embouchure","fortissimo","glissando","harmony","interval","jazz","key","legato","melody","nocturne","ostinato","pizzicato","quaver","rhythm","staccato","tempo","unison","vibrato","waltz","xylophone","yodel","zarzuela","anemone","basilisk","chameleon","dingo","echidna","flamingo","gazelle","hippopotamus","iguana","jaguar","kangaroo","lemur","macaque","narwhal","orangutan","pangolin","quetzal","rhinoceros","salamander","tarantula","uakari","vicuna","wallaby","xantus","yak","zebra","absinthe","baklava","croissant","daiquiri","enchilada","fettuccine","gazpacho","hummus","igname","jalapeno","kielbasa","lasagna","macaroni","nougat","omelet","pastrami","quiche","ravioli","spaghetti","tiramisu","udon","vichyssoise","waffle","xylitol","yogurt","zucchini","aberration","anachronism","anathema","bellicose","capricious","chimerical","deleterious","enervate","evanescent","garrulous","hackneyed","iconoclast","impugn","loquacious","malleable","nefarious","obfuscate","pariah","pugnacious","recalcitrant","salubrious","sycophant","timorous","unctuous","vacillate","vociferous","wanton"],
+    lvl5: ["sesquipedalian","obfuscation","antidisestablishmentarianism","floccinaucinihilipilification","pseudopseudohypoparathyroidism","incomprehensibilities","unsubstantiatability","supercalifragilisticexpialidocious","honorificabilitudinitatibus","microminiaturization","pneumonoultramicroscopicsilicovolcanoconiosis","hippopotomonstrosesquippedaliophobia","spectrophotofluorometrically","psychoneuroendocrinological","radioimmunoelectrophoresis","otorhinolaryngological","immunoelectrophoretically","macromolecularly","polytetrafluoroethylene","hexakosioihexekontahexaphobia","tetraethyldiaminotriphenylmethane","pseudomyxoma","peritonei","choledocholithiasis","encephalomyocarditis","synecdoche","hemidemisemiquaver","flibbertigibbet","defenestration","gobbledygook","abracadabra","bamboozle","cattywampus","discombobulate","erstwhile","finagle","gargantuan","hullabaloo","indubitably","juxtapose","kerfuffle","lackadaisical","malarkey","nincompoop","obstreperous","persnickety","quagmire","ramshackle","skedaddle","tomfoolery","ubiquitous","verisimilitude","whippersnapper","xenotransplantation","yahoo","zeppelin","acrimonious","belligerent","cantankerous","deleterious","egregious","fastidious","gregarious","hubris","iconoclast","judicious","lugubrious","mellifluous","nefarious","obsequious","paradigm","quixotic","recalcitrant","sycophant","trepidation","ubiquity","vacillate","winsome","xenophobe","yielding","zealous","anachronism","cacophony","diatribe","ephemeral","facetious","grandiloquent","harangue","idiosyncrasy","juggernaut","kaleidoscope","labyrinthine","machiavellian","narcissism","obfuscate","panacea","quandary","rhetoric","serendipity","tautology","umbrage","vicarious","wanderlust","xenomorphic","yashmak","zeitgeist","aberration","bifurcation","conundrum","dichotomy","epistemology","fiduciary","gerrymandering","hegemony","infrastructure","jurisprudence","kleptocracy","lexicography","megalomania","nomenclature","oligarchy","plutocracy","quintessential","reciprocity","stratification","totalitarianism","unilateral","vernacular","whimsical","xenolithic","yeomanry","zoology","anthropomorphism","bibliophile","claustrophobia","dermatologist","entomology","philanthropy","gerontology","herpetology","ichthyology","jurisdiction","kinesiology","lepidoptery","meteorology","neurology","ornithology","paleontology","quantum","radiology","seismology","toxicology","urology","virology","weather","xerography","yachting","zodiac","abstemious","bowdlerize","chicanery","diffident","enervate","fatuous","gauche","homogeneous","incognito","jejune","kinetic","loquacious","misanthrope","nonsectarian","oxidize","parameter","quotidian","recapitulate","sanguine","thermodynamic","usurp","vacuous","wrought","xylose","yokel","ziggurat","alacrity","bourgeois","circumlocution","dearth","ebullient","facet","germane","hackneyed","impetuous","jocose","knell","lachrymose","maudlin","nadir","obdurate","palliate","quagmire","rancor","sacrosanct","taciturn","ubiquitous","vapid","wane","xenial","yore","zephyr","accolade","boisterous","capricious","decorum","eclectic","fallacy","garrulous","haughty","impeccable","jocular","labyrinth","macabre","neophyte","obliterate","pacify","quarantine","ramification","sagacious","tangible","ultimatum","validate","waive","xanthic","yearn","zealot","adamant","blandishment","cajole","decadence","elicit","fathom","galvanize","halcyon","illicit","jaded","keen","lament","magnanimous","naive","oblivious","palpable","qualm","radiant","salient","tantamount","uncanny","vanguard","warrant","xenogamy","yield","zenith","aesthetic","benevolent","camaraderie","debilitate","empathy","fortitude","gregarious","hypothesis","inevitable","jubilant","karma","lucid","meticulous","nonchalant","opulent","pragmatic","quaint","resilient","scrutinize","tenacious","unprecedented","venerable","wary","xenogenesis","yonder","zest","amiable","brazen","compassion","diligent","ephemeral","frugal","hinder","integrity","justify","kindle","lingo","mundane","novice","ostentatious","provocative","quell","reverence","subtle","tactful","urbane","vindicate","witty","xenotime","yacht","zealous","absquatulate","adumbrate","aliquot","amphiarthrosis","anacoluthon","anadiplosis","anamorphosis","anaphora","anathematize","androgynous","anemophilous","angstrom","animadversion","anisometropia","anteambulo","antediluvian","anthocyanin","anthropocentric","anticlimax","antinomianism","antithetical","apocalypse","apocryphal","apoplectic","apotheosis","appurtenances","archaeopteryx","archetypal","argillaceous","asymptomatic","asymmetrical","asymptote","asynchrony","atherosclerosis","attainder","attenuate","authoritarianism","autocthonous","autodidact","automaton","avantgarde","averruncate","avunculate","axial","azimuth","baccalaureate","badinage","balistraria","balthazar","banausic","barathea","barbican","baratry","basaltic","bathyscaphe","beatification","bellwether","beneficent","bibliopole","bifurcated","bilateralism","bildungsroman","biodegradable","bioluminescence","bipartisanship","bissextile","bivouac","blunderbuss","boanerges","boustrophedon","brachycephalic","breviary","briolette","brouhaha","bucolic","bureaucracy","cachinnation","cacography","caduceus","caesura","calamitous","calcification","calorimeter","camaraderie","campanile","canaliculate","cantankerous","capitulation","caprimulgid","caravanserai","carcinogenic","cardiovascular","carillon","carmagnole","catachresis","cataclysmic","catastrophic","catechumen","categorical","catenary","catharsis","catoptric","cauliflower","cavalcade","celebrated","celestial","centrifugal","centripetal","cephalopod","cerulean","chalybeate","charlatanism","chartaceous","chiaroscuro","chiliastic","chimerical","chirography","chiropodist","chivalrous","cholecystitis","choreography","chrestomathy","chromatography","chronological","chrysanthemum","chthonic","churlishness","chyron","cinematography","circumnavigate","circumscription","circumstantial","clandestine","clastogenic","clausura","clepsydra","clericalism","coadunation","coalescence","coaxial","cockerel","codicil","coelenterate","cogitation","cognizance","collateral","colloquialism","colloquium","collusion","columbarium","commensurate","comminution","commiserate","commodious","commonwealth","compartmentalization","compatriot","compendious","complaisance","compostela","compressibility","compunction","computational","concatenation","conceptualization","concessionaire","concomitant","concupiscent","concurrency","condescension","confectionery","confederacy","confraternity","congelation","conglomeration","congratulatory","connoisseurship","connubial","consanguinity","conscientiousness","conscript","consecration","consequential","conservatoire","consignment","consolidation","consonantal","consortium","conspicuous","conspiratorial","constellation","constituency","constitutional","constriction","consubstantiation","contemporaneous","contemptible","contextualization","contingency","continuum","contraband","contradistinctive","contraposition","contravention","contretemps","contumacious","conundrum","convalescence","convection","conventionalism","conventicle","convergence","conversazione","cooperage","coparcenary","copious","cordillera","cornucopia","coronator","corporal","corporeal","corps","corregidor","corroboration","coruscation","cosmopolitan","costermonger","coterminous","counterbalance","counterfeiter","countermanned","counterpoint","countervailing","coureurs","courtesan","covenanter","covenous","crabbed","cramoisy","craniometry","crassitude","craven","crepuscular","crescendo","cretonne","criminality","criminology","crispate","criterion","croquembouche","cruciform","cryptography","crystallography","cubiculand","cuckold","culinary","culminate","cultivator","cummerbund","cuneiform","cupidity","curator","curmudgeon","curricle","cursory","curvilinear","cybernetics","cyclical","cyclone","cygnographic","cylindrical","cynical","cynosure","cytoplasm","dactylozoic","dadaism","daguerreotype","dalmatic","damascened"]
 };
 
+// 40 Distinct Typable Paragraphs for Race Mode
 const RaceParagraphs = [
     "The quantum architecture of the modern web relies heavily on distributed peer to peer nodal connections that bypass traditional client server hierarchies.",
     "A liquid glass interface provides a frictionless user experience by mimicking physical material properties through advanced rendering algorithms.",
     "Cryptographic obfuscation ensures that intercepting symmetric keys becomes computationally unfeasible for unauthorized entities attempting traversal.",
-    "When initializing the central boot sequence, the system must synchronize parallel threads to prevent race conditions within the memory matrix."
+    "When initializing the central boot sequence, the system must synchronize parallel threads to prevent race conditions within the memory matrix.",
+    "Artificial neural networks operate by adjusting the synaptic weights between nodes through continuous backpropagation of error differentials.",
+    "The phenomenon of quantum entanglement suggests that particles can instantaneously share states regardless of the spatial distance separating them.",
+    "Suborbital flight trajectories require precise calculation of atmospheric drag coefficients to ensure the structural integrity of the fuselage.",
+    "Bioluminescent organisms utilize complex chemical reactions involving luciferin to generate visible light in otherwise pitch black abyssal zones.",
+    "Modern cryptography relies on the computational difficulty of factoring large semiprime numbers into their constituent prime variables.",
+    "The thermodynamics of closed systems dictate that entropy will continuously increase until a state of absolute thermal equilibrium is reached.",
+    "In object oriented programming, polymorphism allows disparate entities to be treated as instances of the same class through a shared interface.",
+    "Geological subduction zones are areas where tectonic plates collide forcing one lithospheric layer deep beneath the other into the mantle.",
+    "The event horizon of a black hole represents the boundary beyond which the escape velocity exceeds the absolute speed of light in a vacuum.",
+    "Algorithmic trading platforms execute thousands of transactions per second by analyzing micro trends in the global financial market data.",
+    "Photosynthesis converts luminous energy into chemical energy storing it within the molecular bonds of glucose for later cellular respiration.",
+    "The observer effect in quantum mechanics posits that the mere act of measuring a particle fundamentally alters its trajectory and properties.",
+    "Symmetric encryption algorithms use the exact same cryptographic key for both the obfuscation and decryption of the transmitted payload.",
+    "Neuroplasticity describes the extraordinary ability of the human brain to reorganize its synaptic connections in response to new learning.",
+    "The propagation of electromagnetic waves through a vacuum occurs at a constant velocity independent of the motion of the emitting source.",
+    "A distributed ledger functions as a decentralized database that is continuously synchronized across multiple independent network nodes.",
+    "Aerodynamic lift is generated when the fluid pressure below an airfoil exceeds the fluid pressure traveling over its curved upper surface.",
+    "The synthesis of artificial proteins requires the exact sequencing of amino acids guided by transcribed messenger ribonucleic acid templates.",
+    "Heuristic algorithms sacrifice absolute mathematical precision in favor of computational speed when solving highly complex search problems.",
+    "Stochastic modeling incorporates random variables to predict the probability distributions of various outcomes under uncertain conditions.",
+    "The coriolis effect causes circulating atmospheric currents to deflect to the right in the northern hemisphere and left in the southern.",
+    "Asynchronous javascript functions allow the main execution thread to continue processing while awaiting the resolution of network requests.",
+    "Isotopic dating relies on the predictable radioactive decay of unstable elements to determine the precise chronological age of geological samples.",
+    "The placebo effect demonstrates the profound physiological changes that can be induced purely through psychological expectation and belief.",
+    "Cybernetic systems utilize continuous feedback loops to self regulate their behavior and maintain homeostasis within fluctuating environments.",
+    "Kinetic energy is directly proportional to the mass of an object and the square of its velocity relative to a designated reference frame.",
+    "The structural integrity of a suspension bridge depends on the precise tensioning of its primary cables transferring the load to the anchors.",
+    "Epigenetics involves the modification of gene expression without any underlying alteration to the foundational sequence of the host genome.",
+    "A fractal is a complex geometric shape that exhibits self similarity regardless of the scale or magnification at which it is currently observed.",
+    "The concept of absolute zero represents the theoretical temperature at which all macroscopic thermodynamic motion completely ceases to exist.",
+    "In linear algebra, an eigenvector is a non zero vector that only changes by a scalar factor when a specific linear transformation is applied.",
+    "The proliferation of autonomous vehicles requires the integration of advanced lidar sensors to construct real time three dimensional topological maps.",
+    "Symbiotic relationships in ecosystems range from mutually beneficial interactions to parasitic dynamics where one organism exploits the host.",
+    "The doppler effect causes a perceptible shift in the frequency of a wave relative to an observer who is moving relative to the wave source.",
+    "Microprocessors utilize billions of microscopic transistors etched onto silicon wafers to execute fundamental boolean logic operations.",
+    "The transition from classical mechanics to relativity was necessitated by the observation that the speed of light remains constant in all frames."
 ];
 
 const Lexicon = {};
@@ -462,12 +709,12 @@ for(let key in MasterLexicon) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    Lexicon[key] = arr.slice(0, 2); // Keep 2 words per level for 10 total words
+    Lexicon[key] = arr.slice(0, 2); // 2 per level = 10 words total for solo
 }
 
 /**
  * ==========================================================================
- * AUDIO ENGINE
+ * AUDIO & VFX ENGINES
  * ==========================================================================
  */
 class AudioEngine {
@@ -509,7 +756,7 @@ class AudioEngine {
     updateVoiceLabel() {
         let v = this.availableVoices[this.currentVoiceIndex];
         let shortName = v.name.split(' ')[0] || "VOICE";
-        this.btnVoice.textContent = `VOICE: ${shortName.toUpperCase()} (${this.currentVoiceIndex + 1}/${this.availableVoices.length})`;
+        this.btnVoice.textContent = `VOICE: ${shortName.toUpperCase()}`;
     }
     
     speakWord(text) {
@@ -535,10 +782,11 @@ class AudioEngine {
         osc.start(); osc.stop(this.ctx.currentTime + time);
     }
     
-    playKeyStroke() { this.createOsc(600 + Math.random()*200, 'sine', 0.05, 0.02); }
+    playKeyStroke() { this.createOsc(600 + Math.random()*200, 'sine', 0.03, 0.015); }
     playSuccess() { this.createOsc(500, 'sine', 0.2, 0.05); setTimeout(() => this.createOsc(750, 'triangle', 0.3, 0.05), 100); }
     playError() { this.createOsc(200, 'sawtooth', 0.3, 0.1, 100); setTimeout(() => this.createOsc(150, 'square', 0.4, 0.1, 50), 100); }
     playLevelUp() { this.createOsc(440, 'triangle', 0.5, 0.05, 880); }
+    playStart() { this.createOsc(300, 'sine', 0.1, 0.05, 600); setTimeout(() => this.createOsc(600, 'sine', 0.3, 0.05, 1200), 100); }
 }
 
 function createConfetti() {
@@ -549,19 +797,19 @@ function createConfetti() {
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     const particles = [];
-    const colors = ['#000000', '#555555', '#999999', '#cccccc', '#d4af37', '#c0c0c0'];
-    for(let i = 0; i < 200; i++) {
+    const colors = ['#111111', '#555555', '#999999', '#ff3b30', '#34c759', '#007aff'];
+    for(let i = 0; i < 250; i++) {
         particles.push({
-            x: canvas.width / 2, y: canvas.height / 2 + 100,
-            vx: (Math.random() - 0.5) * 25, vy: (Math.random() - 0.5) * 25 - 15,
-            size: Math.random() * 8 + 4, color: colors[Math.floor(Math.random() * colors.length)],
-            rot: Math.random() * Math.PI * 2, rotSpeed: (Math.random() - 0.5) * 0.4
+            x: canvas.width / 2, y: canvas.height / 2,
+            vx: (Math.random() - 0.5) * 35, vy: (Math.random() - 0.5) * 35 - 10,
+            size: Math.random() * 10 + 5, color: colors[Math.floor(Math.random() * colors.length)],
+            rot: Math.random() * Math.PI * 2, rotSpeed: (Math.random() - 0.5) * 0.5
         });
     }
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); let active = false;
         particles.forEach(p => {
-            p.x += p.vx; p.y += p.vy; p.vy += 0.4; p.rot += p.rotSpeed;
+            p.x += p.vx; p.y += p.vy; p.vy += 0.5; p.rot += p.rotSpeed; // gravity
             if(p.y < canvas.height) active = true;
             ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
             ctx.fillStyle = p.color; ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size); ctx.restore();
@@ -585,6 +833,8 @@ class SpellingBeeEngine {
         this.currentWord = ""; this.list = [];
         this.audio = new AudioEngine();
         
+        document.getElementById('display-mode-name').textContent = isTimed ? "TIMED 10S" : "SOLO";
+        
         this.uiScore = document.getElementById('ui-score');
         this.uiMult = document.getElementById('ui-mult');
         this.uiLvl = document.getElementById('level-display');
@@ -601,22 +851,19 @@ class SpellingBeeEngine {
         this.timerBar = document.getElementById('timer-bar-fill');
         this.timerInterval = null;
         this.timeRemaining = 10;
+        this.diagInterval = null;
 
-        if (this.isTimed) {
-            this.timerUI.style.display = 'block';
-        } else {
-            this.timerUI.style.display = 'none';
-        }
+        if (this.isTimed) this.timerUI.style.display = 'block';
+        else this.timerUI.style.display = 'none';
         
         this._keydownHandler = (e) => {
             if(e.key !== 'Enter' && e.key !== 'Control') this.audio.playKeyStroke();
             if(e.key === 'Enter') this.validateInput();
             if(e.key === 'Control') {
-                this.uiCtxDef.textContent = `HINT: Word contains ${this.currentWord.length} letters. Starts with "${this.currentWord[0].toUpperCase()}"`;
+                this.uiCtxDef.textContent = `HINT: Contains ${this.currentWord.length} letters. Starts with "${this.currentWord[0].toUpperCase()}"`;
             }
         };
         
-        // Remove old listeners to prevent duplication
         const oldInput = this.uiInput.cloneNode(true);
         this.uiInput.parentNode.replaceChild(oldInput, this.uiInput);
         this.uiInput = oldInput;
@@ -626,27 +873,24 @@ class SpellingBeeEngine {
             this.uiInput.focus(); this.audio.speakWord(this.currentWord);
         };
         document.getElementById('btn-skip').onclick = () => {
+            if(this.uiInput.disabled) return;
             this.combo = 0; this.updateStatsUI();
             this.triggerVisualFeedback(`OVERRIDDEN: ${this.currentWord.toUpperCase()}`, false);
             this.nextWord(); this.uiInput.focus();
         };
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Control' && document.getElementById('app-container').classList.contains('active-screen')) {
-                this.uiCtxDef.textContent = `HINT: Word contains ${this.currentWord.length} letters. Starts with "${this.currentWord[0].toUpperCase()}"`;
-            }
-        });
+        document.getElementById('btn-exit-solo').onclick = () => this.exitGame();
     }
     
     start() {
         this.startTime = Date.now();
         this.loadLevel(1);
-        setInterval(() => this.updateDiagnostics(), 1000);
+        this.diagInterval = setInterval(() => this.updateDiagnostics(), 1000);
     }
     
     loadLevel(l) {
         this.level = l; this.wordIndex = 0; this.list = Lexicon[`lvl${l}`];
-        this.uiLvl.textContent = `PHASE 0${l}`;
-        const descArr = ["STANDARD LEXICON", "INTERMEDIATE LEXICON", "ADVANCED LEXICON", "EXPERT LEXICON", "MASTER LEXICON"];
+        this.uiLvl.textContent = `P-0${l}`;
+        const descArr = ["STANDARD", "INTERMEDIATE", "ADVANCED", "EXPERT", "MASTER"];
         this.uiDesc.textContent = descArr[l-1];
         if (l > 1) this.audio.playLevelUp();
         this.nextWord();
@@ -658,13 +902,11 @@ class SpellingBeeEngine {
             else this.triggerVictory();
             return;
         }
-        
         this.wordGuesses = 0; this.currentWord = this.list[this.wordIndex];
         this.uiInput.value = ''; this.uiInput.disabled = false; this.uiInput.focus();
         this.uiCtxDef.textContent = `AWAITING AUDIO TRANSCRIPTION...`;
         this.updateDiagnosticsUI();
         setTimeout(() => this.audio.speakWord(this.currentWord), 600);
-
         if (this.isTimed) this.startTimer();
     }
 
@@ -672,14 +914,13 @@ class SpellingBeeEngine {
         clearInterval(this.timerInterval);
         this.timeRemaining = 10;
         this.timerBar.style.width = '100%';
-        this.timerBar.style.background = '#111';
+        this.timerBar.style.background = 'var(--text-main)';
         
         this.timerInterval = setInterval(() => {
             this.timeRemaining -= 0.1;
             let pct = (this.timeRemaining / 10) * 100;
             this.timerBar.style.width = `${pct}%`;
-            if (pct < 30) this.timerBar.style.background = '#ff3b30';
-            
+            if (pct < 30) this.timerBar.style.background = 'var(--accent-red)';
             if (this.timeRemaining <= 0) {
                 clearInterval(this.timerInterval);
                 this.handleError(true);
@@ -775,7 +1016,7 @@ class SpellingBeeEngine {
     }
     
     triggerVictory() {
-        clearInterval(this.timerInterval);
+        clearInterval(this.timerInterval); clearInterval(this.diagInterval);
         this.uiInput.disabled = true; this.uiInput.value = "COMPLETE";
         this.uiCtxDef.textContent = "ALL 10 SECTORS COMPLETED SUCCESSFULLY.";
         this.audio.speakWord("Assessment complete. Excellent work.");
@@ -784,10 +1025,173 @@ class SpellingBeeEngine {
     }
 
     triggerGameOver() {
-        clearInterval(this.timerInterval);
+        clearInterval(this.timerInterval); clearInterval(this.diagInterval);
         this.uiInput.disabled = true; this.uiInput.value = "TERMINATED";
         this.uiCtxDef.textContent = "TOO MANY CORRUPTIONS. SYSTEM LOCKED.";
         this.audio.speakWord("Game over. Three strikes recorded.");
+    }
+
+    exitGame() {
+        clearInterval(this.timerInterval); clearInterval(this.diagInterval);
+        UIManager.switchScreen('mode-screen');
+    }
+}
+
+/**
+ * ==========================================================================
+ * REAL P2P NETWORKING ENGINE (BROADCAST CHANNEL SIGNALING)
+ * Enables real Cross-Tab/Same-Network multiplayer without an external backend.
+ * ==========================================================================
+ */
+class P2PNetworkEngine {
+    constructor() {
+        this.bc = new BroadcastChannel('nexus_spelling_lobby');
+        this.peers = new Map(); // id -> { name, lastSeen }
+        this.inMatch = false;
+        
+        this.bc.onmessage = (e) => this.handleMessage(e.data);
+        
+        // Start Heartbeat
+        this.heartbeat = setInterval(() => {
+            if(!this.inMatch) {
+                this.bc.postMessage({ type: 'HEARTBEAT', id: GlobalState.peerId, name: GlobalState.playerName });
+                this.cleanupPeers();
+            }
+        }, 2000);
+    }
+
+    scan() {
+        this.peers.clear();
+        this.renderLobby();
+        this.bc.postMessage({ type: 'DISCOVERY', id: GlobalState.peerId, name: GlobalState.playerName });
+    }
+
+    handleMessage(data) {
+        if(this.inMatch && data.type !== 'RACE_DATA' && data.type !== 'MATCH_START' && data.type !== 'ABORT') return;
+        
+        switch(data.type) {
+            case 'DISCOVERY':
+            case 'HEARTBEAT':
+                if(data.id !== GlobalState.peerId) {
+                    this.peers.set(data.id, { name: data.name, lastSeen: Date.now() });
+                    this.renderLobby();
+                    if(data.type === 'DISCOVERY') {
+                        // Reply to discovery
+                        this.bc.postMessage({ type: 'HEARTBEAT', id: GlobalState.peerId, name: GlobalState.playerName });
+                    }
+                }
+                break;
+            case 'CHALLENGE_OFFER':
+                if(data.targetId === GlobalState.peerId && !this.inMatch) {
+                    UIManager.showModal(
+                        "INCOMING MATCH", 
+                        `${data.senderName} has challenged you.`,
+                        () => { // Accept
+                            this.bc.postMessage({ type: 'CHALLENGE_ACCEPT', targetId: data.senderId, senderId: GlobalState.peerId, senderName: GlobalState.playerName, paragraphIndex: data.paragraphIndex });
+                            this.startMatch(data.senderId, data.senderName, data.paragraphIndex, false);
+                        },
+                        () => { // Decline
+                            this.bc.postMessage({ type: 'CHALLENGE_DECLINE', targetId: data.senderId });
+                        }
+                    );
+                }
+                break;
+            case 'CHALLENGE_ACCEPT':
+                if(data.targetId === GlobalState.peerId && !this.inMatch) {
+                    UIManager.showToast(`${data.senderName} accepted! Starting...`, "success");
+                    this.startMatch(data.senderId, data.senderName, data.paragraphIndex, true);
+                }
+                break;
+            case 'CHALLENGE_DECLINE':
+                if(data.targetId === GlobalState.peerId) {
+                    UIManager.showToast("Challenge declined.", "error");
+                }
+                break;
+            case 'RACE_DATA':
+                if(data.targetId === GlobalState.peerId && this.inMatch && window.RaceInstance) {
+                    window.RaceInstance.syncOpponent(data.progress, data.wpm);
+                }
+                break;
+            case 'ABORT':
+                if(data.targetId === GlobalState.peerId && this.inMatch && window.RaceInstance) {
+                    window.RaceInstance.handleOpponentDisconnect();
+                }
+                break;
+        }
+    }
+
+    cleanupPeers() {
+        const now = Date.now();
+        let changed = false;
+        for(let [id, peer] of this.peers.entries()) {
+            if(now - peer.lastSeen > 6000) { // Timeout after 6s
+                this.peers.delete(id);
+                changed = true;
+            }
+        }
+        if(changed) this.renderLobby();
+    }
+
+    renderLobby() {
+        if(this.inMatch) return;
+        const list = document.getElementById('peer-list');
+        list.innerHTML = '';
+        
+        if(this.peers.size === 0) {
+            document.getElementById('lobby-status').textContent = "AWAITING PEER RESPONSES...";
+            document.querySelector('.radar-spinner').style.display = "block";
+            return;
+        }
+
+        document.getElementById('lobby-status').textContent = `${this.peers.size} ACTIVE NODE(S) FOUND`;
+        document.querySelector('.radar-spinner').style.display = "none";
+
+        for(let [id, peer] of this.peers.entries()) {
+            let div = document.createElement('div');
+            div.className = 'lobby-item';
+            div.innerHTML = `
+                <div class="peer-info">
+                    <span class="peer-name">${peer.name}</span>
+                    <span class="peer-id">ID: ${id}</span>
+                </div>
+                <div class="peer-action">CHALLENGE</div>
+            `;
+            div.onclick = () => {
+                UIManager.showToast("Challenge sent. Awaiting response...");
+                // Select random paragraph
+                const pIndex = Math.floor(Math.random() * RaceParagraphs.length);
+                this.bc.postMessage({
+                    type: 'CHALLENGE_OFFER',
+                    senderId: GlobalState.peerId, senderName: GlobalState.playerName,
+                    targetId: id, paragraphIndex: pIndex
+                });
+            };
+            list.appendChild(div);
+        }
+    }
+
+    startMatch(oppId, oppName, paragraphIndex, isInitiator) {
+        this.inMatch = true;
+        GlobalState.opponentId = oppId;
+        GlobalState.opponentName = oppName;
+        
+        UIManager.switchScreen('race-container');
+        window.RaceInstance = new RaceEngine(oppId, oppName, paragraphIndex, this.bc);
+    }
+
+    sendRaceData(progress, wpm) {
+        if(!this.inMatch || !GlobalState.opponentId) return;
+        this.bc.postMessage({
+            type: 'RACE_DATA', targetId: GlobalState.opponentId,
+            progress: progress, wpm: wpm
+        });
+    }
+
+    abortMatch() {
+        if(!this.inMatch || !GlobalState.opponentId) return;
+        this.bc.postMessage({ type: 'ABORT', targetId: GlobalState.opponentId });
+        this.inMatch = false;
+        GlobalState.opponentId = null;
     }
 }
 
@@ -797,29 +1201,68 @@ class SpellingBeeEngine {
  * ==========================================================================
  */
 class RaceEngine {
-    constructor(opponentName) {
-        this.opponent = opponentName;
+    constructor(oppId, oppName, paragraphIndex, networkRef) {
+        this.oppId = oppId;
+        this.oppName = oppName;
+        this.network = networkRef;
         this.audio = new AudioEngine();
-        this.paragraph = RaceParagraphs[Math.floor(Math.random() * RaceParagraphs.length)];
+        
+        this.paragraph = RaceParagraphs[paragraphIndex];
         this.chars = this.paragraph.split('');
         this.currentIndex = 0;
-        this.opponentIndex = 0;
-        this.startTime = Date.now();
+        this.oppIndex = 0;
+        
+        this.startTime = 0;
+        this.myWpm = 0;
         this.isFinished = false;
-        this.oppInterval = null;
+        this.isCountdown = true;
         
         document.getElementById('race-p1-name').textContent = GlobalState.playerName;
-        document.getElementById('race-p2-name').textContent = this.opponent;
+        document.getElementById('race-p2-name').textContent = this.oppName;
+        document.getElementById('race-p1-name').style.color = "var(--text-main)";
+        document.getElementById('race-p2-name').style.color = "var(--text-main)";
         
         this.container = document.getElementById('race-paragraph');
         this.p1Bar = document.getElementById('p1-bar');
         this.p2Bar = document.getElementById('p2-bar');
         this.p1Pct = document.getElementById('p1-percent');
         this.p2Pct = document.getElementById('p2-percent');
+        this.msgOverlay = document.getElementById('race-overlay-msg');
         
         this.renderText();
-        this.bindEvents();
-        this.startOpponentSimulation();
+        this.updateProgress();
+        
+        document.getElementById('btn-exit-race').onclick = () => {
+            this.network.abortMatch();
+            this.cleanup();
+            UIManager.switchScreen('lobby-screen');
+            window.NetworkInstance.scan();
+        };
+
+        this.startCountdown();
+    }
+
+    startCountdown() {
+        let count = 3;
+        this.msgOverlay.style.display = 'block';
+        this.msgOverlay.textContent = count;
+        this.audio.playKeyStroke();
+        
+        const intv = setInterval(() => {
+            count--;
+            if(count > 0) {
+                this.msgOverlay.textContent = count;
+                this.audio.playKeyStroke();
+            } else {
+                clearInterval(intv);
+                this.msgOverlay.textContent = "TYPE!";
+                this.audio.playStart();
+                setTimeout(() => this.msgOverlay.style.display = 'none', 1000);
+                this.isCountdown = false;
+                this.startTime = Date.now();
+                this.bindEvents();
+            }
+        }, 1000);
     }
 
     renderText() {
@@ -829,39 +1272,56 @@ class RaceEngine {
             span.textContent = char;
             if (index < this.currentIndex) span.className = 'correct';
             else if (index === this.currentIndex) span.className = 'current';
+            
+            if (index === this.oppIndex) span.classList.add('opp-cursor');
             this.container.appendChild(span);
         });
     }
 
     bindEvents() {
+        this.container.focus();
         this._raceKeydown = (e) => {
-            if (this.isFinished) return;
-            // Ignore modifiers
+            if (this.isFinished || this.isCountdown) return;
             if (e.key.length > 1 && e.key !== 'Backspace' && e.key !== 'Spacebar') return;
             
             e.preventDefault();
-            this.audio.playKeyStroke();
-
             const targetChar = this.chars[this.currentIndex];
             let typedChar = e.key;
 
             if (typedChar === targetChar) {
+                this.audio.playKeyStroke();
                 this.currentIndex++;
-                this.updateProgress();
+                this.updateMetrics();
                 this.renderText();
+                
+                // Network Sync
+                this.network.sendRaceData(this.currentIndex, this.myWpm);
+
                 if (this.currentIndex >= this.chars.length) this.triggerWin();
             } else {
                 // Error flash
                 const spans = this.container.querySelectorAll('span');
-                if(spans[this.currentIndex]) spans[this.currentIndex].classList.add('error');
+                if(spans[this.currentIndex]) {
+                    spans[this.currentIndex].classList.add('error');
+                    this.audio.playError();
+                    setTimeout(() => spans[this.currentIndex].classList.remove('error'), 200);
+                }
             }
         };
         window.addEventListener('keydown', this._raceKeydown);
     }
 
+    updateMetrics() {
+        let mins = (Date.now() - this.startTime) / 60000;
+        let words = this.currentIndex / 5; // Standard WPM calculation (5 chars = 1 word)
+        this.myWpm = mins > 0 ? Math.floor(words / mins) : 0;
+        document.getElementById('race-p1-wpm').textContent = `${this.myWpm} WPM`;
+        this.updateProgress();
+    }
+
     updateProgress() {
         let p1Prog = (this.currentIndex / this.chars.length) * 100;
-        let p2Prog = (this.opponentIndex / this.chars.length) * 100;
+        let p2Prog = (this.oppIndex / this.chars.length) * 100;
         
         this.p1Bar.style.width = `${p1Prog}%`;
         this.p1Pct.textContent = `${Math.floor(p1Prog)}%`;
@@ -870,35 +1330,42 @@ class RaceEngine {
         this.p2Pct.textContent = `${Math.floor(p2Prog)}%`;
     }
 
-    startOpponentSimulation() {
-        // Simulate opponent typing between 40-90 WPM (~4-9 chars per second -> 1 char every ~110-250ms)
-        const typeOpponentChar = () => {
-            if(this.isFinished) return;
-            this.opponentIndex++;
-            this.updateProgress();
-            
-            if(this.opponentIndex >= this.chars.length) {
-                this.triggerLoss();
-            } else {
-                this.oppInterval = setTimeout(typeOpponentChar, Math.random() * 150 + 100);
-            }
-        };
-        typeOpponentChar();
+    syncOpponent(index, wpm) {
+        if(this.isFinished) return;
+        this.oppIndex = index;
+        document.getElementById('race-p2-wpm').textContent = `${wpm} WPM`;
+        this.renderText();
+        this.updateProgress();
+        
+        if(this.oppIndex >= this.chars.length) {
+            this.triggerLoss();
+        }
+    }
+
+    handleOpponentDisconnect() {
+        if(this.isFinished) return;
+        this.cleanup();
+        UIManager.showToast("Opponent disconnected from the network.", "error");
+        document.getElementById('race-p2-name').textContent = "DISCONNECTED";
+        document.getElementById('race-p2-name').style.color = "var(--text-muted)";
     }
 
     cleanup() {
         this.isFinished = true;
-        clearTimeout(this.oppInterval);
+        this.network.inMatch = false;
         window.removeEventListener('keydown', this._raceKeydown);
     }
 
     triggerWin() {
         this.cleanup();
         this.audio.playLevelUp();
-        document.getElementById('race-p1-name').textContent = "WINNER";
-        document.getElementById('race-p1-name').style.color = "#000";
-        document.getElementById('race-p2-name').textContent = "LOSER";
-        document.getElementById('race-p2-name').style.color = "#ccc";
+        document.getElementById('race-p1-name').textContent = "VICTORY";
+        document.getElementById('race-p1-name').style.color = "var(--accent-green)";
+        document.getElementById('race-p2-name').style.color = "var(--text-muted)";
+        
+        this.msgOverlay.style.display = 'block';
+        this.msgOverlay.textContent = "YOU WIN";
+        this.msgOverlay.style.color = "var(--accent-green)";
         createConfetti();
         setInterval(createConfetti, 1500);
     }
@@ -906,10 +1373,13 @@ class RaceEngine {
     triggerLoss() {
         this.cleanup();
         this.audio.playError();
-        document.getElementById('race-p1-name').textContent = "LOSER";
-        document.getElementById('race-p1-name').style.color = "#ccc";
-        document.getElementById('race-p2-name').textContent = "WINNER";
-        document.getElementById('race-p2-name').style.color = "#000";
+        document.getElementById('race-p1-name').style.color = "var(--text-muted)";
+        document.getElementById('race-p2-name').textContent = "VICTORY";
+        document.getElementById('race-p2-name').style.color = "var(--accent-green)";
+        
+        this.msgOverlay.style.display = 'block';
+        this.msgOverlay.textContent = "DEFEAT";
+        this.msgOverlay.style.color = "var(--accent-red)";
     }
 }
 
@@ -920,15 +1390,16 @@ class RaceEngine {
  */
 document.addEventListener('DOMContentLoaded', () => {
     
+    // Init Global Network Node
+    window.NetworkInstance = new P2PNetworkEngine();
+
     // 1. Name Submission
     document.getElementById('btn-submit-name').addEventListener('click', () => {
         let name = document.getElementById('player-name-input').value.trim();
         if (name !== "") GlobalState.playerName = name.toUpperCase();
         document.getElementById('display-player-name').textContent = GlobalState.playerName;
-        switchScreen('name-screen', 'mode-screen');
+        UIManager.switchScreen('mode-screen');
     });
-
-    // Handle enter key on name input
     document.getElementById('player-name-input').addEventListener('keydown', (e) => {
         if(e.key === 'Enter') document.getElementById('btn-submit-name').click();
     });
@@ -937,7 +1408,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-mode-regular').addEventListener('click', () => {
         GlobalState.gameMode = 'regular';
         launchBootSequence(() => {
-            switchScreen('boot-sequence', 'app-container');
+            UIManager.switchScreen('app-container');
             window.GameInstance = new SpellingBeeEngine(false);
             window.GameInstance.start();
         });
@@ -946,7 +1417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-mode-timed').addEventListener('click', () => {
         GlobalState.gameMode = 'timed';
         launchBootSequence(() => {
-            switchScreen('boot-sequence', 'app-container');
+            UIManager.switchScreen('app-container');
             window.GameInstance = new SpellingBeeEngine(true);
             window.GameInstance.start();
         });
@@ -954,22 +1425,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('btn-mode-race').addEventListener('click', () => {
         GlobalState.gameMode = 'race';
-        switchScreen('mode-screen', 'lobby-screen');
-        populateLobby();
+        UIManager.switchScreen('lobby-screen');
+        window.NetworkInstance.scan();
     });
+
+    // Lobby Controls
+    document.getElementById('btn-refresh-lobby').addEventListener('click', () => window.NetworkInstance.scan());
+    document.getElementById('btn-leave-lobby').addEventListener('click', () => UIManager.switchScreen('mode-screen'));
 
     // 3. Boot Sequence Logic
     function launchBootSequence(callback) {
-        switchScreen('mode-screen', 'boot-sequence');
+        UIManager.switchScreen('boot-sequence');
         const logs = document.getElementById('terminal-logs');
         logs.innerHTML = '';
         const lines = [
-            `Authenticating user [${GlobalState.playerName}]...`,
-            "Initializing core services...",
-            "Loading lexicon subsets...",
-            "Secured 10 randomized terms.",
-            "Establishing audio protocols...",
-            "Ready."
+            `Authenticating User: [${GlobalState.playerName}]`,
+            `Allocating Node ID: [${GlobalState.peerId}]`,
+            "Connecting to secure lexicon subsets...",
+            "Decrypting 10 randomized terms.",
+            "Establishing neural audio protocols...",
+            "System Ready."
         ];
         
         let delay = 0;
@@ -986,43 +1461,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         setTimeout(() => {
                             bootC.style.opacity = '1';
                             callback();
-                        }, 500);
-                    }, 500);
+                        }, 600);
+                    }, 800);
                 }
             }, delay);
-            delay += 200 + Math.random() * 200;
-        });
-    }
-
-    // 4. Lobby Logic
-    function populateLobby() {
-        const peerList = document.getElementById('peer-list');
-        peerList.innerHTML = '';
-        const mockPeers = [
-            { name: "xX_CyberTyper_Xx", ping: "24ms" },
-            { name: "Neo_The_One", ping: "12ms" },
-            { name: "Trinity_99", ping: "38ms" },
-            { name: "GhostInTheShell", ping: "15ms" },
-            { name: "Morpheus_Key", ping: "45ms" },
-            { name: "LiquidGlass_Pro", ping: "8ms" }
-        ];
-
-        let delay = 500;
-        mockPeers.forEach(peer => {
-            setTimeout(() => {
-                let div = document.createElement('div');
-                div.className = 'lobby-item';
-                div.innerHTML = `<span class="peer-name">${peer.name}</span><span class="peer-ping">PING: ${peer.ping} - CLICK TO CHALLENGE</span>`;
-                div.addEventListener('click', () => {
-                    document.getElementById('lobby-status').textContent = `CONNECTING TO ${peer.name}...`;
-                    setTimeout(() => {
-                        switchScreen('lobby-screen', 'race-container');
-                        window.RaceInstance = new RaceEngine(peer.name);
-                    }, 800);
-                });
-                peerList.appendChild(div);
-            }, delay);
-            delay += Math.random() * 400 + 200;
+            delay += 250 + Math.random() * 150;
         });
     }
 });
