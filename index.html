@@ -3,36 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SYS.TERMINAL // PRISMATIC_LIQUID_BEE_v12.0.0</title>
+<title>Professional Spelling Bee Assessment</title>
 <style>
     /* ==========================================================================
-       CORE SYSTEM VARIABLES & RESET
+       CORE SYSTEM & RESET
        ========================================================================== */
-    :root {
-        --liquid-bg: rgba(5, 5, 10, 0.6);
-        --glass-surface: rgba(255, 255, 255, 0.03);
-        --glass-border: rgba(255, 255, 255, 0.15);
-        --glass-highlight: rgba(255, 255, 255, 0.3);
-        
-        --text-primary: #ffffff;
-        --text-dim: rgba(255, 255, 255, 0.6);
-        
-        --rainbow-1: #ff0055;
-        --rainbow-2: #ffaa00;
-        --rainbow-3: #00ffaa;
-        --rainbow-4: #00aaff;
-        --rainbow-5: #aa00ff;
-        
-        --rainbow-gradient: linear-gradient(
-            124deg, 
-            var(--rainbow-1), var(--rainbow-2), var(--rainbow-3), 
-            var(--rainbow-4), var(--rainbow-5), var(--rainbow-1)
-        );
-        
-        --lvl-color: #00aaff;
-        --glow-spread: 30px;
-    }
-    
     * { 
         box-sizing: border-box; 
         margin: 0; 
@@ -44,385 +19,285 @@
     body, html {
         width: 100%; 
         height: 100%; 
-        overflow: hidden;
-        background-color: #010102; 
-        color: var(--text-primary);
-        font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+        background-color: #ffffff; 
+        color: #000000;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         user-select: none;
-        perspective: 1500px;
     }
 
     /* ==========================================================================
-       CUSTOM SCROLLBARS
-       ========================================================================== */
-    ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: var(--liquid-bg); }
-    ::-webkit-scrollbar-thumb { 
-        background: var(--rainbow-gradient); 
-        background-size: 200% 200%;
-        border-radius: 10px; 
-        border: 1px solid rgba(0,0,0,0.5);
-        animation: rainbow-flow 3s linear infinite;
-    }
-    ::selection { background: var(--glass-highlight); color: #fff; }
-
-    /* ==========================================================================
-       MOVING RAINBOW BLURBS & LIQUID GLASS BACKGROUND
-       ========================================================================== */
-    #liquid-canvas {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-        z-index: 1; pointer-events: none;
-        filter: blur(12px) contrast(140%) saturate(200%);
-        opacity: 0.8; mix-blend-mode: screen;
-    }
-
-    .blurb-container {
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        z-index: 0; overflow: hidden; pointer-events: none;
-        filter: blur(60px); opacity: 0.6;
-    }
-
-    .blurb {
-        position: absolute; border-radius: 50%;
-        animation: float-blurb 20s infinite ease-in-out alternate;
-        mix-blend-mode: screen;
-    }
-
-    .blurb-1 { width: 40vw; height: 40vw; background: var(--rainbow-1); top: -10%; left: -10%; animation-delay: 0s; }
-    .blurb-2 { width: 35vw; height: 35vw; background: var(--rainbow-3); top: 50%; right: -10%; animation-delay: -5s; }
-    .blurb-3 { width: 45vw; height: 45vw; background: var(--rainbow-5); bottom: -20%; left: 20%; animation-delay: -10s; }
-    .blurb-4 { width: 30vw; height: 30vw; background: var(--rainbow-2); top: 20%; left: 40%; animation-delay: -15s; }
-
-    .glass-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.9) 100%);
-        z-index: 2; pointer-events: none;
-    }
-
-    /* ==========================================================================
-       KEYFRAME ANIMATIONS
-       ========================================================================== */
-    @keyframes rainbow-flow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    @keyframes float-blurb {
-        0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-        33% { transform: translate(10vw, 10vh) scale(1.2) rotate(90deg); }
-        66% { transform: translate(-10vw, 20vh) scale(0.8) rotate(180deg); }
-        100% { transform: translate(5vw, -10vh) scale(1.1) rotate(270deg); }
-    }
-
-    @keyframes text-shimmer {
-        0% { background-position: -200% center; }
-        100% { background-position: 200% center; }
-    }
-
-    @keyframes error-shake {
-        0%, 100% { transform: translate3d(0, 0, 0); }
-        10%, 30%, 50%, 70%, 90% { transform: translate3d(-15px, 0, 0); }
-        20%, 40%, 60%, 80% { transform: translate3d(15px, 0, 0); }
-    }
-
-    @keyframes liquid-morph {
-        0% { border-radius: 30px; }
-        25% { border-radius: 40px 20px 40px 20px; }
-        50% { border-radius: 20px 40px 20px 40px; }
-        75% { border-radius: 40px 30px 20px 40px; }
-        100% { border-radius: 30px; }
-    }
-
-    /* ==========================================================================
-       LIQUID GLASS PANELS
-       ========================================================================== */
-    .liquid-panel {
-        background: var(--glass-surface);
-        backdrop-filter: blur(20px) saturate(180%) contrast(120%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%) contrast(120%);
-        border: 1px solid var(--glass-border);
-        border-radius: 30px;
-        box-shadow: 
-            0 20px 40px rgba(0, 0, 0, 0.7),
-            inset 0 1px 2px rgba(255, 255, 255, 0.2),
-            inset 0 -1px 2px rgba(0, 0, 0, 0.2),
-            0 0 30px rgba(var(--lvl-color-rgb), 0.1);
-        position: relative;
-        overflow: hidden;
-        animation: liquid-morph 10s ease-in-out infinite alternate;
-        transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    .liquid-panel::after {
-        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-        background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%);
-        animation: text-shimmer 8s infinite linear; pointer-events: none;
-    }
-
-    .rainbow-text {
-        background: var(--rainbow-gradient); background-size: 300% auto;
-        color: transparent; -webkit-background-clip: text; background-clip: text;
-        animation: text-shimmer 4s linear infinite;
-        text-shadow: 0 0 20px rgba(255,255,255,0.1);
-    }
-
-    /* ==========================================================================
-       BOOT SEQUENCE STYLES
+       BOOT SEQUENCE
        ========================================================================== */
     #boot-sequence {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: #000; z-index: 10000; display: flex; flex-direction: column;
-        justify-content: center; align-items: center;
-        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100%;
+        background: #ffffff; 
+        z-index: 10000; 
+        display: flex; 
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        transition: opacity 1s ease;
     }
-
-    .boot-core {
-        position: relative; width: 300px; height: 300px;
-        display: flex; justify-content: center; align-items: center;
-    }
-
-    .boot-ring-1, .boot-ring-2, .boot-ring-3 {
-        position: absolute; border-radius: 50%; border: 2px solid transparent;
-    }
-
-    .boot-ring-1 { width: 100%; height: 100%; border-top-color: var(--rainbow-1); border-bottom-color: var(--rainbow-3); animation: spin 2s linear infinite; filter: drop-shadow(0 0 15px var(--rainbow-1)); }
-    .boot-ring-2 { width: 80%; height: 80%; border-left-color: var(--rainbow-2); border-right-color: var(--rainbow-4); animation: spin 1.5s linear infinite reverse; filter: drop-shadow(0 0 15px var(--rainbow-4)); }
-    .boot-ring-3 { width: 60%; height: 60%; border-top-color: var(--rainbow-5); border-bottom-color: var(--rainbow-1); animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
-
-    @keyframes spin { 100% { transform: rotate(360deg); } }
 
     #init-btn {
-        position: absolute; padding: 20px 40px; font-size: 20px; font-weight: 900;
-        border-radius: 40px; cursor: pointer; text-transform: uppercase;
-        letter-spacing: 6px; background: rgba(0, 0, 0, 0.8);
-        border: 2px solid rgba(255,255,255,0.2); color: #fff;
-        backdrop-filter: blur(10px); transition: all 0.3s; z-index: 10;
+        padding: 15px 30px; 
+        font-size: 16px; 
+        font-weight: bold;
+        cursor: pointer; 
+        text-transform: uppercase;
+        letter-spacing: 2px; 
+        background: #ffffff;
+        border: 2px solid #000000; 
+        color: #000000;
+        transition: all 0.2s; 
+        z-index: 10;
+        margin-bottom: 30px;
     }
 
-    #init-btn:hover { transform: scale(1.1); box-shadow: 0 0 40px var(--rainbow-3); border-color: var(--rainbow-3); letter-spacing: 8px; }
+    #init-btn:hover { 
+        background: #000000; 
+        color: #ffffff; 
+    }
 
     #terminal-wrapper {
-        position: absolute; bottom: 5vh; left: 5vw; width: 600px; height: 300px;
-        overflow: hidden; mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-        -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+        width: 600px; 
+        height: 150px;
+        overflow: hidden;
     }
 
     #terminal-logs {
-        color: #00ffaa; font-family: 'Courier New', Courier, monospace;
-        font-size: 14px; line-height: 1.6; text-shadow: 0 0 5px rgba(0,255,170,0.5);
-        display: flex; flex-direction: column; justify-content: flex-end; height: 100%;
+        color: #000000; 
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 14px; 
+        line-height: 1.6;
+        display: flex; 
+        flex-direction: column; 
+        justify-content: flex-end; 
+        height: 100%;
     }
 
     /* ==========================================================================
        MAIN APPLICATION LAYOUT
        ========================================================================== */
     #app-container {
-        display: none; grid-template-rows: auto 1fr auto;
-        height: 100vh; width: 100vw; padding: 3vh 3vw; gap: 3vh;
-        position: relative; z-index: 10; transform-style: preserve-3d;
+        display: none; 
+        flex-direction: column;
+        height: 100vh; 
+        width: 100vw; 
     }
 
     header {
-        display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-        padding: 20px 40px; transform: translateZ(50px);
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        padding: 20px 40px; 
+        border-bottom: 2px solid #000000;
     }
 
-    .level-badge { display: flex; flex-direction: column; }
-    #level-display { font-size: 52px; font-weight: 900; letter-spacing: 8px; margin-bottom: 5px; }
-    .level-sub { font-size: 14px; font-weight: 700; letter-spacing: 5px; color: var(--text-dim); }
-
-    .combo-meter-container { display: flex; flex-direction: column; align-items: center; width: 350px; }
-    .combo-text { font-size: 18px; font-weight: 900; letter-spacing: 6px; margin-bottom: 12px; }
-    .combo-bar-bg { width: 100%; height: 25px; border-radius: 20px; background: rgba(0,0,0,0.8); border: 2px solid var(--glass-border); box-shadow: inset 0 5px 10px rgba(0,0,0,0.9); overflow: hidden; }
-    #combo-fill { height: 100%; width: 0%; border-radius: 20px; background: var(--rainbow-gradient); background-size: 300% 300%; animation: rainbow-flow 1.5s linear infinite; transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-    .score-board { display: flex; gap: 3vw; justify-content: flex-end; }
-    .stat-card { display: flex; flex-direction: column; align-items: flex-end; padding: 15px 30px; border-radius: 25px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); }
-    .stat-val { font-size: 42px; font-weight: 900; font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
-    .stat-lbl { font-size: 12px; color: var(--text-dim); letter-spacing: 4px; margin-top: 5px; }
-
-    main { display: flex; justify-content: center; align-items: center; perspective: 2000px; }
-
-    .mainframe-core {
-        width: 100%; max-width: 1100px; padding: 80px;
-        display: flex; flex-direction: column; align-items: center;
-        transform: translateZ(100px);
-        box-shadow: 0 50px 100px rgba(0,0,0,0.9), inset 0 2px 10px rgba(255,255,255,0.2), 0 0 150px rgba(var(--lvl-color-rgb), 0.2);
+    .header-controls {
+        display: flex;
+        gap: 15px;
     }
 
-    .mainframe-core.success-state { transform: translateZ(150px) scale(1.05); box-shadow: 0 0 150px rgba(0, 255, 170, 0.5), inset 0 0 80px rgba(0, 255, 170, 0.2); border-color: rgba(0, 255, 170, 0.8); }
-    .mainframe-core.error-state { transform: translateZ(50px) scale(0.95); box-shadow: 0 0 150px rgba(255, 0, 85, 0.5), inset 0 0 80px rgba(255, 0, 85, 0.2); border-color: rgba(255, 0, 85, 0.8); animation: error-shake 0.4s both; }
-
-    .action-grid { display: flex; gap: 25px; margin-bottom: 50px; width: 100%; justify-content: center; flex-wrap: wrap; }
-    
-    .glass-btn {
-        background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.2);
-        color: #fff; padding: 20px 40px; font-size: 18px; font-weight: 800;
-        border-radius: 35px; cursor: pointer; letter-spacing: 5px;
-        backdrop-filter: blur(10px); transition: all 0.3s; position: relative; overflow: hidden;
+    .std-btn {
+        background: #ffffff; 
+        border: 2px solid #000000;
+        color: #000000; 
+        padding: 10px 20px; 
+        font-size: 14px; 
+        font-weight: bold;
+        cursor: pointer; 
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.2s; 
     }
-    .glass-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-20deg); transition: left 0.5s ease; }
-    .glass-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 30px rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); }
-    .glass-btn:hover::before { left: 200%; }
-    .glass-btn:active { transform: translateY(2px); }
 
-    .voice-toggle-btn { border-color: var(--rainbow-5); text-shadow: 0 0 10px var(--rainbow-5); }
-    .skip-btn { border-color: var(--rainbow-1); text-shadow: 0 0 10px var(--rainbow-1); }
+    .std-btn:hover { 
+        background: #000000; 
+        color: #ffffff; 
+    }
 
-    .input-zone { position: relative; width: 100%; margin-bottom: 40px; }
+    main { 
+        flex: 1; 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center; 
+        padding: 40px;
+    }
+
+    .dashboard {
+        display: flex;
+        gap: 50px;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .stat-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-val {
+        font-size: 32px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .stat-lbl {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #555555;
+        margin-top: 5px;
+    }
+
+    .input-zone { 
+        position: relative; 
+        width: 100%; 
+        max-width: 800px;
+        margin-bottom: 20px; 
+    }
     
     #console-input {
-        width: 100%; background: rgba(0, 0, 0, 0.6);
-        border: 3px solid rgba(255,255,255,0.1); border-radius: 50px;
-        color: #fff; font-size: 72px; padding: 40px; text-align: center; outline: none;
-        font-family: 'SF Pro Display', sans-serif; letter-spacing: 20px; font-weight: 200;
-        text-transform: uppercase; transition: all 0.3s;
-        box-shadow: inset 0 10px 30px rgba(0,0,0,0.8);
+        width: 100%; 
+        background: transparent;
+        border: none;
+        border-bottom: 4px solid #000000;
+        color: #000000; 
+        font-size: 64px; 
+        padding: 20px 10px; 
+        text-align: center; 
+        outline: none;
+        font-family: 'Helvetica Neue', sans-serif; 
+        letter-spacing: 10px; 
+        font-weight: 300;
+        text-transform: uppercase; 
+        transition: all 0.3s;
     }
-    #console-input:focus { border-color: var(--lvl-color); background: rgba(0, 0, 0, 0.8); box-shadow: inset 0 10px 30px rgba(0,0,0,0.9), 0 0 60px rgba(var(--lvl-color-rgb), 0.5); transform: scale(1.02); }
-    #console-input:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    #visual-feedback { height: 70px; font-size: 40px; letter-spacing: 10px; font-weight: 900; text-align: center; opacity: 0; transition: opacity 0.2s, transform 0.2s; transform: translateY(30px); text-shadow: 0 0 30px currentColor; }
-    .msg-success { color: #00ffaa; }
-    .msg-error { color: #ff0055; }
+    #console-input:focus { 
+        border-bottom-color: #555555; 
+    }
+    
+    #console-input:disabled { 
+        opacity: 0.3; 
+        cursor: not-allowed; 
+    }
+
+    #visual-feedback { 
+        height: 30px; 
+        font-size: 18px; 
+        letter-spacing: 2px; 
+        font-weight: bold; 
+        text-align: center; 
+        opacity: 0; 
+        transition: opacity 0.2s; 
+        text-transform: uppercase;
+    }
+
+    .msg-success { color: #000000; }
+    .msg-error { color: #000000; text-decoration: line-through; }
 
     #context-panel {
-        margin-top: 40px; padding: 30px 50px; background: rgba(0,0,0,0.5);
-        border-radius: 30px; font-size: 24px; color: var(--text-dim);
-        min-height: 100px; font-weight: 300; display: flex; align-items: center; justify-content: center;
-        border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
+        margin-top: 40px; 
+        font-size: 16px; 
+        color: #555555;
+        text-align: center;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
-    footer { display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; padding: 30px 50px; transform: translateZ(50px); }
-    .diag-cluster { display: flex; gap: 5vw; justify-content: flex-start; }
-    .diag-node { display: flex; flex-direction: column; }
-    .diag-val { font-size: 32px; font-weight: 800; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.3); }
-    .diag-lbl { font-size: 12px; color: var(--text-dim); letter-spacing: 4px; margin-top: 5px;}
-    .center-diag { display: flex; justify-content: center; align-items: center; }
-    .right-diag { display: flex; justify-content: flex-end; align-items: center; gap: 30px;}
+    footer { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 20px 40px; 
+        border-top: 2px solid #000000; 
+    }
 
-    .progress-ring { position: relative; width: 100px; height: 100px; }
-    .progress-ring svg { transform: rotate(-90deg); width: 100%; height: 100%; filter: drop-shadow(0 0 15px rgba(255,255,255,0.2));}
-    .progress-ring circle { fill: transparent; stroke-width: 8; stroke-linecap: round; }
-    .progress-ring .bg { stroke: rgba(255,255,255,0.1); }
-    .progress-ring .fill { stroke: url(#rainbow-grad); stroke-dasharray: 264; stroke-dashoffset: 264; transition: stroke-dashoffset 0.5s ease; }
-    .progress-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 20px; font-weight: 900; }
-
-    /* Theming Variables */
-    body.lvl-1 { --lvl-color: #00aaff; --lvl-color-rgb: 0, 170, 255; }
-    body.lvl-2 { --lvl-color: #00ffaa; --lvl-color-rgb: 0, 255, 170; }
-    body.lvl-3 { --lvl-color: #ffaa00; --lvl-color-rgb: 255, 170, 0; }
-    body.lvl-4 { --lvl-color: #ff0055; --lvl-color-rgb: 255, 0, 85; }
-    body.lvl-5 { --lvl-color: #aa00ff; --lvl-color-rgb: 170, 0, 255; }
-
+    .footer-section {
+        display: flex;
+        gap: 30px;
+    }
 </style>
 </head>
-<body class="lvl-1">
-
-<svg style="position: absolute; width: 0; height: 0;">
-  <defs>
-    <linearGradient id="rainbow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff0055" />
-      <stop offset="25%" stop-color="#ffaa00" />
-      <stop offset="50%" stop-color="#00ffaa" />
-      <stop offset="75%" stop-color="#00aaff" />
-      <stop offset="100%" stop-color="#aa00ff" />
-    </linearGradient>
-  </defs>
-</svg>
-
-<div class="blurb-container">
-    <div class="blurb blurb-1"></div>
-    <div class="blurb blurb-2"></div>
-    <div class="blurb blurb-3"></div>
-    <div class="blurb blurb-4"></div>
-</div>
-
-<canvas id="liquid-canvas"></canvas>
-<div class="glass-overlay"></div>
+<body>
 
 <div id="boot-sequence">
-    <div class="boot-core">
-        <div class="boot-ring-1"></div>
-        <div class="boot-ring-2"></div>
-        <div class="boot-ring-3"></div>
-        <button id="init-btn">INITIALIZE</button>
-    </div>
+    <button id="init-btn">INITIALIZE SYSTEM</button>
     <div id="terminal-wrapper">
         <div id="terminal-logs"></div>
     </div>
 </div>
 
 <div id="app-container">
-    <header class="liquid-panel">
-        <div class="level-badge">
-            <div id="level-display" class="rainbow-text">PHASE 01</div>
-            <div class="level-sub" id="level-desc">INITIALIZING...</div>
+    <header>
+        <div class="header-controls">
+            <button class="std-btn" id="btn-voice">VOICE: 1/10</button>
         </div>
-        <div class="combo-meter-container">
-            <div class="combo-text rainbow-text">NEURAL LINK SYNC</div>
-            <div class="combo-bar-bg">
-                <div id="combo-fill"></div>
-            </div>
-        </div>
-        <div class="score-board">
-            <div class="stat-card liquid-panel">
-                <div class="stat-val" id="ui-score">0000000</div>
-                <div class="stat-lbl">TOTAL YIELD</div>
-            </div>
-            <div class="stat-card liquid-panel">
-                <div class="stat-val" id="ui-mult">1.00x</div>
-                <div class="stat-lbl">MULTIPLIER</div>
-            </div>
+        <div class="header-controls">
+            <button class="std-btn" id="btn-play">RE-BROADCAST</button>
+            <button class="std-btn" id="btn-skip">OVERRIDE</button>
         </div>
     </header>
 
     <main>
-        <div class="mainframe-core liquid-panel" id="main-ui">
-            <div class="action-grid">
-                <button class="glass-btn" id="btn-play">▶ RE-BROADCAST</button>
-                <button class="glass-btn voice-toggle-btn" id="btn-voice">♫ VOICE: 1/10</button>
-                <button class="glass-btn skip-btn" id="btn-skip">⚠ OVERRIDE</button>
+        <div class="dashboard">
+            <div class="stat-group">
+                <span class="stat-val" id="level-display">PHASE 01</span>
+                <span class="stat-lbl" id="level-desc">INITIALIZING...</span>
             </div>
-            
-            <div class="input-zone">
-                <input type="text" id="console-input" autocomplete="off" spellcheck="false" placeholder="AWAITING AUDIO..." disabled>
+            <div class="stat-group">
+                <span class="stat-val" id="ui-score">0000000</span>
+                <span class="stat-lbl">TOTAL SCORE</span>
             </div>
-            
-            <div id="visual-feedback"></div>
-            
-            <div id="context-panel" class="liquid-panel">
-                <div id="context-def">CONNECTING TO SECURE LEXICON...</div>
+            <div class="stat-group">
+                <span class="stat-val" id="ui-mult">1.00x</span>
+                <span class="stat-lbl">MULTIPLIER</span>
             </div>
+            <div class="stat-group">
+                <span class="stat-val" id="ui-combo">0</span>
+                <span class="stat-lbl">COMBO</span>
+            </div>
+        </div>
+
+        <div class="input-zone">
+            <input type="text" id="console-input" autocomplete="off" spellcheck="false" placeholder="AWAITING AUDIO..." disabled>
+        </div>
+        
+        <div id="visual-feedback"></div>
+        
+        <div id="context-panel">
+            <div id="context-def">CONNECTING TO SECURE LEXICON...</div>
         </div>
     </main>
 
-    <footer class="liquid-panel">
-        <div class="diag-cluster">
-            <div class="diag-node">
-                <span class="diag-val" id="ui-wpm">0.0</span>
-                <span class="diag-lbl">WPM</span>
+    <footer>
+        <div class="footer-section">
+            <div class="stat-group">
+                <span class="stat-val" style="font-size: 20px;" id="ui-wpm">0.0</span>
+                <span class="stat-lbl">WPM</span>
             </div>
-            <div class="diag-node">
-                <span class="diag-val" id="ui-acc">100.0%</span>
-                <span class="diag-lbl">PRECISION</span>
-            </div>
-        </div>
-        <div class="center-diag">
-            <div class="diag-node" style="align-items: center;">
-                <span class="diag-val rainbow-text" id="ui-rem" style="font-size: 56px;">300</span>
-                <span class="diag-lbl">SECTORS REMAINING</span>
+            <div class="stat-group">
+                <span class="stat-val" style="font-size: 20px;" id="ui-acc">100.0%</span>
+                <span class="stat-lbl">PRECISION</span>
             </div>
         </div>
-        <div class="right-diag">
-            <span class="diag-lbl">PROGRESSION</span>
-            <div class="progress-ring">
-                <svg>
-                    <circle class="bg" cx="50" cy="50" r="42"></circle>
-                    <circle class="fill" id="lvl-progress-circle" cx="50" cy="50" r="42"></circle>
-                </svg>
-                <div class="progress-text" id="lvl-progress-text">0%</div>
+        <div class="footer-section">
+            <div class="stat-group" style="align-items: center;">
+                <span class="stat-val" style="font-size: 24px;" id="ui-rem">300</span>
+                <span class="stat-lbl">WORDS REMAINING</span>
+            </div>
+        </div>
+        <div class="footer-section">
+            <div class="stat-group" style="align-items: flex-end;">
+                <span class="stat-val" style="font-size: 20px;" id="lvl-progress-text">0%</span>
+                <span class="stat-lbl">PROGRESSION</span>
             </div>
         </div>
     </footer>
@@ -455,10 +330,9 @@ const Lexicon = {
 
 // Ensure lists are exact to specifications (300 limit) and properly shuffled
 for(let key in Lexicon) {
-    if(Lexicon[key].length > 3) {
-        Lexicon[key] = Lexicon[key].slice(0, 3);
+    if(Lexicon[key].length > 300) {
+        Lexicon[key] = Lexicon[key].slice(0, 300);
     }
-    // Shuffle Array
     for (let i = Lexicon[key].length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [Lexicon[key][i], Lexicon[key][j]] = [Lexicon[key][j], Lexicon[key][i]];
@@ -467,113 +341,10 @@ for(let key in Lexicon) {
 
 /**
  * ==========================================================================
- * LIQUID GLASS CANVAS ENGINE (Particle/Fluid Sim)
+ * AUDIO ENGINE
  * ==========================================================================
  */
-class LiquidCanvas {
-    constructor() {
-        this.canvas = document.getElementById('liquid-canvas');
-        this.ctx = this.canvas.getContext('2d', { alpha: false });
-        this.particles = [];
-        this.numParticles = 250;
-        this.colors = ['#ff0055', '#ffaa00', '#00ffaa', '#00aaff', '#aa00ff'];
-        this.mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
-        
-        this.init();
-        this.animate = this.animate.bind(this);
-        requestAnimationFrame(this.animate);
-        
-        window.addEventListener('resize', () => this.resize());
-        window.addEventListener('mousemove', (e) => {
-            this.mouse.x = e.clientX;
-            this.mouse.y = e.clientY;
-        });
-    }
-    
-    init() {
-        this.resize();
-        this.particles = [];
-        for (let i = 0; i < this.numParticles; i++) {
-            this.particles.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                vx: (Math.random() - 0.5) * 4,
-                vy: (Math.random() - 0.5) * 4,
-                radius: Math.random() * 80 + 30,
-                color: this.colors[Math.floor(Math.random() * this.colors.length)],
-                baseRadius: Math.random() * 80 + 30
-            });
-        }
-    }
-    
-    resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-    }
-    
-    animate() {
-        this.ctx.fillStyle = 'rgba(2, 2, 5, 0.4)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.globalCompositeOperation = 'screen';
-        
-        for (let i = 0; i < this.particles.length; i++) {
-            let p = this.particles[i];
-            p.x += p.vx; p.y += p.vy;
-            
-            if (p.x - p.radius < 0 || p.x + p.radius > this.canvas.width) p.vx *= -1;
-            if (p.y - p.radius < 0 || p.y + p.radius > this.canvas.height) p.vy *= -1;
-            
-            let dx = this.mouse.x - p.x;
-            let dy = this.mouse.y - p.y;
-            let dist = Math.sqrt(dx*dx + dy*dy);
-            
-            if (dist < 400) {
-                p.x -= dx * 0.01;
-                p.y -= dy * 0.01;
-                p.radius = p.baseRadius + (400 - dist) * 0.4;
-            } else {
-                p.radius = p.baseRadius;
-            }
-            
-            let gradient = this.ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-            gradient.addColorStop(0, p.color);
-            gradient.addColorStop(1, 'rgba(0,0,0,0)');
-            
-            this.ctx.beginPath();
-            this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            this.ctx.fillStyle = gradient;
-            this.ctx.fill();
-        }
-        
-        this.ctx.globalCompositeOperation = 'source-over';
-        requestAnimationFrame(this.animate);
-    }
-    
-    burst(x, y, color) {
-        for(let i=0; i<40; i++) {
-            this.particles.push({
-                x: x, y: y,
-                vx: (Math.random() - 0.5) * 25,
-                vy: (Math.random() - 0.5) * 25,
-                radius: Math.random() * 100 + 50,
-                color: color,
-                baseRadius: 20,
-                decay: true
-            });
-        }
-        setTimeout(() => {
-            this.particles = this.particles.filter(p => !p.decay);
-        }, 1500);
-    }
-}
-
-/**
- * ==========================================================================
- * AUDIO SYNTHESIS ENGINE (10 Selectable Voices)
- * strictly reads only the word text to prevent random numbers/letters.
- * ==========================================================================
- */
-class CyberAudioEngine {
+class AudioEngine {
     constructor() {
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         this.synth = window.speechSynthesis;
@@ -587,11 +358,9 @@ class CyberAudioEngine {
     initVoices() {
         const populate = () => {
             let allVoices = this.synth.getVoices();
-            // Filter strictly for English
             let engVoices = allVoices.filter(v => v.lang.startsWith('en'));
             if(engVoices.length === 0) engVoices = allVoices; 
             
-            // Get exactly 10 distinct voices if available
             this.availableVoices = engVoices.slice(0, 10);
             if(this.availableVoices.length > 0) {
                 this.updateVoiceLabel();
@@ -604,22 +373,19 @@ class CyberAudioEngine {
             if(this.availableVoices.length === 0) return;
             this.currentVoiceIndex = (this.currentVoiceIndex + 1) % this.availableVoices.length;
             this.updateVoiceLabel();
-            this.createOsc(1000, 'sine', 0.1, 0.1); // beep
+            this.createOsc(1000, 'sine', 0.1, 0.1);
         });
     }
     
     updateVoiceLabel() {
         let v = this.availableVoices[this.currentVoiceIndex];
         let shortName = v.name.split(' ')[0] || "VOICE";
-        this.btnVoice.textContent = `♫ VOICE: ${shortName.toUpperCase()} (${this.currentVoiceIndex + 1}/${this.availableVoices.length})`;
+        this.btnVoice.textContent = `VOICE: ${shortName.toUpperCase()} (${this.currentVoiceIndex + 1}/${this.availableVoices.length})`;
     }
     
     speakWord(text, rate = 1.0, pitch = 1.0) {
         if(this.synth.speaking) this.synth.cancel();
-        
-        // Strictly sanitize the text to purely alphabetic characters to stop weird symbols/numbers
         let cleanText = text.replace(/[^a-zA-Z]/g, '');
-        
         let utter = new SpeechSynthesisUtterance(cleanText);
         if(this.availableVoices.length > 0) {
             utter.voice = this.availableVoices[this.currentVoiceIndex];
@@ -651,7 +417,6 @@ class CyberAudioEngine {
         let baseFreq = 440 + (comboLevel * 25); 
         this.createOsc(baseFreq, 'sine', 0.2, 0.1);
         setTimeout(() => this.createOsc(baseFreq * 1.5, 'triangle', 0.3, 0.1), 100);
-        setTimeout(() => this.createOsc(baseFreq * 2, 'square', 0.4, 0.05), 200);
     }
     
     playError() {
@@ -660,9 +425,7 @@ class CyberAudioEngine {
     }
     
     playLevelUp() {
-        this.createOsc(220, 'triangle', 1.5, 0.2, 880);
-        setTimeout(() => this.createOsc(330, 'triangle', 1.5, 0.2, 1320), 200);
-        setTimeout(() => this.createOsc(440, 'triangle', 1.5, 0.2, 1760), 400);
+        this.createOsc(440, 'triangle', 0.5, 0.2, 880);
     }
 }
 
@@ -686,26 +449,21 @@ class SpellingBeeEngine {
         this.currentWord = "";
         this.list = [];
         
-        this.audio = new CyberAudioEngine();
-        this.liquid = new LiquidCanvas();
+        this.audio = new AudioEngine();
         
-        // Cache DOM elements
         this.uiScore = document.getElementById('ui-score');
         this.uiMult = document.getElementById('ui-mult');
+        this.uiCombo = document.getElementById('ui-combo');
         this.uiLvl = document.getElementById('level-display');
         this.uiDesc = document.getElementById('level-desc');
-        this.uiComboFill = document.getElementById('combo-fill');
         
         this.uiInput = document.getElementById('console-input');
         this.uiFeedback = document.getElementById('visual-feedback');
         this.uiCtxDef = document.getElementById('context-def');
-        this.mainUI = document.getElementById('main-ui');
         
         this.uiWPM = document.getElementById('ui-wpm');
         this.uiAcc = document.getElementById('ui-acc');
         this.uiRem = document.getElementById('ui-rem');
-        
-        this.progressCircle = document.getElementById('lvl-progress-circle');
         this.progressText = document.getElementById('lvl-progress-text');
         
         this.bindEvents();
@@ -742,23 +500,16 @@ class SpellingBeeEngine {
         this.wordIndex = 0;
         this.list = Lexicon[`lvl${l}`];
         
-        document.body.className = `lvl-${l}`;
         this.uiLvl.textContent = `PHASE 0${l}`;
-        
         const descArr = [
-            "NEURAL BASELINE ESTABLISHED",
-            "SYNAPTIC PATHWAYS ENHANCED",
-            "COGNITIVE OVERCLOCK ACTIVE",
-            "LINGUISTIC SINGULARITY IMMINENT",
-            "TRANSCENDENTAL LEXICON REACHED"
+            "STANDARD LEXICON",
+            "INTERMEDIATE LEXICON",
+            "ADVANCED LEXICON",
+            "EXPERT LEXICON",
+            "MASTER LEXICON"
         ];
         this.uiDesc.textContent = descArr[l-1];
-        
         this.audio.playLevelUp();
-        
-        let rect = this.mainUI.getBoundingClientRect();
-        this.liquid.burst(rect.left + rect.width/2, rect.top + rect.height/2, '#ffffff');
-        
         this.nextWord();
     }
     
@@ -785,10 +536,8 @@ class SpellingBeeEngine {
         this.uiInput.disabled = false;
         this.uiInput.focus();
         
-        // Hide length info or definitions, just state waiting for input
-        this.uiCtxDef.textContent = `>> AWAITING AUDIO TRANSCRIPTION...`;
+        this.uiCtxDef.textContent = `AWAITING AUDIO TRANSCRIPTION...`;
         this.updateDiagnosticsUI();
-        
         setTimeout(() => this.broadcastWord(), 600);
     }
     
@@ -805,7 +554,6 @@ class SpellingBeeEngine {
     
     handleSuccess() {
         this.audio.playSuccess(this.combo);
-        
         this.combo++;
         this.wordsTyped++;
         this.multiplier = 1.0 + (Math.min(this.combo, this.maxCombo) * 0.1);
@@ -813,11 +561,7 @@ class SpellingBeeEngine {
         let basePoints = this.currentWord.length * 20;
         this.score += Math.floor(basePoints * this.multiplier * this.level);
         
-        this.triggerVisualFeedback("LINK STABILIZED", true);
-        
-        let rect = this.uiInput.getBoundingClientRect();
-        this.liquid.burst(rect.left + rect.width/2, rect.top, '#00ffaa');
-        
+        this.triggerVisualFeedback("CORRECT", true);
         this.wordIndex++;
         this.updateStatsUI();
         this.nextWord();
@@ -827,12 +571,7 @@ class SpellingBeeEngine {
         this.audio.playError();
         this.combo = 0;
         this.multiplier = 1.0;
-        
-        this.triggerVisualFeedback("SYSTEM CORRUPTION", false);
-        
-        let rect = this.uiInput.getBoundingClientRect();
-        this.liquid.burst(rect.left + rect.width/2, rect.top, '#ff0055');
-        
+        this.triggerVisualFeedback("INCORRECT", false);
         this.uiInput.value = '';
         this.updateStatsUI();
     }
@@ -842,52 +581,33 @@ class SpellingBeeEngine {
         this.uiFeedback.className = isSuccess ? "msg-success" : "msg-error";
         
         this.uiFeedback.style.opacity = '0';
-        this.uiFeedback.style.transform = 'translateY(30px)';
-        void this.uiFeedback.offsetWidth; // Reflow
+        void this.uiFeedback.offsetWidth;
         this.uiFeedback.style.opacity = '1';
-        this.uiFeedback.style.transform = 'translateY(0)';
-        
-        this.mainUI.classList.add(isSuccess ? 'success-state' : 'error-state');
         
         setTimeout(() => {
             this.uiFeedback.style.opacity = '0';
-            this.uiFeedback.style.transform = 'translateY(-30px)';
-            this.mainUI.classList.remove('success-state', 'error-state');
         }, 800);
     }
     
     updateStatsUI() {
         this.uiScore.textContent = this.score.toString().padStart(8, '0');
         this.uiMult.textContent = this.multiplier.toFixed(2) + 'x';
-        
-        let comboPercent = Math.min((this.combo / this.maxCombo) * 100, 100);
-        this.uiComboFill.style.width = `${comboPercent}%`;
-        
-        if(comboPercent === 100) {
-            this.uiComboFill.style.boxShadow = "0 0 30px #fff, 0 0 60px var(--rainbow-4)";
-        } else {
-            this.uiComboFill.style.boxShadow = "0 0 15px rgba(255,255,255,0.7)";
-        }
+        this.uiCombo.textContent = this.combo;
     }
     
     updateDiagnosticsUI() {
         this.uiRem.textContent = this.list.length - this.wordIndex;
-        
         let percent = (this.wordIndex / this.list.length) * 100;
-        let offset = 264 - (264 * percent) / 100;
-        this.progressCircle.style.strokeDashoffset = offset;
         this.progressText.textContent = Math.floor(percent) + '%';
     }
     
     updateDiagnostics() {
         if(this.startTime === 0) return;
-        
         let minutes = (Date.now() - this.startTime) / 60000;
         if(minutes > 0) {
             let wpm = this.wordsTyped / minutes;
             this.uiWPM.textContent = wpm.toFixed(1);
         }
-        
         if(this.wordIndex > 0) {
             let acc = (this.wordsTyped / Math.max(this.wordIndex, 1)) * 100;
             this.uiAcc.textContent = Math.min(acc, 100).toFixed(1) + '%';
@@ -896,13 +616,9 @@ class SpellingBeeEngine {
     
     triggerVictory() {
         this.uiInput.disabled = true;
-        this.uiInput.value = "DOMINANCE";
-        this.uiCtxDef.innerHTML = "<span class='rainbow-text'>GLOBAL MAINFRAME OVERRIDDEN. ALL SECTORS SECURED.</span>";
-        this.audio.speakWord("System override complete. Global linguistic dominance achieved.", 1.0, 1.0);
-        
-        setInterval(() => {
-            this.liquid.burst(Math.random()*window.innerWidth, Math.random()*window.innerHeight, this.liquid.colors[Math.floor(Math.random()*this.liquid.colors.length)]);
-        }, 250);
+        this.uiInput.value = "COMPLETE";
+        this.uiCtxDef.textContent = "ALL ASSESSMENTS COMPLETED SUCCESSFULLY.";
+        this.audio.speakWord("Assessment complete.", 1.0, 1.0);
     }
 }
 
@@ -918,20 +634,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const logs = document.getElementById('terminal-logs');
     
     const bootSequenceLines = [
-        "KERNEL: Booting OS core...",
-        "SYS: Loading massive lexicon...",
-        "SYS: 1500 entities secured [OK]",
-        "NET: Establishing Neural Link Protocol v12...",
-        "AUDIO: Syncing 10-channel voice modulation...",
-        "VFX: Rendering massive liquid particle simulation...",
-        "SEC: Firewall heuristics bypassed...",
-        "CRIT: Proceed with extreme caution.",
-        "SYS: Handshake complete. Deployment authorized."
+        "Initializing core services...",
+        "Loading lexicon...",
+        "Secured 1500 terms.",
+        "Establishing audio protocols...",
+        "Ready."
     ];
     
     btn.addEventListener('click', () => {
-        btn.style.transform = 'scale(0)';
-        btn.style.opacity = '0';
+        btn.style.display = 'none';
         
         let delay = 0;
         bootSequenceLines.forEach((line, index) => {
@@ -940,29 +651,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.textContent = `> ${line}`;
                 logs.appendChild(p);
                 
-                let tempAudio = new (window.AudioContext || window.webkitAudioContext)();
-                let osc = tempAudio.createOscillator();
-                let gain = tempAudio.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(1000 + (Math.random()*300), tempAudio.currentTime);
-                gain.gain.setValueAtTime(0.05, tempAudio.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, tempAudio.currentTime + 0.05);
-                osc.connect(gain); gain.connect(tempAudio.destination);
-                osc.start(); osc.stop(tempAudio.currentTime + 0.05);
-                
                 if (index === bootSequenceLines.length - 1) {
                     setTimeout(() => {
                         bootContainer.style.opacity = '0';
                         setTimeout(() => {
                             bootContainer.style.display = 'none';
-                            appContainer.style.display = 'grid';
+                            appContainer.style.display = 'flex';
                             window.GameInstance = new SpellingBeeEngine();
                             window.GameInstance.start();
-                        }, 2000);
-                    }, 1000);
+                        }, 1000);
+                    }, 500);
                 }
             }, delay);
-            delay += 300 + Math.random() * 300;
+            delay += 200 + Math.random() * 200;
         });
     });
 });
