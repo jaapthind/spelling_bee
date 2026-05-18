@@ -1178,7 +1178,7 @@ class P2PNetworkEngine {
         GlobalState.opponentName = oppName;
         
         UIManager.switchScreen('race-container');
-        window.RaceInstance = new RaceEngine(oppId, oppName, paragraphIndex, this.bc);
+        window.RaceInstance = new RaceEngine(oppId, oppName, paragraphIndex, this);
     }
 
     sendRaceData(progress, wpm) {
