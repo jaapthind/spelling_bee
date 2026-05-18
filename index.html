@@ -37,7 +37,7 @@
     body, html {
         width: 100%; 
         height: 100%; 
-        background: linear-gradient(-45deg, hsl(0, 85%, 88%), hsl(60, 85%, 88%), hsl(120, 85%, 88%), hsl(180, 85%, 88%), hsl(240, 85%, 88%), hsl(300, 85%, 88%));
+        background: linear-gradient(-45deg, hsl(0, 100%, 75%), hsl(60, 100%, 75%), hsl(120, 100%, 75%), hsl(180, 100%, 75%), hsl(240, 100%, 75%), hsl(300, 100%, 75%));
         background-size: 400% 400%;
         animation: liquidBg 30s ease infinite;
         color: var(--text-main);
@@ -1369,7 +1369,7 @@ class RaceEngine {
         this.msgOverlay.textContent = "YOU WIN";
         this.msgOverlay.style.color = "var(--accent-green)";
         createConfetti();
-        setInterval(createConfetti, 1500);
+        let cLoop = setInterval(createConfetti, 1000); setTimeout(() => clearInterval(cLoop), 2000);
     }
 
     triggerLoss() {
